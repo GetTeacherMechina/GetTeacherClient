@@ -23,11 +23,14 @@ class _CallScreenState extends State<CallScreen> {
   // videoRenderer for localPeer
   final _localRTCVideoRenderer = RTCVideoRenderer();
 
+  final _remoteRTCSCreenShareVideoRenderer = RTCVideoRenderer();
+
   // videoRenderer for remotePeer
   final _remoteRTCVideoRenderer = RTCVideoRenderer();
 
   // mediaStream for localPeer
   MediaStream? _localStream;
+  MediaStream? _localShareStream;
 
   // RTC peer connection
   RTCPeerConnection? _rtcPeerConnection;
@@ -72,15 +75,19 @@ class _CallScreenState extends State<CallScreen> {
     // listen for remotePeer mediaTrack event
     _rtcPeerConnection!.onTrack = (event) {
       _remoteRTCVideoRenderer.srcObject = event.streams[0];
+      if (event.streams.length > 1) {
+        _remoteRTCSCreenShareVideoRenderer.srcObject = event.streams[1];
+      } else if (_remoteRTCVideoRenderer.srcObject != null) {
+        _remoteRTCSCreenShareVideoRenderer.srcObject = event.streams[0];
+      }
+
       setState(() {});
     };
 
     // get localStream
     _localStream = await navigator.mediaDevices.getUserMedia({
       'audio': isAudioOn,
-      'video': isVideoOn
-          ? {'facingMode': isFrontCameraSelected ? 'user' : 'environment'}
-          : false,
+      'video': isVideoOn,
     });
 
     // add mediaTrack to peerConnection
@@ -217,9 +224,27 @@ class _CallScreenState extends State<CallScreen> {
           children: [
             Expanded(
               child: Stack(children: [
-                RTCVideoView(
-                  _remoteRTCVideoRenderer,
-                  objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: RTCVideoView(
+                        _remoteRTCVideoRenderer,
+                        objectFit:
+                            RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: RTCVideoView(
+                        _remoteRTCSCreenShareVideoRenderer,
+                        objectFit:
+                            RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                      ),
+                    ),
+                  ],
                 ),
                 Positioned(
                   right: 20,
