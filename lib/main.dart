@@ -1,38 +1,15 @@
 import "package:flutter/material.dart";
-import "package:getteacher/logic.dart";
+import "package:getteacher/views/main_screen/main_screen.dart";
 
 void main() {
-  runApp(const MainApp());
+  runApp(const App());
 }
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  Model model = const Model();
-
-  @override
-  Widget build(final BuildContext context) => MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Column(
-              children: <Widget>[
-                const Text("Hello World!"),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      model = model.incrementI();
-                    });
-                  },
-                  child: const Text(""),
-                ),
-              ],
-            ),
-          ),
-        ),
+  Widget build(final BuildContext context) => const MaterialApp(
+        home: MainScreen(),
       );
 }
