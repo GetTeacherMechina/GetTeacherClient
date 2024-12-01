@@ -23,6 +23,7 @@ class _CallScreenState extends State<CallScreen> {
   // videoRenderer for localPeer
   final _localRTCVideoRenderer = RTCVideoRenderer();
 
+  final _localRTCSCreenShareVideoRenderer = RTCVideoRenderer();
   final _remoteRTCSCreenShareVideoRenderer = RTCVideoRenderer();
 
   // videoRenderer for remotePeer
@@ -200,15 +201,12 @@ class _CallScreenState extends State<CallScreen> {
     setState(() {});
   }
 
-  _switchCamera() {
-    // change status
-    isFrontCameraSelected = !isFrontCameraSelected;
+  _toggleShare() async {
+    _localShareStream =
+        await navigator.mediaDevices.getDisplayMedia({"video": true});
 
-    // switch camera
-    _localStream?.getVideoTracks().forEach((track) {
-      // ignore: deprecated_member_use
-      track.switchCamera();
-    });
+    _localRTCSCreenShareVideoRenderer.srcObject = _localShareStream!;
+    await _rtcPeerConnection!.addStream(_localShareStream!);
     setState(() {});
   }
 
@@ -231,6 +229,15 @@ class _CallScreenState extends State<CallScreen> {
                       width: 200,
                       child: RTCVideoView(
                         _remoteRTCVideoRenderer,
+                        objectFit:
+                            RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: RTCVideoView(
+                        _localRTCSCreenShareVideoRenderer,
                         objectFit:
                             RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
                       ),
@@ -277,12 +284,12 @@ class _CallScreenState extends State<CallScreen> {
                     onPressed: _leaveCall,
                   ),
                   IconButton(
-                    icon: const Icon(Icons.cameraswitch),
-                    onPressed: _switchCamera,
-                  ),
-                  IconButton(
                     icon: Icon(isVideoOn ? Icons.videocam : Icons.videocam_off),
                     onPressed: _toggleCamera,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.screen_share),
+                    onPressed: _toggleShare,
                   ),
                 ],
               ),
