@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 
 const int debugPort = 5205;
@@ -25,7 +26,6 @@ class GetTeacherClient extends http.BaseClient {
 
   Future<Map<String, dynamic>> getJson(final String endpoint) async {
     final http.Response response = await get(uriOfEndpoint(endpoint));
-    print(response.body);
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 }

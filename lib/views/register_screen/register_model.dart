@@ -25,7 +25,7 @@ class RegisterModel {
         email = "",
         password = "",
         confirmedPassword = "",
-        role = const Student("");
+        role = const Teacher("");
 
   const RegisterModel._hidden({
     required this.fullName,
