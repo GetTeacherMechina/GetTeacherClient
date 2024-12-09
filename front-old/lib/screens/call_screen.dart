@@ -47,6 +47,8 @@ class _CallScreenState extends State<CallScreen> {
     // initializing renderers
     _localRTCVideoRenderer.initialize();
     _remoteRTCVideoRenderer.initialize();
+    _remoteRTCSCreenShareVideoRenderer.initialize();
+    _localRTCSCreenShareVideoRenderer.initialize();
 
     // setup Peer Connection
     _setupPeerConnection();
@@ -75,10 +77,10 @@ class _CallScreenState extends State<CallScreen> {
 
     // listen for remotePeer mediaTrack event
     _rtcPeerConnection!.onTrack = (event) {
-      _remoteRTCVideoRenderer.srcObject = event.streams[0];
-      if (event.streams.length > 1) {
-        _remoteRTCSCreenShareVideoRenderer.srcObject = event.streams[1];
-      } else if (_remoteRTCVideoRenderer.srcObject != null) {
+      print("got tracks!!! ${event.streams.length}");
+      if (event.streams[0].getTracks().any((a) => a.kind == "sound")) {
+        _remoteRTCVideoRenderer.srcObject = event.streams[0];
+      } else {
         _remoteRTCSCreenShareVideoRenderer.srcObject = event.streams[0];
       }
 
@@ -100,6 +102,24 @@ class _CallScreenState extends State<CallScreen> {
     _localRTCVideoRenderer.srcObject = _localStream;
     setState(() {});
 
+    socket!.on("newCall", (data) async {
+        print("got new call");
+        await _rtcPeerConnection!.setRemoteDescription(
+          RTCSessionDescription(
+              data["sdpOffer"]["sdp"], data["sdpOffer"]["type"]),
+        );
+      // create SDP answer
+      RTCSessionDescription answer = await _rtcPeerConnection!.createAnswer();
+
+      // set SDP answer as localDescription for peerConnection
+      _rtcPeerConnection!.setLocalDescription(answer);
+
+      // send SDP answer to remote peer over signalling
+      socket!.emit("answerCall", {
+        "callerId": widget.callerId,
+        "sdpAnswer": answer.toMap(),
+      });
+    });
     // for Incoming call
     if (widget.offer != null) {
       // listen for Remote IceCandidate
@@ -162,6 +182,27 @@ class _CallScreenState extends State<CallScreen> {
         }
       });
 
+      socket!.on("callAnswered", (data) async {
+        // set SDP answer as remoteDescription for peerConnection
+        await _rtcPeerConnection!.setRemoteDescription(
+          RTCSessionDescription(
+            data["sdpAnswer"]["sdp"],
+            data["sdpAnswer"]["type"],
+          ),
+        );
+
+        // send iceCandidate generated to remote peer over signalling
+        for (RTCIceCandidate candidate in rtcIceCadidates) {
+          socket!.emit("IceCandidate", {
+            "calleeId": widget.calleeId,
+            "iceCandidate": {
+              "id": candidate.sdpMid,
+              "label": candidate.sdpMLineIndex,
+              "candidate": candidate.candidate
+            }
+          });
+        }
+      });
       // create SDP Offer
       RTCSessionDescription offer = await _rtcPeerConnection!.createOffer();
 
@@ -174,6 +215,20 @@ class _CallScreenState extends State<CallScreen> {
         "sdpOffer": offer.toMap(),
       });
     }
+    print("dam??");
+    _rtcPeerConnection!.onRenegotiationNeeded = () async {
+      await _restartCall();
+    };
+  }
+
+  _restartCall() async {
+    print("snet new call");
+    final offer = await _rtcPeerConnection!.createOffer();
+    await _rtcPeerConnection!.setLocalDescription(offer);
+    socket!.emit('makeCall', {
+      "calleeId": widget.calleeId,
+      "sdpOffer": offer.toMap(),
+    });
   }
 
   _leaveCall() {
@@ -202,12 +257,15 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   _toggleShare() async {
-    _localShareStream =
-        await navigator.mediaDevices.getDisplayMedia({"video": true});
-
+    _localShareStream = await navigator.mediaDevices.getDisplayMedia({
+      "video": true,
+    });
     _localRTCSCreenShareVideoRenderer.srcObject = _localShareStream!;
-    await _rtcPeerConnection!.addStream(_localShareStream!);
+    _localShareStream!
+        .getTracks()
+        .map((track) => _rtcPeerConnection!.addTrack(track));
     setState(() {});
+    _restartCall();
   }
 
   @override
