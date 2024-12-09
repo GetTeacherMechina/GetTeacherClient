@@ -1,5 +1,6 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 
@@ -45,6 +46,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       decoration: const InputDecoration(
                         hintText: "Full name",
                       ),
+                      onChanged: (final String value) {
+                        model = model.copyWith(fullName: () => value);
+                      },
                     ),
                     TextFormField(
                       decoration: const InputDecoration(hintText: "Email"),
@@ -61,8 +65,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     ToggleButtons(
                       children: const <Widget>[
-                        Icon(Icons.school),
-                        Icon(Icons.book),
+                        Tooltip(message: "Teacher", child: Icon(Icons.school)),
+                        Tooltip(message: "Student", child: Icon(Icons.book)),
                       ],
                       isSelected: <bool>[
                         model.role.isTeacher(),
@@ -111,6 +115,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const Spacer(
                       flex: 4,
                     ),
+                    SubmitButton(
+                      validate: () => _formKey.currentState!.validate(),
+                      submit: () =>
+                          Future<void>.delayed(const Duration(seconds: 3)),
+                    ),
+                    const Spacer()
                   ],
                 ),
               ),
