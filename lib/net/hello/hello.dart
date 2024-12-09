@@ -13,5 +13,4 @@ class Hello {
   final String message;
 }
 
-Future<Hello> fetchHello() async =>
-    Hello.fromJson(await getClient().getJson("/hello"));
+Future<Hello> fetchHello() async => Hello.fromJson(await getClient().getJson("/hello"));

@@ -19,8 +19,8 @@ class Teacher extends UserRole {
 
 class Student extends UserRole {
   const Student(this.grade);
-  const Student.empty() : grade = "";
-  final String grade;
+  const Student.empty() : grade = 1;
+  final int grade;
 
   @override
   bool isTeacher() => false;
