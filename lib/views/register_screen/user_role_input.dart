@@ -29,7 +29,7 @@ class UserRoleInput extends StatelessWidget {
               teacher: final Teacher teacher
             ) =>
               Column(
-                children: [
+                children: <Widget>[
                   TeacherInput(
                     teacher: teacher,
                     onChanged: (final Teacher newTeacher) {

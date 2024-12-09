@@ -3,8 +3,8 @@ import "package:flutter/material.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 
-const int studnetIndex = 0;
-const int teacherIndex = 1;
+const int studnetIndex = 1;
+const int teacherIndex = 0;
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Icon(Icons.school),
                         Icon(Icons.book),
                       ],
-                      isSelected: [
+                      isSelected: <bool>[
                         model.role.isTeacher(),
                         model.role.isStudent(),
                       ],
@@ -74,14 +74,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             role: () {
                               switch (model.role) {
                                 case Teacher():
-                                  return index == teacherIndex
+                                  return index == studnetIndex
                                       ? StudentAndTeacher(
                                           const Student.empty(),
                                           model.role as Teacher,
                                         )
                                       : model.role;
                                 case Student():
-                                  return index == studnetIndex
+                                  return index == teacherIndex
                                       ? StudentAndTeacher(
                                           model.role as Student,
                                           const Teacher.empty(),
@@ -91,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     student: final Student student,
                                     teacher: final Teacher teacher
                                   ):
-                                  return index == studnetIndex
+                                  return index == teacherIndex
                                       ? student
                                       : teacher;
                               }
@@ -101,12 +101,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                     ),
                     UserRoleInput(
-                        role: model.role,
-                        onRoleChanged: (final UserRole role) {
-                          setState(() {
-                            model = model.copyWith(role: () => role);
-                          });
-                        }),
+                      role: model.role,
+                      onRoleChanged: (final UserRole role) {
+                        setState(() {
+                          model = model.copyWith(role: () => role);
+                        });
+                      },
+                    ),
                     const Spacer(
                       flex: 4,
                     ),
