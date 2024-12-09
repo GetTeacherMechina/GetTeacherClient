@@ -11,12 +11,6 @@ class Teacher extends UserRole {
   final String bio;
 
   @override
-  String toString() {
-    // TODO: implement toString
-    return "Teacher: $bio";
-  }
-
-  @override
   bool isTeacher() => true;
 
   @override
@@ -27,12 +21,6 @@ class Student extends UserRole {
   const Student(this.grade);
   const Student.empty() : grade = "";
   final String grade;
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "Student: $grade";
-  }
 
   @override
   bool isTeacher() => false;
@@ -47,13 +35,8 @@ class StudentAndTeacher extends UserRole {
   final Teacher teacher;
 
   @override
-  String toString() {
-    // TODO: implement toString
-    return "$student $teacher";
-  }
-
-  @override
   bool isTeacher() => true;
+
   @override
   bool isStudent() => true;
 }
