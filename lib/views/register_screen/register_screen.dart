@@ -3,6 +3,9 @@ import "package:flutter/material.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 
+const int studnetIndex = 0;
+const int teacherIndex = 1;
+
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
@@ -55,6 +58,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           email != null && EmailValidator.validate(email)
                               ? null
                               : "Invalid Email",
+                    ),
+                    ToggleButtons(
+                      children: const <Widget>[
+                        Icon(Icons.school),
+                        Icon(Icons.book),
+                      ],
+                      isSelected: [
+                        model.role.isTeacher(),
+                        model.role.isStudent(),
+                      ],
+                      onPressed: (final int index) {
+                        setState(() {
+                          model = model.copyWith(
+                            role: () {
+                              switch (model.role) {
+                                case Teacher():
+                                  return index == teacherIndex
+                                      ? StudentAndTeacher(
+                                          const Student.empty(),
+                                          model.role as Teacher,
+                                        )
+                                      : model.role;
+                                case Student():
+                                  return index == studnetIndex
+                                      ? StudentAndTeacher(
+                                          model.role as Student,
+                                          const Teacher.empty(),
+                                        )
+                                      : model.role;
+                                case StudentAndTeacher(
+                                    student: final Student student,
+                                    teacher: final Teacher teacher
+                                  ):
+                                  return index == studnetIndex
+                                      ? student
+                                      : teacher;
+                              }
+                            },
+                          );
+                        });
+                      },
                     ),
                     UserRoleInput(
                         role: model.role,

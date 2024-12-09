@@ -1,21 +1,42 @@
 sealed class UserRole {
   const UserRole();
+
+  bool isTeacher();
+  bool isStudent();
 }
 
 class Teacher extends UserRole {
   const Teacher(this.bio);
+  const Teacher.empty() : bio = "";
   final String bio;
+  @override
+  bool isTeacher() => true;
+
+  @override
+  bool isStudent() => false;
 }
 
 class Student extends UserRole {
   const Student(this.grade);
+  const Student.empty() : grade = "";
   final String grade;
+
+  @override
+  bool isTeacher() => false;
+
+  @override
+  bool isStudent() => true;
 }
 
 class StudentAndTeacher extends UserRole {
   const StudentAndTeacher(this.student, this.teacher);
   final Student student;
-  final Student teacher;
+  final Teacher teacher;
+
+  @override
+  bool isTeacher() => true;
+  @override
+  bool isStudent() => true;
 }
 
 // Register class

@@ -16,12 +16,34 @@ class UserRoleInput extends StatelessWidget {
   Widget build(final BuildContext context) => Column(
         children: <Widget>[
           switch (role) {
-            Teacher() => TeacherInput(onChanged: onRoleChanged),
+            Teacher() => TeacherInput(
+                onChanged: onRoleChanged,
+                teacher: role as Teacher,
+              ),
             Student() => StudentInput(
                 student: role as Student,
                 onChanged: onRoleChanged,
               ),
-            StudentAndTeacher() => throw UnimplementedError(),
+            StudentAndTeacher(
+              student: final Student student,
+              teacher: final Teacher teacher
+            ) =>
+              Column(
+                children: [
+                  TeacherInput(
+                    teacher: teacher,
+                    onChanged: (final Teacher newTeacher) {
+                      onRoleChanged(StudentAndTeacher(student, newTeacher));
+                    },
+                  ),
+                  StudentInput(
+                    student: student,
+                    onChanged: (final Student newStudent) {
+                      onRoleChanged(StudentAndTeacher(newStudent, teacher));
+                    },
+                  ),
+                ],
+              ),
           },
         ],
       );
