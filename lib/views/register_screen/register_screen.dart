@@ -3,9 +3,7 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
-
-const int studnetIndex = 0;
-const int teacherIndex = 1;
+import "package:getteacher/views/register_screen/user_role_selector.dart";
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -63,38 +61,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ? null
                               : "Invalid Email",
                     ),
-                    ToggleButtons(
-                      children: const <Widget>[
-                        Tooltip(message: "Teacher", child: Icon(Icons.school)),
-                        Tooltip(message: "Student", child: Icon(Icons.book)),
-                      ],
-                      isSelected: <bool>[
-                        model.role.isTeacher(),
-                        model.role.isStudent(),
-                      ],
-                      onPressed: (final int index) {
+                    UserRoleSelector(
+                      role: model.role,
+                      onNewUserRole: (final UserRole role) {
                         setState(() {
-                          model = model.copyWith(
-                            role: () => switch (model.role) {
-                              Teacher() => index == teacherIndex
-                                  ? StudentAndTeacher(
-                                      const Student.empty(),
-                                      model.role as Teacher,
-                                    )
-                                  : model.role,
-                              Student() => index == studnetIndex
-                                  ? StudentAndTeacher(
-                                      model.role as Student,
-                                      const Teacher.empty(),
-                                    )
-                                  : model.role,
-                              StudentAndTeacher(
-                                student: final Student student,
-                                teacher: final Teacher teacher
-                              ) =>
-                                index == studnetIndex ? student : teacher
-                            },
-                          );
+                          model = model.copyWith(role: () => role);
                         });
                       },
                     ),
@@ -105,6 +76,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           model = model.copyWith(role: () => role);
                         });
                       },
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      decoration: const InputDecoration(hintText: "Password"),
+                      onChanged: (final String value) {
+                        setState(() {
+                          model = model.copyWith(password: () => value);
+                        });
+                      },
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      decoration:
+                          const InputDecoration(hintText: "Confirm password"),
+                      onChanged: (final String value) {
+                        setState(() {
+                          model =
+                              model.copyWith(confirmedPassword: () => value);
+                        });
+                      },
+                      validator: (final String? value) =>
+                          model.password == model.confirmedPassword
+                              ? null
+                              : "Passwords don't match",
                     ),
                     const Spacer(
                       flex: 4,
