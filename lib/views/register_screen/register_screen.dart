@@ -68,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Tooltip(message: "Teacher", child: Icon(Icons.school)),
                         Tooltip(message: "Student", child: Icon(Icons.book)),
                       ],
-                      isSelected: [
+                      isSelected: <bool>[
                         model.role.isTeacher(),
                         model.role.isStudent(),
                       ],
@@ -76,36 +76,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         setState(() {
                           model = model.copyWith(
                             role: () => switch (model.role) {
-                                Teacher() => index == teacherIndex
-                                      ? StudentAndTeacher(
-                                          const Student.empty(),
-                                          model.role as Teacher,
-                                        )
-                                      : model.role,
-                                Student() => index == studnetIndex
-                                      ? StudentAndTeacher(
-                                          model.role as Student,
-                                          const Teacher.empty(),
-                                        )
-                                      : model.role,
-                                StudentAndTeacher(
-                                    student: final Student student,
-                                    teacher: final Teacher teacher
-                                  ) => index == studnetIndex
-                                      ? student
-                                      : teacher
-                              },
+                              Teacher() => index == teacherIndex
+                                  ? StudentAndTeacher(
+                                      const Student.empty(),
+                                      model.role as Teacher,
+                                    )
+                                  : model.role,
+                              Student() => index == studnetIndex
+                                  ? StudentAndTeacher(
+                                      model.role as Student,
+                                      const Teacher.empty(),
+                                    )
+                                  : model.role,
+                              StudentAndTeacher(
+                                student: final Student student,
+                                teacher: final Teacher teacher
+                              ) =>
+                                index == studnetIndex ? student : teacher
+                            },
                           );
                         });
                       },
                     ),
                     UserRoleInput(
-                        role: model.role,
-                        onRoleChanged: (final UserRole role) {
-                          setState(() {
-                            model = model.copyWith(role: () => role);
-                          });
-                        }),
+                      role: model.role,
+                      onRoleChanged: (final UserRole role) {
+                        setState(() {
+                          model = model.copyWith(role: () => role);
+                        });
+                      },
+                    ),
                     const Spacer(
                       flex: 4,
                     ),
@@ -114,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       submit: () =>
                           Future<void>.delayed(const Duration(seconds: 3)),
                     ),
-                    const Spacer()
+                    const Spacer(),
                   ],
                 ),
               ),

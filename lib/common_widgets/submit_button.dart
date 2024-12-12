@@ -68,8 +68,7 @@ class _SubmitButtonState extends State<SubmitButton> {
             setState(() {
               _state = ButtonState.success;
             });
-          } on Exception catch (exceptoin) {
-            print(exceptoin);
+          } on Exception catch (_) {
             setState(() {
               _state = ButtonState.fail;
             });
