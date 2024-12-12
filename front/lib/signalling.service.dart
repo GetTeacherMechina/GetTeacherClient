@@ -2,21 +2,21 @@ import 'dart:developer';
 import 'dart:math' hide log;
 import 'package:socket_io_client/socket_io_client.dart';
 
+const String websocketUrl = "ws://localhost:5000";
 
 class SignallingService {
   // instance of Socket
-  Socket? socket;
+  late Socket socket;
   int id = 0;
-  SignallingService._();
   static final instance = SignallingService._();
 
-  init({required String websocketUrl}) {
+  SignallingService._() {
     // init Socket
     id = Random.secure().nextInt(10000000);
 
     socket = io(websocketUrl, {
       "transports": ['websocket'],
-      "query": {"callerId": id }
+      "query": {"callerId": id}
     });
 
     // listen onConnect event

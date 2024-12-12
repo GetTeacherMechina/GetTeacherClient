@@ -22,7 +22,7 @@ IO.on("connection", (socket) => {
   socket.on("makeCall", (data) => {
     let calleeId = data.calleeId;
     let sdpOffer = data.sdpOffer;
-
+    console.log("making call");
     socket.to(calleeId).emit("newCall", {
       callerId: socket.user,
       sdpOffer: sdpOffer,
@@ -33,6 +33,7 @@ IO.on("connection", (socket) => {
     let callerId = data.callerId;
     let sdpAnswer = data.sdpAnswer;
 
+    console.log("got answer to call");
     socket.to(callerId).emit("callAnswered", {
       callee: socket.user,
       sdpAnswer: sdpAnswer,
@@ -42,6 +43,8 @@ IO.on("connection", (socket) => {
   socket.on("IceCandidate", (data) => {
     let calleeId = data.calleeId;
     let iceCandidate = data.iceCandidate;
+
+    console.log("got ice");
 
     socket.to(calleeId).emit("IceCandidate", {
       sender: socket.user,
