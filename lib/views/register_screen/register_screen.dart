@@ -1,6 +1,7 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
+import "package:getteacher/net/register/register.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 import "package:getteacher/views/register_screen/user_role_selector.dart";
@@ -106,8 +107,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
-                      submit: () =>
-                          Future<void>.delayed(const Duration(seconds: 3)),
+                      submit: () async {
+                        await register(model.intoRegisterRequest());
+                      },
                     ),
                     const Spacer(),
                   ],

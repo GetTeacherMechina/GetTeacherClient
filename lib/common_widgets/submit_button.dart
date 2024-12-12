@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
@@ -66,12 +67,18 @@ class _SubmitButtonState extends State<SubmitButton> {
             _state = ButtonState.loading;
           });
 
-          try {
+          if (kDebugMode) {
             await widget.submit();
+          }
+          try {
+            if (kReleaseMode) {
+              await widget.submit();
+            }
             setState(() {
               _state = ButtonState.success;
             });
-          } on Exception catch (_) {
+          } on Exception catch (exception) {
+            print(exception);
             setState(() {
               _state = ButtonState.fail;
             });

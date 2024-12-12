@@ -1,3 +1,5 @@
+import "package:getteacher/net/register/register_net_model.dart";
+
 sealed class UserRole {
   const UserRole();
 
@@ -63,6 +65,12 @@ class RegisterModel {
   final String password;
   final String confirmedPassword;
   final UserRole role;
+
+  RegisterRequestModel intoRegisterRequest() => RegisterRequestModel(
+        fullName: fullName,
+        email: email,
+        password: password,
+      );
 
   RegisterModel copyWith({
     final String Function()? fullName,
