@@ -16,6 +16,7 @@ class SubmitButton extends StatefulWidget {
 
 class _SubmitButtonState extends State<SubmitButton> {
   ButtonState _state = ButtonState.idle;
+  String failedMessage = "Failed";
   @override
   Widget build(final BuildContext context) => ProgressButton.icon(
         iconedButtons: <ButtonState, IconedButton>{
@@ -29,7 +30,7 @@ class _SubmitButtonState extends State<SubmitButton> {
             color: Colors.blue[400]!,
           ),
           ButtonState.fail: IconedButton(
-            text: "Failed",
+            text: failedMessage,
             icon: const Icon(Icons.cancel, color: Colors.white),
             color: Colors.red.shade300,
           ),
@@ -45,11 +46,13 @@ class _SubmitButtonState extends State<SubmitButton> {
         onPressed: () async {
           if (!widget.validate()) {
             setState(() {
+              failedMessage = "Fields are invalid";
               _state = ButtonState.fail;
             });
             Future<void>.delayed(const Duration(seconds: 5), () {
               if (mounted) {
                 setState(() {
+                  failedMessage = "Failed";
                   _state = ButtonState.idle;
                 });
               }
