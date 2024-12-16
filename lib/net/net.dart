@@ -30,7 +30,6 @@ class GetTeacherClient extends http.BaseClient {
     if (response.statusCode != 200) {
       throw Exception("Request failed with code: ${response.statusCode}");
     }
-    print(response.body);
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
@@ -41,14 +40,15 @@ class GetTeacherClient extends http.BaseClient {
     final http.Response response = await post(
       uriOfEndpoint(baseUrl + endpoint),
       headers: <String, String>{
-        HttpHeaders.contentTypeHeader: "application/json"
+        HttpHeaders.contentTypeHeader: "application/json",
       },
       body: jsonEncode(json),
     );
 
     if (response.statusCode != 200) {
       throw Exception(
-          "Request failed with code: ${response.statusCode} ${response.body}");
+        "Request failed with code: ${response.statusCode} ${response.body}",
+      );
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }

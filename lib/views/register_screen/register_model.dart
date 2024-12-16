@@ -70,6 +70,12 @@ class RegisterModel {
         fullName: fullName,
         email: email,
         password: password,
+        teacherRequestModel: switch (role) {
+          Teacher(bio: final String bio) ||
+          StudentAndTeacher(teacher: Teacher(bio: final String bio)) =>
+            TeacherRequestModel(bio: bio),
+          Student() => null,
+        },
       );
 
   RegisterModel copyWith({
