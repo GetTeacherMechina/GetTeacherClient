@@ -44,17 +44,26 @@ class _CallScreenState extends State<CallScreen> {
         }
       ]
     });
+    _connection.onTrack = (data) {
+      if (data.streams[0].getTracks().any((a) => a.kind == "audio")) {
+        print("got the track!!!! ${data.streams.length}");
+        setState(() {
+          _otherVideoRenderer.srcObject = data.streams[0];
+        });
+      }
+    };
     _connection.onIceCandidate = (ice) {
-      print("got ice");
       if (callsTo != null) {
         print("used ice");
-        _socket.emit(
-            "IceCandidate", {"calleeId": callsTo, "iceCandidate": ice.toMap()});
+        _socket.emit("iceCandidate",
+            {"calleeId": callsTo.toString(), "iceCandidate": ice.toMap()});
       }
     };
     final stream = await navigator.mediaDevices
         .getUserMedia({"video": true, "audio": true});
-    await _connection.addStream(stream);
+    stream.getTracks().forEach((a) {
+      _connection.addTrack(a, stream);
+    });
     setState(() {
       _myVideoRenderer.srcObject = stream;
     });
@@ -68,8 +77,10 @@ class _CallScreenState extends State<CallScreen> {
           RTCSessionDescription(offer['sdp'], offer['type']),
         );
         callsTo = int.parse(data['callerId']);
+        print("other: $callsTo");
         final ans = await _connection.createAnswer();
         print("sent answer");
+        print("the type is fucking: ${data['callerId'].runtimeType}");
         _socket.emit("answerCall", {
           "callerId": data['callerId'],
           "sdpAnswer": ans.toMap(),
@@ -85,14 +96,25 @@ class _CallScreenState extends State<CallScreen> {
             data['sdpAnswer']['sdp'], data['sdpAnswer']['type']));
       },
     );
-
+    _socket.onAny((a, data) {
+      if (a.contains("ceC")) {
+        String candidate = data["iceCandidate"]["candidate"];
+        String sdpMid = data["iceCandidate"]["sdpMid"];
+        int sdpMLineIndex = data["iceCandidate"]["sdpMLineIndex"];
+        // add iceCandidate
+        _connection.addCandidate(RTCIceCandidate(
+          candidate,
+          sdpMid,
+          sdpMLineIndex,
+        ));
+      }
+    });
     _socket.on(
-      "iceCandidate",
+      "IceCandidate",
       (data) {
         String candidate = data["iceCandidate"]["candidate"];
-        String sdpMid = data["iceCandidate"]["id"];
-        int sdpMLineIndex = data["iceCandidate"]["label"];
-
+        String sdpMid = data["iceCandidate"]["sdpMid"];
+        int sdpMLineIndex = data["iceCandidate"]["sdpMLineIndex"];
         // add iceCandidate
         _connection.addCandidate(RTCIceCandidate(
           candidate,
@@ -101,9 +123,6 @@ class _CallScreenState extends State<CallScreen> {
         ));
       },
     );
-    _connection.onTrack = (data) {
-      _otherVideoRenderer.srcObject = data.streams[0];
-    };
   }
 
   _call() async {
@@ -112,6 +131,7 @@ class _CallScreenState extends State<CallScreen> {
     _connection.setLocalDescription(offer);
     print("calling");
     callsTo = int.parse(calleController.text);
+    print("other: $callsTo");
     _socket.emit("makeCall",
         {"calleeId": calleController.text, "sdpOffer": offer.toMap()});
   }
