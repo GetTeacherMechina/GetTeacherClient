@@ -4,12 +4,12 @@ part "register_net_model.g.dart";
 
 @JsonSerializable()
 class RegisterRequestModel {
-  RegisterRequestModel({
-    required this.fullName,
-    required this.password,
-    required this.email,
-    required this.teacherRequestModel,
-  });
+  RegisterRequestModel(
+      {required this.fullName,
+      required this.password,
+      required this.email,
+      required this.teacherRequestModel,
+      required this.studentRequestModel});
 
   Map<String, dynamic> toJson() => _$RegisterRequestModelToJson(this);
 
@@ -22,6 +22,21 @@ class RegisterRequestModel {
 
   @JsonKey(name: "Teacher", required: false, disallowNullValue: true)
   final TeacherRequestModel? teacherRequestModel;
+
+  @JsonKey(name: "Student", required: false, disallowNullValue: true)
+  final StudentRequestModel? studentRequestModel;
+}
+
+@JsonSerializable()
+class StudentRequestModel {
+  const StudentRequestModel({required this.grade});
+
+  factory StudentRequestModel.fromJson(final Map<String, dynamic> json) =>
+      _$StudentRequestModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$StudentRequestModelToJson(this);
+
+  final String grade;
 }
 
 @JsonSerializable()

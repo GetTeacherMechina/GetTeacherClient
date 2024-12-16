@@ -1,4 +1,5 @@
 import "package:getteacher/net/register/register_net_model.dart";
+import "package:getteacher/views/register_screen/student_input.dart";
 
 sealed class UserRole {
   const UserRole();
@@ -75,6 +76,12 @@ class RegisterModel {
           StudentAndTeacher(teacher: Teacher(bio: final String bio)) =>
             TeacherRequestModel(bio: bio),
           Student() => null,
+        },
+        studentRequestModel: switch (role) {
+          Student(grade: final int grade) ||
+          StudentAndTeacher(student: Student(grade: final int grade)) =>
+            StudentRequestModel(grade: grades[grade]!),
+          _ => null,
         },
       );
 
