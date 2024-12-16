@@ -4,12 +4,13 @@ part "register_net_model.g.dart";
 
 @JsonSerializable()
 class RegisterRequestModel {
-  RegisterRequestModel(
-      {required this.fullName,
-      required this.password,
-      required this.email,
-      required this.teacherRequestModel,
-      required this.studentRequestModel});
+  RegisterRequestModel({
+    required this.fullName,
+    required this.password,
+    required this.email,
+    required this.teacherRequestModel,
+    required this.studentRequestModel,
+  });
 
   Map<String, dynamic> toJson() => _$RegisterRequestModelToJson(this);
 
