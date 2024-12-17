@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 
 void main() {

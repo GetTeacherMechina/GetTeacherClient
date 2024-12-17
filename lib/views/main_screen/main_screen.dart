@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-import "package:getteacher/net/hello/hello.dart";
-import "package:getteacher/views/main_screen/main_screenl_model.dart";
+import "package:getteacher/net/net.dart";
+import "package:getteacher/net/profile/profile.dart";
+import "package:getteacher/net/profile/profile_net_model.dart";
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -10,24 +11,20 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Model model = const Model();
-
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () async {
-                  final Hello hello = await fetchHello();
-
-                  setState(() {
-                    model = model.copyWith(hello: () => hello);
-                  });
-                },
-                child: Text("Message from server: ${model.hello.message}"),
+        body: FutureBuilder<ProfileResponseModel>(
+          future: profile(),
+          builder: (
+            final BuildContext context,
+            final AsyncSnapshot<ProfileResponseModel> snapshot,
+          ) =>
+              snapshot.mapSnapshot(
+            onSuccess: (final ProfileResponseModel profile) => Center(
+              child: Text(
+                "Message from server: ${profile.email}, ${profile.fullName}",
               ),
-            ],
+            ),
           ),
         ),
       );

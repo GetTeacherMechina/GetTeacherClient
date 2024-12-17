@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
+import "package:getteacher/views/main_screen/main_screen.dart";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -58,6 +59,12 @@ class _LoginScreen extends State<LoginScreen> {
                     validate: () => true,
                     submit: () async {
                       await login(model.toRequest());
+                      await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute<void>(
+                          builder: (final BuildContext context) =>
+                              const MainScreen(),
+                        ),
+                      );
                     },
                   ),
                 ],
