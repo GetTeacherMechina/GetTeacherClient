@@ -2,6 +2,7 @@ import "dart:convert";
 import "dart:io";
 
 import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 
 const int debugPort = 44300;
@@ -19,37 +20,61 @@ Uri uriOfEndpoint(final String path) {
   }
 }
 
-class GetTeacherClient extends http.BaseClient {
-  http.Client client = http.Client();
-  @override
-  Future<http.StreamedResponse> send(final http.BaseRequest request) =>
-      client.send(request);
+class GetTeacherClient {
+  final http.Client _client = http.Client();
+  String? _jwt;
 
-  Future<Map<String, dynamic>> getJson(final String endpoint) async {
-    final http.Response response = await get(uriOfEndpoint(baseUrl + endpoint));
+  void authorize(final String jwt) {
+    _jwt = jwt;
+  }
+
+  Map<String, String> headers() => <String, String>{
+        HttpHeaders.contentTypeHeader: "application/json",
+        if (_jwt != null) HttpHeaders.authorizationHeader: "Bearer ${_jwt!}",
+      };
+
+  Map<String, dynamic> handleResponse(final http.Response response) {
     if (response.statusCode != 200) {
       throw Exception("Request failed with code: ${response.statusCode}");
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> getJson(final String endpoint) async {
+    final http.Response response = await _client
+        .get(uriOfEndpoint(baseUrl + endpoint), headers: headers());
+    return handleResponse(response);
+  }
+
   Future<Map<String, dynamic>> postJson(
     final String endpoint,
     final Map<String, dynamic> json,
   ) async {
-    final http.Response response = await post(
+    final http.Response response = await _client.post(
       uriOfEndpoint(baseUrl + endpoint),
-      headers: <String, String>{
-        HttpHeaders.contentTypeHeader: "application/json",
-      },
+      headers: headers(),
       body: jsonEncode(json),
     );
-
-    if (response.statusCode != 200) {
-      throw Exception(
-        "Request failed with code: ${response.statusCode} ${response.body}",
-      );
-    }
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    return handleResponse(response);
   }
+}
+
+Widget errorText(final Object object) => Text("Error occured: $object");
+Widget noData() => const Text("No data");
+Widget waiting() => const Center(
+      child: CircularProgressIndicator(),
+    );
+
+extension MapSnapshot<T> on AsyncSnapshot<T> {
+  Widget mapSnapshot<V>({
+    required final Widget Function(T) onSuccess,
+    final Widget Function() onWaiting = waiting,
+    final Widget Function() onNoData = noData,
+    final Widget Function(Object) onError = errorText,
+  }) =>
+      hasError
+          ? onError(error!)
+          : (ConnectionState.waiting == connectionState
+              ? onWaiting()
+              : (hasData ? onSuccess(data as T) : onNoData()));
 }
