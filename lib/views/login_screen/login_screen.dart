@@ -5,6 +5,7 @@ import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
 import "package:getteacher/views/main_screen/main_screen.dart";
+import "package:getteacher/views/register_screen/register_screen.dart";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -35,27 +36,45 @@ class _LoginScreen extends State<LoginScreen> {
                   const Spacer(
                     flex: 1,
                   ),
-                  TextField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      hintText: "Email",
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      children: <Widget>[
+                        TextField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            hintText: "Email",
+                          ),
+                          onChanged: (final String value) {
+                            model = model.copyWith(email: () => value);
+                          },
+                        ),
+                        TextField(
+                          obscureText: true,
+                          controller: passwordController,
+                          decoration: const InputDecoration(
+                            hintText: "Password",
+                          ),
+                          onChanged: (final String value) {
+                            model = model.copyWith(password: () => value);
+                          },
+                        ),
+                      ],
                     ),
-                    onChanged: (final String value) {
-                      model = model.copyWith(email: () => value);
-                    },
-                  ),
-                  TextField(
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                      hintText: "Password",
-                    ),
-                    onChanged: (final String value) {
-                      model = model.copyWith(password: () => value);
-                    },
                   ),
                   const Spacer(
-                    flex: 4,
+                    flex: 2,
+                  ),
+                  TextButton(
+                    child: const Text("Don't have a profile?"),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute<void>(
+                          builder: (final BuildContext context) =>
+                              RegisterScreen(),
+                        ),
+                      );
+                    },
                   ),
                   SubmitButton(
                     validate: () => true,
@@ -71,6 +90,7 @@ class _LoginScreen extends State<LoginScreen> {
                       );
                     },
                   ),
+                  const Spacer()
                 ],
               ),
             ),
