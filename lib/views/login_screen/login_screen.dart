@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
@@ -22,82 +23,92 @@ class _LoginScreen extends State<LoginScreen> {
   late final TextEditingController passwordController =
       TextEditingController(text: model.password);
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Row(
-          children: <Widget>[
-            const Spacer(
-              flex: 1,
-            ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                children: <Widget>[
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      children: <Widget>[
-                        TextField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                            hintText: "Email",
-                          ),
-                          onChanged: (final String value) {
-                            model = model.copyWith(email: () => value);
-                          },
-                        ),
-                        TextField(
-                          obscureText: true,
-                          controller: passwordController,
-                          decoration: const InputDecoration(
-                            hintText: "Password",
-                          ),
-                          onChanged: (final String value) {
-                            model = model.copyWith(password: () => value);
-                          },
-                        ),
-                      ],
+        body: Form(
+          key: _formKey,
+          autovalidateMode: AutovalidateMode.always,
+          child: Row(
+            children: <Widget>[
+              const Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: <Widget>[
+                    const Spacer(
+                      flex: 1,
                     ),
-                  ),
-                  const Spacer(
-                    flex: 2,
-                  ),
-                  TextButton(
-                    child: const Text("Don't have a profile?"),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (final BuildContext context) =>
-                              RegisterScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  SubmitButton(
-                    validate: () => true,
-                    submit: () async {
-                      await login(model.toRequest());
-                      unawaited(
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              hintText: "Email",
+                            ),
+                            onChanged: (final String value) {
+                              model = model.copyWith(email: () => value);
+                            },
+                            validator: (final String? value) =>
+                                value != null && EmailValidator.validate(value)
+                                    ? null
+                                    : "Invalid email",
+                          ),
+                          TextField(
+                            obscureText: true,
+                            controller: passwordController,
+                            decoration: const InputDecoration(
+                              hintText: "Password",
+                            ),
+                            onChanged: (final String value) {
+                              model = model.copyWith(password: () => value);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(
+                      flex: 2,
+                    ),
+                    TextButton(
+                      child: const Text("Don't have a profile?"),
+                      onPressed: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
                             builder: (final BuildContext context) =>
-                                const MainScreen(),
+                                RegisterScreen(),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                  const Spacer()
-                ],
+                        );
+                      },
+                    ),
+                    SubmitButton(
+                      validate: () => _formKey.currentState!.validate(),
+                      submit: () async {
+                        await login(model.toRequest());
+                        unawaited(
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute<void>(
+                              builder: (final BuildContext context) =>
+                                  const MainScreen(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Spacer()
+                  ],
+                ),
               ),
-            ),
-            const Spacer(
-              flex: 1,
-            ),
-          ],
+              const Spacer(
+                flex: 1,
+              ),
+            ],
+          ),
         ),
       );
 }
