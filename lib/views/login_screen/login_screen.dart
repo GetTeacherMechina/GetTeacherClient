@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
@@ -59,12 +61,12 @@ class _LoginScreen extends State<LoginScreen> {
                     validate: () => true,
                     submit: () async {
                       await login(model.toRequest());
-                      await Navigator.of(context).pushReplacement(
+                      unawaited(Navigator.of(context).pushReplacement(
                         MaterialPageRoute<void>(
                           builder: (final BuildContext context) =>
                               const MainScreen(),
                         ),
-                      );
+                      ));
                     },
                   ),
                 ],
