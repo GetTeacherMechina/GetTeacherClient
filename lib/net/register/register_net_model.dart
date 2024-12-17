@@ -14,17 +14,14 @@ class RegisterRequestModel {
 
   Map<String, dynamic> toJson() => _$RegisterRequestModelToJson(this);
 
-  @JsonKey(name: "FullName")
   final String fullName;
-  @JsonKey(name: "Password")
   final String password;
-  @JsonKey(name: "Email")
   final String email;
 
-  @JsonKey(name: "Teacher", required: false, disallowNullValue: true)
+  @JsonKey(name: "teacher", required: false, disallowNullValue: true)
   final TeacherRequestModel? teacherRequestModel;
 
-  @JsonKey(name: "Student", required: false, disallowNullValue: true)
+  @JsonKey(name: "student", required: false, disallowNullValue: true)
   final StudentRequestModel? studentRequestModel;
 }
 

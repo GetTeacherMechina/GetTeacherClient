@@ -17,11 +17,12 @@ class LoginRequestModel {
 
 @JsonSerializable()
 class LoginResponseModel {
-  const LoginResponseModel({required this.jwt});
+  const LoginResponseModel({
+    required this.jwtToken,
+  });
 
   factory LoginResponseModel.fromJson(final Map<String, dynamic> json) =>
       _$LoginResponseModelFromJson(json);
 
-  @JsonKey(name: "jwtToken")
-  final String jwt;
+  final String jwtToken;
 }
