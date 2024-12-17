@@ -5,7 +5,7 @@ import "package:getteacher/views/login_screen/login_model.dart";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
-  
+
   @override
   State<StatefulWidget> createState() => _LoginScreen();
 }
@@ -22,47 +22,51 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(final BuildContext context) => Scaffold(
         body: Row(
           children: <Widget>[
-          const Spacer(
-            flex: 1,
-          ),
-          Expanded(
-            flex: 1,
-            child: Column(
+            const Spacer(
+              flex: 1,
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
                 children: <Widget>[
-                const Spacer(
-                  flex: 1,
-                ),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
+                  const Spacer(
+                    flex: 1,
+                  ),
+                  TextField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
                       hintText: "Email",
                     ),
                     onChanged: (final String value) {
                       model = model.copyWith(email: () => value);
                     },
-                ),
-                TextField(
-                  obscureText: true,
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                      hintText: "Password",
                   ),
+                  TextField(
+                    obscureText: true,
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                      hintText: "Password",
+                    ),
                     onChanged: (final String value) {
                       model = model.copyWith(password: () => value);
                     },
-                ),
-                const Spacer(
-                  flex: 4,
-                ),
-              ],
-            ), 
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-        ],
-      ),
-    ),
-  );
-
+                  ),
+                  const Spacer(
+                    flex: 4,
+                  ),
+                  SubmitButton(
+                    validate: () => true,
+                    submit: () async {
+                      await login(model.toRequest());
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const Spacer(
+              flex: 1,
+            ),
+          ],
+        ),
+      );
 }
