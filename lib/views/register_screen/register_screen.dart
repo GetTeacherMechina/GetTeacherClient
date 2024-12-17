@@ -1,7 +1,10 @@
+import "dart:async";
+
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/register/register.dart";
+import "package:getteacher/views/main_screen/main_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 import "package:getteacher/views/register_screen/user_role_selector.dart";
@@ -109,6 +112,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await register(model.intoRegisterRequest());
+                        unawaited(
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute<void>(
+                              builder: (final BuildContext context) =>
+                                  const MainScreen(),
+                            ),
+                          ),
+                        );
                       },
                     ),
                     const Spacer(),

@@ -71,13 +71,13 @@ class RegisterModel {
         fullName: fullName,
         email: email,
         password: password,
-        teacherRequestModel: switch (role) {
+        teacher: switch (role) {
           Teacher(bio: final String bio) ||
           StudentAndTeacher(teacher: Teacher(bio: final String bio)) =>
             TeacherRequestModel(bio: bio),
           Student() => null,
         },
-        studentRequestModel: switch (role) {
+        student: switch (role) {
           Student(grade: final int grade) ||
           StudentAndTeacher(student: Student(grade: final int grade)) =>
             StudentRequestModel(grade: grades[grade]!),

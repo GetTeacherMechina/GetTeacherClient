@@ -8,10 +8,7 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() => _$LoginRequestModelToJson(this);
 
-  @JsonKey(name: "Email")
   final String email;
-
-  @JsonKey(name: "Password")
   final String password;
 }
 

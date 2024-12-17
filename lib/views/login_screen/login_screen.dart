@@ -61,12 +61,14 @@ class _LoginScreen extends State<LoginScreen> {
                     validate: () => true,
                     submit: () async {
                       await login(model.toRequest());
-                      unawaited(Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (final BuildContext context) =>
-                              const MainScreen(),
+                      unawaited(
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                const MainScreen(),
+                          ),
                         ),
-                      ));
+                      );
                     },
                   ),
                 ],
