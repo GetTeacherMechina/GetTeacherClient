@@ -1,11 +1,8 @@
-import "dart:async";
-
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/register/register.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
-import "package:getteacher/views/main_screen/main_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 import "package:getteacher/views/register_screen/user_role_selector.dart";
@@ -100,11 +97,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           TextFormField(
                             obscureText: true,
                             decoration: const InputDecoration(
-                                hintText: "Confirm password"),
+                              hintText: "Confirm password",
+                            ),
                             onChanged: (final String value) {
                               setState(() {
                                 model = model.copyWith(
-                                    confirmedPassword: () => value);
+                                  confirmedPassword: () => value,
+                                );
                               });
                             },
                             validator: (final String? value) =>
@@ -132,15 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        await register(model.intoRegisterRequest());
-                        unawaited(
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute<void>(
-                              builder: (final BuildContext context) =>
-                                  const MainScreen(),
-                            ),
-                          ),
-                        );
+                        await register(model.intoRegisterRequest(), context);
                       },
                     ),
                     const Spacer(),
