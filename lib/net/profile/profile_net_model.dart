@@ -5,17 +5,19 @@ part "profile_net_model.g.dart";
 @JsonSerializable()
 class ProfileResponseModel {
   ProfileResponseModel({
-    this.email = "",
-    this.fullName = "",
+    required this.email,
+    required this.fullName,
+    required this.isStudent,
+    required this.isTeacher,
   });
 
-  // Factory method to create an instance from JSON
   factory ProfileResponseModel.fromJson(final Map<String, dynamic> json) =>
       _$ProfileResponseModelFromJson(json);
 
   final String email;
   final String fullName;
+  final bool isStudent;
+  final bool isTeacher;
 
-  // Method to convert an instance to JSON
   Map<String, dynamic> toJson() => _$ProfileResponseModelToJson(this);
 }
