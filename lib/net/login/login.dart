@@ -5,6 +5,7 @@ import "package:getteacher/net/login/login_net_model.dart";
 import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
+import "package:getteacher/utils/local_jwt.dart";
 import "package:getteacher/views/student_main_screen/student_main_screen.dart";
 import "package:getteacher/views/teacher_main_screen/teacher_main_screen.dart";
 import "package:getteacher/views/teacher_student_selection_screen/teacher_student_selection_screen.dart";
@@ -18,6 +19,9 @@ Future<void> login(
 
   final LoginResponseModel jwt = LoginResponseModel.fromJson(response);
   getClient().authorize(jwt.jwtToken);
+  
+  // saves it to local storage
+  LocalJwt.setLocalJwt(jwt.jwtToken);
 
   final ProfileResponseModel profileResponseModel = await profile();
 
