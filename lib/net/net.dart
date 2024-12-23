@@ -41,6 +41,8 @@ class GetTeacherClient {
     _jwt = jwt;
   }
 
+  String? jwt() => _jwt;
+
   Map<String, String> headers() => <String, String>{
         HttpHeaders.contentTypeHeader: "application/json",
         if (_jwt != null) HttpHeaders.authorizationHeader: "Bearer ${_jwt!}",
@@ -64,7 +66,7 @@ class GetTeacherClient {
     final Map<String, dynamic> json,
   ) async {
     final http.Response response = await _client.post(
-      httpUri(baseUrl + endpoint),
+      httpUri(endpoint),
       headers: headers(),
       body: jsonEncode(json),
     );
