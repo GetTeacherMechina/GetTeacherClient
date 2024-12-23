@@ -1,7 +1,6 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
-import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/net/register/register.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
@@ -24,11 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController(text: model.email);
   late final TextEditingController nameController =
       TextEditingController(text: model.fullName);
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
