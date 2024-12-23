@@ -40,7 +40,7 @@ class _LoginScreen extends State<LoginScreen> {
                       flex: 1,
                     ),
                     Expanded(
-                      flex: 6,
+                      flex: 8,
                       child: Column(
                         children: <Widget>[
                           TextFormField(
@@ -70,7 +70,7 @@ class _LoginScreen extends State<LoginScreen> {
                       ),
                     ),
                     const Spacer(
-                      flex: 2,
+                      flex: 1,
                     ),
                     TextButton(
                       child: const Text("Don't have a profile?"),
