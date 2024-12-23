@@ -40,15 +40,15 @@ IO.on("connection", (socket) => {
     });
   });
 
-  socket.on("IceCandidate", (data) => {
+  socket.on("iceCandidate", (data) => {
     let calleeId = data.calleeId;
     let iceCandidate = data.iceCandidate;
+    console.log(data.iceCandidate);
+    console.log(`got ice to ${calleeId}`);  
 
-    console.log("got ice");
-
-    socket.to(calleeId).emit("IceCandidate", {
-      sender: socket.user,
+    console.log(socket.to(calleeId.toString()).emit("iceCandidate", {
+      callee: socket.user,
       iceCandidate: iceCandidate,
-    });
+    }));
   });
 });

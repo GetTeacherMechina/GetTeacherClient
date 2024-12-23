@@ -123,7 +123,7 @@ class _CallScreenState extends State<CallScreen> {
     // for Incoming call
     if (widget.offer != null) {
       // listen for Remote IceCandidate
-      socket!.on("IceCandidate", (data) {
+      socket!.on("iceCandidate", (data) {
         String candidate = data["iceCandidate"]["candidate"];
         String sdpMid = data["iceCandidate"]["id"];
         int sdpMLineIndex = data["iceCandidate"]["label"];
@@ -171,7 +171,7 @@ class _CallScreenState extends State<CallScreen> {
 
         // send iceCandidate generated to remote peer over signalling
         for (RTCIceCandidate candidate in rtcIceCadidates) {
-          socket!.emit("IceCandidate", {
+          socket!.emit("iceCandidate", {
             "calleeId": widget.calleeId,
             "iceCandidate": {
               "id": candidate.sdpMid,
@@ -193,7 +193,7 @@ class _CallScreenState extends State<CallScreen> {
 
         // send iceCandidate generated to remote peer over signalling
         for (RTCIceCandidate candidate in rtcIceCadidates) {
-          socket!.emit("IceCandidate", {
+          socket!.emit("iceCandidate", {
             "calleeId": widget.calleeId,
             "iceCandidate": {
               "id": candidate.sdpMid,

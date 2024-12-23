@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:front/signalling.service.dart';
@@ -17,9 +19,14 @@ class _CallScreenState extends State<CallScreen> {
   final _myVideoRenderer = RTCVideoRenderer();
   final _otherVideoRenderer = RTCVideoRenderer();
 
+  MediaStream? _myStream;
+  MediaStream? _otherStream;
+
   late RTCPeerConnection _connection;
 
   final _socket = SignallingService.instance.socket;
+
+  final List<RTCIceCandidate> _rtcIceCadidates = [];
 
   @override
   void initState() {
@@ -32,38 +39,49 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   _initWebRTC() async {
-    await _myVideoRenderer.initialize();
-    await _otherVideoRenderer.initialize();
+    _myVideoRenderer.initialize();
+    _otherVideoRenderer.initialize();
     _connection = await createPeerConnection({
       'iceServers': [
         {
           'urls': [
+            'stun:stun1.l.google.com:3478',
             'stun:stun1.l.google.com:19302',
             'stun:stun2.l.google.com:19302'
           ]
         }
       ]
     });
+    _connection.onConnectionState = (data) {
+      print("state: ${data.name}");
+    };
+
+    _connection.onIceConnectionState = (data) {
+      print("ice state: ${data.name}");
+    };
+
     _connection.onTrack = (data) {
-      if (data.streams[0].getTracks().any((a) => a.kind == "audio")) {
+      if (data.streams[0].getTracks().any((a) => a.kind == "video")) {
         print("got the track!!!! ${data.streams.length}");
+        print(data.streams[0]);
         setState(() {
-          _otherVideoRenderer.srcObject = data.streams[0];
+          _otherStream = data.streams[0];
+          _otherVideoRenderer.srcObject = _otherStream;
         });
       }
     };
+
     _connection.onIceCandidate = (ice) {
-      if (callsTo != null) {
-        print("used ice");
-        _socket.emit("iceCandidate",
-            {"calleeId": callsTo.toString(), "iceCandidate": ice.toMap()});
-      }
+      _rtcIceCadidates.add(ice);
     };
+    // await _connection.restartIce();
     final stream = await navigator.mediaDevices
-        .getUserMedia({"video": true, "audio": true});
-    stream.getTracks().forEach((a) {
-      _connection.addTrack(a, stream);
-    });
+        .getUserMedia({"video": true, 'audio': true});
+    _myStream = stream;
+    final tracks = stream.getTracks();
+    for (var track in tracks) {
+      await _connection.addTrack(track, stream);
+    }
     setState(() {
       _myVideoRenderer.srcObject = stream;
     });
@@ -80,7 +98,7 @@ class _CallScreenState extends State<CallScreen> {
         print("other: $callsTo");
         final ans = await _connection.createAnswer();
         print("sent answer");
-        print("the type is fucking: ${data['callerId'].runtimeType}");
+        // print("the type is fucking: ${data['callerId'].runtimeType}");
         _socket.emit("answerCall", {
           "callerId": data['callerId'],
           "sdpAnswer": ans.toMap(),
@@ -94,13 +112,27 @@ class _CallScreenState extends State<CallScreen> {
         print("got answered");
         _connection.setRemoteDescription(RTCSessionDescription(
             data['sdpAnswer']['sdp'], data['sdpAnswer']['type']));
+
+        for (RTCIceCandidate candidate in _rtcIceCadidates) {
+          print("ice candidate: ${candidate.toMap()}");
+          _socket.emit("iceCandidate", {
+            "calleeId": callsTo.toString(),
+            "iceCandidate": candidate.toMap()
+          });
+
+          _connection.addCandidate(candidate);
+        }
+        print("used ice");
+        _rtcIceCadidates.clear();
       },
     );
     _socket.onAny((a, data) {
       if (a.contains("ceC")) {
+        print(data['iceCandidate']);
         String candidate = data["iceCandidate"]["candidate"];
         String sdpMid = data["iceCandidate"]["sdpMid"];
         int sdpMLineIndex = data["iceCandidate"]["sdpMLineIndex"];
+        print('got ice from other');
         // add iceCandidate
         _connection.addCandidate(RTCIceCandidate(
           candidate,
@@ -110,12 +142,13 @@ class _CallScreenState extends State<CallScreen> {
       }
     });
     _socket.on(
-      "IceCandidate",
+      "iceCandidate",
       (data) {
         String candidate = data["iceCandidate"]["candidate"];
         String sdpMid = data["iceCandidate"]["sdpMid"];
         int sdpMLineIndex = data["iceCandidate"]["sdpMLineIndex"];
         // add iceCandidate
+        print('got ice from other');
         _connection.addCandidate(RTCIceCandidate(
           candidate,
           sdpMid,
@@ -138,6 +171,10 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("rebuild alllllll");
+    print(_otherVideoRenderer.srcObject?.getTracks().map((a) {
+      print(a.jsify());
+    }));
     return Scaffold(
       appBar: AppBar(title: SelectableText("$id")),
       body: Center(
