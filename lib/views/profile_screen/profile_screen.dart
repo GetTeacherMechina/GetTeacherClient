@@ -12,7 +12,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final Profile _profile = Profile(
     name: "Rick Astley",
     email: "john.doe@example.com",
-    profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpSYk_W83N2xJNEfhep2ia56pzsUI1ucsPZg&s", // Placeholder image
+    profileImage:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpSYk_W83N2xJNEfhep2ia56pzsUI1ucsPZg&s", // Placeholder image
   );
 
   @override
@@ -24,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 20),
                 // Profile Picture
                 CircleAvatar(
@@ -55,17 +56,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     // Add logic for editing profile
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Edit Profile clicked')),
+                      const SnackBar(content: Text("Edit Profile clicked")),
                     );
                   },
                   icon: const Icon(Icons.edit),
                   label: const Text("Edit Profile"),
                   style: ElevatedButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 100,)
+                const SizedBox(
+                  height: 100,
+                ),
               ],
             ),
           ),

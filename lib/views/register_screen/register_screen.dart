@@ -1,7 +1,10 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
+import "package:getteacher/net/net.dart";
 import "package:getteacher/net/register/register.dart";
+import "package:getteacher/utils/local_jwt.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
@@ -24,9 +27,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late final TextEditingController nameController =
       TextEditingController(text: model.fullName);
 
+  Future<void> tryLogin() async {
+    final String? jwt = await LocalJwt.getLocalJwt();
+    if (jwt != null) {
+      getClient().authorize(jwt);
+      try {
+        await jumpToMainScreen(context);
+      } catch (e) {
+        LocalJwt.clearJwt();
+      }
+    } else {}
+  }
+
   @override
   void initState() {
     super.initState();
+    tryLogin();
   }
 
   @override
@@ -137,6 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await register(model.intoRegisterRequest(), context);
+                        await jumpToMainScreen(context);
                       },
                     ),
                     const Spacer(),
