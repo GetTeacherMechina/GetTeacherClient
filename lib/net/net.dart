@@ -5,7 +5,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
 
-const int debugPort = 44300;
+const int debugPort = 5000;//44300;
 const String baseUrl = "/api/v1";
 
 final GetTeacherClient _client = GetTeacherClient();
@@ -14,7 +14,7 @@ GetTeacherClient getClient() => _client;
 
 Uri uriOfEndpoint(final String path) {
   if (kDebugMode) {
-    return Uri.https("localhost:$debugPort", path);
+    return Uri.http("localhost:$debugPort", path);
   } else {
     throw Exception("No release url");
   }
@@ -22,7 +22,7 @@ Uri uriOfEndpoint(final String path) {
 
 class GetTeacherClient {
   final http.Client _client = http.Client();
-  String? _jwt;
+  String? _jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lY2hpbmEtaGFuaWNoLTI0QGdyZWVuZHJlYW10ZWFtLm9ubWljcm9zb2Z0LmNvbSIsInN1YiI6IjEiLCJqdGkiOiJmMzBjZDRhMy1iN2QwLTQ0YjUtYTEzNy1iNDA4NWQ5M2Y5ZjUiLCJleHAiOjE3MzUxNTc0NDYsImlzcyI6Im1lIiwiYXVkIjoieW91In0.oOV2g74VSSnxKYtGTwhS8ZIqF7nnEUrlit_OQo47FFQ";
 
   void authorize(final String jwt) {
     _jwt = jwt;
