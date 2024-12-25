@@ -1,10 +1,10 @@
 import 'package:getteacher/net/subject_search/subject_search_net_model.dart';
 import 'package:getteacher/net/net.dart';
 
-Future<List<SubjectModel>> subjectSearch(final SubjectSearchRequestModel request) async
+Future<List<SubjectModel>> subjectSearch(final String subjectName) async
 {
   final Map<String, dynamic> response =
-    await getClient().postJson("/subjects/search", request.toJson());
+    await getClient().getJson("/subjects/search?subjectName=${subjectName}" );
   
   final List<SubjectModel> subjects = SubjectSearchResponseModel.fromJson(response).subjects;
 
