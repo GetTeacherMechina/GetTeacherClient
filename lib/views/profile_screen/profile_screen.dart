@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 20),
                 // Profile Picture
                 CircleAvatar(
@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     // Add logic for editing profile
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Edit Profile clicked')),
+                      const SnackBar(content: Text("Edit Profile clicked")),
                     );
                   },
                   icon: const Icon(Icons.edit),
@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   ),
                 ),
-                const SizedBox(height: 100,)
+                const SizedBox(height: 100,),
               ],
             ),
           ),
