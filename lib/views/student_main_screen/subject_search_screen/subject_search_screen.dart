@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 import "dart:async";
 
+import "package:getteacher/net/subject_search/subject_search.dart";
+import "package:getteacher/net/subject_search/subject_search_net_model.dart";
+
 class SubjectSearchWidget extends StatefulWidget {
   @override
   SubjectSearchWidgetState createState() => SubjectSearchWidgetState();
@@ -40,7 +43,9 @@ class SubjectSearchWidgetState extends State<SubjectSearchWidget> {
     });
 
     try {
-      final List<String> data = await fetchSubjectsFromApi(query);
+      final List<String> data = (await subjectSearch(_searchController.text))
+          .map((final SubjectModel a) => a.name)
+          .toList();
       setState(() {
         _subjects = data;
         _isLoading = false;

@@ -12,9 +12,9 @@ final GetTeacherClient _client = GetTeacherClient();
 
 GetTeacherClient getClient() => _client;
 
-Uri uriOfEndpoint(final String path) {
+Uri uriOfEndpoint(final String path, [final Map<String, dynamic>? query]) {
   if (kDebugMode) {
-    return Uri.https("localhost:$debugPort", path);
+    return Uri.https("localhost:$debugPort", path, query);
   } else {
     throw Exception("No release url");
   }
@@ -40,18 +40,22 @@ class GetTeacherClient {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> getJson(final String endpoint) async {
+  Future<Map<String, dynamic>> getJson(
+    final String endpoint, [
+    final Map<String, dynamic>? query,
+  ]) async {
     final http.Response response = await _client
-        .get(uriOfEndpoint(baseUrl + endpoint), headers: headers());
+        .get(uriOfEndpoint(baseUrl + endpoint, query), headers: headers());
     return handleResponse(response);
   }
 
   Future<Map<String, dynamic>> postJson(
     final String endpoint,
-    final Map<String, dynamic> json,
-  ) async {
+    final Map<String, dynamic> json, [
+    final Map<String, dynamic>? query,
+  ]) async {
     final http.Response response = await _client.post(
-      uriOfEndpoint(baseUrl + endpoint),
+      uriOfEndpoint(baseUrl + endpoint, query),
       headers: headers(),
       body: jsonEncode(json),
     );
