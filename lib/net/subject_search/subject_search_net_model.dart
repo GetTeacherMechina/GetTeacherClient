@@ -26,7 +26,7 @@ class SubjectModel {
 class SubjectSearchResponseModel {
   SubjectSearchResponseModel({required this.subjects});
   factory SubjectSearchResponseModel.fromJson(
-          final Map<String, dynamic> json) =>
+          final Map<String, dynamic> json,) =>
       _$SubjectSearchResponseModelFromJson(json);
 
   final List<SubjectModel> subjects;

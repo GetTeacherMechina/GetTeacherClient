@@ -63,7 +63,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   label: const Text("Edit Profile"),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                   ),
                 ),
                 const SizedBox(
