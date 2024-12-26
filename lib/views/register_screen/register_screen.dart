@@ -25,6 +25,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController(text: model.fullName);
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(final BuildContext context) => Scaffold(
         body: Form(
           key: _formKey,
@@ -42,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       flex: 1,
                     ),
                     Expanded(
-                      flex: 6,
+                      flex: 8,
                       child: Column(
                         children: <Widget>[
                           TextFormField(
@@ -115,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     const Spacer(
-                      flex: 2,
+                      flex: 1,
                     ),
                     TextButton(
                       child: const Text("Already have a profile?"),
