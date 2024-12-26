@@ -1,5 +1,6 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
@@ -87,6 +88,7 @@ class _LoginScreen extends State<LoginScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await login(model.toRequest(), context);
+                        await jumpToMainScreen(context);
                       },
                     ),
                     const Spacer(),
