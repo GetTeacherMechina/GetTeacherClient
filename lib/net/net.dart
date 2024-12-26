@@ -23,9 +23,9 @@ Uri httpUri(final String path) {
 Uri wsUri(final String path) {
   if (kDebugMode) {
     return Uri(
-      scheme: "ws",
+      scheme: "wss",
       host: "localhost",
-      port: 8765,
+      port: debugPort,
       path: baseUrl + path,
     );
   } else {

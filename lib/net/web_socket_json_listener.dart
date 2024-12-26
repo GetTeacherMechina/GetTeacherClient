@@ -13,7 +13,9 @@ class WebSocketJson {
             if (data is Map<String, dynamic>) {
               onNewData(data);
             } else {}
-          } catch (e) {}
+          } catch (e) {
+            //
+          }
         } else if (message is List<int>) {
         } else {}
       },
@@ -29,7 +31,7 @@ class WebSocketJson {
     final void Function(Map<String, dynamic>) onNewData,
   ) async {
     final WebSocketChannel websocket = WebSocketChannel.connect(
-      wsUri("/api/v1/websocket"),
+      wsUri("/websocket"),
     );
 
     websocket.sink.add(getClient().jwt());

@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
+import "package:getteacher/net/call/call_model.dart";
+import "package:getteacher/net/set_online_status/set_online_status.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/views/call_screen.dart";
 
 class TeacherMainScreen extends StatefulWidget {
   const TeacherMainScreen({super.key});
@@ -9,34 +12,53 @@ class TeacherMainScreen extends StatefulWidget {
 }
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
-  late WebSocketJson connection;
+  WebSocketJson? connection;
 
   bool readyForCalling = false;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    connection = await WebSocketJson.connect(
+    WebSocketJson.connect(
       (final Map<String, dynamic> json) {
-        if (json["called_by"] != null) {
-          print("You were called!");
+        final CallModel callModel = CallModel.fromJson(json);
+        if (mounted) {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (final BuildContext context) =>
+                  CallScreen(message: callModel),
+            ),
+          );
         }
       },
-    );
+    ).then((final WebSocketJson socket) {
+      connection = socket;
+    });
   }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
         body: Center(
           child: RawMaterialButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (readyForCalling) {
+                await stopMettingSearching();
+              } else {
+                await startMettingSearching();
+              }
+              setState(() {
+                readyForCalling = !readyForCalling;
+              });
+            },
             elevation: 2.0,
             fillColor: Colors.blue,
             constraints: const BoxConstraints(minWidth: 0.0),
-            child: const Icon(
-              Icons.pause,
-              size: 35.0,
-            ),
+            child: readyForCalling
+                ? const CircularProgressIndicator()
+                : const Icon(
+                    Icons.pause,
+                    size: 35.0,
+                  ),
             padding: const EdgeInsets.all(15.0),
             shape: const CircleBorder(),
           ),
