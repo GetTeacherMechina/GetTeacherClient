@@ -7,7 +7,7 @@ Future<void> startMettingSearching() async {
       "Subject": <String, String>{
         "Name": "computer-science",
       },
-      "Grade": <String, String>{"Name": "12"},
+      "Grade": <String, String>{"Name": "יב"},
     },
   );
 }
