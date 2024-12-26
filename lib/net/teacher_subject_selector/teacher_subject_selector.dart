@@ -15,11 +15,13 @@ class TeacherSubjectSelectorRequestModel {
 @JsonSerializable()
 class TeacherSubjectSelectorResponseModel {
   const TeacherSubjectSelectorResponseModel({
-    required this.jwtToken,
+    required this.grades,
+    required this.subjects
   });
 
-  factory TeacherSubjectSelectorResponseModel.fromJson(final Map<String, dynamic> json) =>
+  factory TeacherSubjectSelectorResponseModel.fromJson(final Map<String, dynamic> json) => 
       _$TeacherSubjectSelectorResponseModelFromJson(json);
 
-  final String jwtToken;
+  final List<String> grades;
+  final List<String> subjects;
 }
