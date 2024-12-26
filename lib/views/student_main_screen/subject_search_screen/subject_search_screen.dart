@@ -1,120 +1,38 @@
 import "package:flutter/material.dart";
-import "dart:async";
-
+import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/subject_search/subject_search.dart";
 import "package:getteacher/net/subject_search/subject_search_net_model.dart";
 
-class SubjectSearchWidget extends StatefulWidget {
-  @override
-  SubjectSearchWidgetState createState() => SubjectSearchWidgetState();
-}
-
-class SubjectSearchWidgetState extends State<SubjectSearchWidget> {
-  final TextEditingController _searchController = TextEditingController();
-  Timer? _debounce;
-  List<String> _subjects = <String>[];
-  bool _isLoading = false;
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _debounce?.cancel();
-    super.dispose();
-  }
-
-  void _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
-      _fetchSubjects(_searchController.text);
-    });
-  }
-
-  Future<void> _fetchSubjects(final String query) async {
-    if (query.isEmpty) {
-      setState(() {
-        _subjects = <String>[];
-        _isLoading = false;
-      });
-      return;
+class SubjectSearchWidget extends StatelessWidget {
+  Future<List<String>> fetchSubjectsFromApi(final String? query) async {
+    if (query == null || query.isEmpty) {
+      return <String>[];
     }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final List<String> data = (await subjectSearch(_searchController.text))
-          .map((final SubjectModel a) => a.name)
-          .toList();
-      setState(() {
-        _subjects = data;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _subjects = <String>[];
-        _isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error fetching subjects: $e")),
-      );
-    }
+    final List<SubjectModel> results = await subjectSearch(query);
+    return results.map((final SubjectModel subject) => subject.name).toList();
   }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text("Search Subjects"),
+          title: const Text("Search Subjects - student"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _searchController,
-                onChanged: (final String value) => _onSearchChanged(),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: "Search for subjects...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
+          child: SearcherWidget<String>(
+            fetchItems: fetchSubjectsFromApi,
+            itemBuilder: (final BuildContext context, final String item) =>
+                Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 20),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : _subjects.isEmpty
-                      ? const Text(
-                          "No subjects found",
-                          style: TextStyle(color: Colors.grey),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: _subjects.length,
-                            itemBuilder:
-                                (final BuildContext context, final int index) =>
-                                    Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: ListTile(
-                                leading: const Icon(Icons.book),
-                                title: Text(_subjects[index]),
-                              ),
-                            ),
-                          ),
-                        ),
-            ],
+              child: ListTile(
+                leading: const Icon(Icons.book),
+                title: Text(item),
+              ),
+            ),
+            hintText: "Search for subjects...",
           ),
         ),
       );
-}
-
-Future<List<String>> fetchSubjectsFromApi(final String query) async {
-  // Replace this with your actual network implementation
-  await Future<void>.delayed(const Duration(seconds: 1));
-  return <String>["Subject 1", "Subject 2", "Subject 3"]; // Example data
 }
