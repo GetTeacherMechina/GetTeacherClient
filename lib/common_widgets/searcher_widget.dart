@@ -66,6 +66,7 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
       );
     }
   }
+
   @override
   void initState() {
     super.initState();

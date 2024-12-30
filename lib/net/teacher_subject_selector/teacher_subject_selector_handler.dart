@@ -8,7 +8,8 @@ Future<List<TeacherSubjectModel>> getTeacherSubjectSelector() async {
       TeacherSubjectSelectorResponseModel.fromJson(json);
   final List<TeacherSubjectModel> ans = <TeacherSubjectModel>[];
   for (int i = 0; i < data.grades.length; i++) {
-    ans.add(TeacherSubjectModel(grade: data.grades[i], subject: data.subjects[i]));
+    ans.add(
+        TeacherSubjectModel(grade: data.grades[i], subject: data.subjects[i]));
   }
   return ans;
 }

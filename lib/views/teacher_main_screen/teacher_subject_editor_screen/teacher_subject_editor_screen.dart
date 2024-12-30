@@ -15,7 +15,9 @@ class _TeacherSubjectEditorScreenState
     extends State<TeacherSubjectEditorScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text("teacher subject selector"), ),
+        appBar: AppBar(
+          title: const Text("teacher subject selector"),
+        ),
         body: SearcherWidget<TeacherSubjectModel>(
           fetchItems: (final String? data) => getTeacherSubjectSelector(),
           itemBuilder:
