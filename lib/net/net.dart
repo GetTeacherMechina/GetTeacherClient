@@ -12,9 +12,22 @@ final GetTeacherClient _client = GetTeacherClient();
 
 GetTeacherClient getClient() => _client;
 
-Uri uriOfEndpoint(final String path) {
+Uri httpUri(final String path) {
   if (kDebugMode) {
-    return Uri.https("localhost:$debugPort", path);
+    return Uri.https("localhost:$debugPort", baseUrl + path);
+  } else {
+    throw Exception("No release url");
+  }
+}
+
+Uri wsUri(final String path) {
+  if (kDebugMode) {
+    return Uri(
+      scheme: "wss",
+      host: "localhost",
+      port: debugPort,
+      path: baseUrl + path,
+    );
   } else {
     throw Exception("No release url");
   }
@@ -27,6 +40,8 @@ class GetTeacherClient {
   void authorize(final String jwt) {
     _jwt = jwt;
   }
+
+  String? jwt() => _jwt;
 
   Map<String, String> headers() => <String, String>{
         HttpHeaders.contentTypeHeader: "application/json",
@@ -41,8 +56,8 @@ class GetTeacherClient {
   }
 
   Future<Map<String, dynamic>> getJson(final String endpoint) async {
-    final http.Response response = await _client
-        .get(uriOfEndpoint(baseUrl + endpoint), headers: headers());
+    final http.Response response =
+        await _client.get(httpUri(endpoint), headers: headers());
     return handleResponse(response);
   }
 
@@ -51,7 +66,7 @@ class GetTeacherClient {
     final Map<String, dynamic> json,
   ) async {
     final http.Response response = await _client.post(
-      uriOfEndpoint(baseUrl + endpoint),
+      httpUri(endpoint),
       headers: headers(),
       body: jsonEncode(json),
     );

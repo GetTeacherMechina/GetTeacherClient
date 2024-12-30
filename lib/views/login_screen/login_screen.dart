@@ -88,7 +88,12 @@ class _LoginScreen extends State<LoginScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await login(model.toRequest(), context);
-                        await jumpToMainScreen(context);
+                        final Widget nextScreen = await getMainScreen();
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) => nextScreen,
+                          ),
+                        );
                       },
                     ),
                     const Spacer(),
