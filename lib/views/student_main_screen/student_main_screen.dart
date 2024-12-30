@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/call_model.dart";
 import "package:getteacher/net/call_teacher/call_teacher.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/views/student_main_screen/subject_search_screen/subject_search_screen.dart";
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key, required this.profile});
@@ -39,6 +41,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
+    drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
           leading: const Icon(Icons.book),
@@ -55,10 +58,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 4,
                   ),
                   Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(hintText: "Subject"),
-                      controller: controller,
-                    ),
+                    child: SubjectSearchWidget(),
                   ),
                   Expanded(
                     flex: 1,

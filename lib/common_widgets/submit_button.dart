@@ -68,13 +68,17 @@ class _SubmitButtonState extends State<SubmitButton> {
 
           try {
             await widget.submit();
-            setState(() {
-              _state = ButtonState.success;
-            });
+            if (mounted) {
+              setState(() {
+                _state = ButtonState.success;
+              });
+            }
           } on Exception catch (_) {
-            setState(() {
-              _state = ButtonState.fail;
-            });
+            if (mounted) {
+              setState(() {
+                _state = ButtonState.fail;
+              });
+            }
           }
 
           Future<void>.delayed(const Duration(seconds: 3), () {

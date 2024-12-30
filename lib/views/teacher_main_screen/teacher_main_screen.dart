@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/call_model.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/set_online_status/set_online_status.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
-import "package:getteacher/views/teacher_main_screen/teacher_subject_editor_screen/teacher_subject_editor_screen.dart";
 
 class TeacherMainScreen extends StatefulWidget {
   const TeacherMainScreen({
@@ -47,27 +47,19 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          leading: const Icon(Icons.school),
-          title: Text("Hello ${widget.profile.fullName}"),
-          surfaceTintColor: Theme.of(context).primaryColor,
-        ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              TextButton(
-                child: const ListTile(
-                  leading: Text("My Subjects"),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (final BuildContext context) =>
-                        const TeacherSubjectEditorScreen(),
-                  ),
-                ),
-              ),
-            ],
+          leading: Builder(
+            builder: (final BuildContext context) => IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
           ),
+          title: Text("Hello ${widget.profile.fullName}"),
+          // surfaceTintColor: Theme.of(context).primaryColor,
+        ),
+        drawer: MainScreenDrawer(
+          profile: widget.profile,
         ),
         body: Row(
           children: <Widget>[

@@ -7,8 +7,8 @@ import "package:getteacher/views/register_screen/register_screen.dart";
 Future<Widget> mainScreenFromLogin() async {
   final String? jwt = await LocalJwt.getLocalJwt();
   if (jwt != null) {
-    getClient().authorize(jwt);
     try {
+      getClient().authorize(jwt);
       return getMainScreen();
     } catch (e) {
       LocalJwt.clearJwt();
@@ -37,7 +37,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => MaterialApp(
-        theme: ThemeData(useMaterial3: false),
+        theme: ThemeData(useMaterial3: true),
         home: mainScreen,
       );
 }
