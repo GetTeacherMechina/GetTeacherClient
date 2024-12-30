@@ -25,3 +25,10 @@ class TeacherSubjectSelectorResponseModel {
   final List<String> grades;
   final List<String> subjects;
 }
+class TeacherSubjectModel {
+
+  TeacherSubjectModel({required this.grade,required this.subject});
+
+  final String grade;
+  final String subject;
+}

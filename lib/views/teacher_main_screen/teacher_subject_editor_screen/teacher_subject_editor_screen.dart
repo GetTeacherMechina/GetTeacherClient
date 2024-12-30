@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
+import "package:getteacher/net/net.dart";
+import "package:getteacher/net/teacher_subject_selector/teacher_subject_selector.dart";
+import "package:getteacher/net/teacher_subject_selector/teacher_subject_selector_handler.dart";
 
 class TeacherSubjectEditorScreen extends StatefulWidget {
   const TeacherSubjectEditorScreen({super.key});
@@ -13,11 +16,13 @@ class _TeacherSubjectEditorScreenState
     extends State<TeacherSubjectEditorScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: SearcherWidget<String>(
-          fetchItems: (final String? data) async => <String>["a", "b", "c"],
-          itemBuilder: (final BuildContext context, final String item) =>
-              ListTile(
-            title: Text(item),
+    appBar: AppBar(title: const Text("teacher subject selector"), ),
+        body: SearcherWidget<TeacherSubjectModel>(
+          fetchItems: (final String? data) => getTeacherSubjectSelector(),
+          itemBuilder:
+              (final BuildContext context, final TeacherSubjectModel item) =>
+                  ListTile(
+            title: Text("subject: ${item.subject}, grade: ${item.grade}"),
           ),
         ),
       );
