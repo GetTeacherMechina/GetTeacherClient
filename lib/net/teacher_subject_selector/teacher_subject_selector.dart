@@ -16,7 +16,7 @@ class TeacherSubjectSelectorRequestModel {
 class TeacherSubjectSelectorResponseModel {
   const TeacherSubjectSelectorResponseModel({
     required this.grades,
-    required this.subjects
+    required this.subjects,
   });
 
   factory TeacherSubjectSelectorResponseModel.fromJson(final Map<String, dynamic> json) => 

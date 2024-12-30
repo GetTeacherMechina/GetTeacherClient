@@ -21,21 +21,22 @@ class TeacherMainScreen extends StatelessWidget {
           ),
         ),
         drawer: Drawer(
-            child: Column(
-          children: <Widget>[
-            TextButton(
-              child: const ListTile(
-                leading: Text("My Subjects"),
-              ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (final BuildContext context) =>
-                      const TeacherSubjectEditorScreen(),
+          child: Column(
+            children: <Widget>[
+              TextButton(
+                child: const ListTile(
+                  leading: Text("My Subjects"),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (final BuildContext context) =>
+                        const TeacherSubjectEditorScreen(),
+                  ),
                 ),
               ),
-            )
-          ],
-        )),
+            ],
+          ),
+        ),
       );
 }

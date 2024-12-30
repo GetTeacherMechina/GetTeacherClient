@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
-import "package:getteacher/net/net.dart";
 import "package:getteacher/net/teacher_subject_selector/teacher_subject_selector.dart";
 import "package:getteacher/net/teacher_subject_selector/teacher_subject_selector_handler.dart";
 
