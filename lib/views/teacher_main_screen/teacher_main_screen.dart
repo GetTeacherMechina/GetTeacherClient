@@ -51,6 +51,24 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
           title: Text("Hello ${widget.profile.fullName}"),
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              TextButton(
+                child: const ListTile(
+                  leading: Text("My Subjects"),
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (final BuildContext context) =>
+                        const TeacherSubjectEditorScreen(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         body: Row(
           children: <Widget>[
             const Spacer(),
@@ -91,24 +109,6 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
             ),
             const Spacer(),
           ],
-        ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              TextButton(
-                child: const ListTile(
-                  leading: Text("My Subjects"),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (final BuildContext context) =>
-                        const TeacherSubjectEditorScreen(),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       );
 }

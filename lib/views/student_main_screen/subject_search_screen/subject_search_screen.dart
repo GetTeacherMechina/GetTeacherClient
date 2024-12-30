@@ -4,11 +4,8 @@ import "package:getteacher/net/subject_search/subject_search.dart";
 import "package:getteacher/net/subject_search/subject_search_net_model.dart";
 
 class SubjectSearchWidget extends StatelessWidget {
-  Future<List<String>> fetchSubjectsFromApi(final String? query) async {
-    if (query == null || query.isEmpty) {
-      return <String>[];
-    }
-    final List<SubjectModel> results = await subjectSearch(query);
+  Future<List<String>> fetchSubjectsFromApi() async {
+    final List<SubjectModel> results = await subjectSearch();
     return results.map((final SubjectModel subject) => subject.name).toList();
   }
 

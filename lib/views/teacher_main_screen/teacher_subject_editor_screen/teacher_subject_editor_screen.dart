@@ -19,7 +19,7 @@ class _TeacherSubjectEditorScreenState
           title: const Text("teacher subject selector"),
         ),
         body: SearcherWidget<TeacherSubjectModel>(
-          fetchItems: (final String? data) => getTeacherSubjectSelector(),
+          fetchItems: getTeacherSubjectSelector,
           itemBuilder:
               (final BuildContext context, final TeacherSubjectModel item) =>
                   ListTile(
