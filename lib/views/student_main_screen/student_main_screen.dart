@@ -46,17 +46,17 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
         body: Row(
-          children: [
+          children: <Widget>[
             const Spacer(),
             Expanded(
               child: Column(
-                children: [
+                children: <Widget>[
                   const Spacer(
                     flex: 4,
                   ),
                   Expanded(
                     child: TextField(
-                      decoration: InputDecoration(hintText: "Subject"),
+                      decoration: const InputDecoration(hintText: "Subject"),
                       controller: controller,
                     ),
                   ),
@@ -73,7 +73,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text("Call a teacher")
+                          Text("Call a teacher"),
                         ],
                       ),
                     ),
@@ -84,7 +84,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                 ],
               ),
             ),
-            const Spacer()
+            const Spacer(),
           ],
         ),
       );

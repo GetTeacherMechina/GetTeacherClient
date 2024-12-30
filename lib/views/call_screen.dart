@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:getteacher/main.dart";
 import "package:getteacher/net/call/call_model.dart";
 
 class CallScreen extends StatelessWidget {

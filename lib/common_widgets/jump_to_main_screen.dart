@@ -13,9 +13,15 @@ Future<void> jumpToMainScreen(final BuildContext context) async {
         profileResponseModel.isStudent,
         profileResponseModel.isTeacher
       )) {
-        (true, true) => const TeacherStudentSelection(),
-        (true, false) => const StudentMainScreen(),
-        (false, true) => const TeacherMainScreen(),
+        (true, true) => TeacherStudentSelection(
+            profile: profileResponseModel,
+          ),
+        (true, false) => StudentMainScreen(
+            profile: profileResponseModel,
+          ),
+        (false, true) => TeacherMainScreen(
+            profile: profileResponseModel,
+          ),
         (false, false) => throw Exception("Impossible")
       },
     ),

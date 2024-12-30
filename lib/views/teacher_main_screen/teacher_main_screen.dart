@@ -51,11 +51,11 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
         body: Row(
-          children: [
-            Spacer(),
+          children: <Widget>[
+            const Spacer(),
             Expanded(
               child: Column(
-                children: [
+                children: <Widget>[
                   const Spacer(flex: 4),
                   Expanded(
                     flex: 1,
@@ -88,7 +88,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                 ],
               ),
             ),
-            Spacer()
+            const Spacer(),
           ],
         ),
       );
