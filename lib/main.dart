@@ -10,6 +10,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => MaterialApp(
+        theme: ThemeData(useMaterial3: false),
         home: RegisterScreen(),
       );
 }

@@ -5,7 +5,7 @@ Future<void> startMettingSearching() async {
     "/meeting/teacher/start",
     <String, dynamic>{
       "Subject": <String, String>{
-        "Name": "computer-science",
+        "Name": "Math",
       },
       "Grade": <String, String>{"Name": "יב"},
     },

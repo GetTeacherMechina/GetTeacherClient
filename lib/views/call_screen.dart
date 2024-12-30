@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/main.dart";
 import "package:getteacher/net/call/call_model.dart";
 
 class CallScreen extends StatelessWidget {
@@ -8,6 +9,7 @@ class CallScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
+        appBar: AppBar(),
         body: Center(
           child: Text("You are in a call with: ${message.companionName}"),
         ),

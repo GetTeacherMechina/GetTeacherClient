@@ -1,11 +1,17 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/call/call_model.dart";
+import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/set_online_status/set_online_status.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
 
 class TeacherMainScreen extends StatefulWidget {
-  const TeacherMainScreen({super.key});
+  const TeacherMainScreen({
+    super.key,
+    required this.profile,
+  });
+
+  final ProfileResponseModel profile;
 
   @override
   State<TeacherMainScreen> createState() => _TeacherMainScreenState();
@@ -38,30 +44,52 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Center(
-          child: RawMaterialButton(
-            onPressed: () async {
-              if (readyForCalling) {
-                await stopMettingSearching();
-              } else {
-                await startMettingSearching();
-              }
-              setState(() {
-                readyForCalling = !readyForCalling;
-              });
-            },
-            elevation: 2.0,
-            fillColor: Colors.blue,
-            constraints: const BoxConstraints(minWidth: 0.0),
-            child: readyForCalling
-                ? const CircularProgressIndicator()
-                : const Icon(
-                    Icons.pause,
-                    size: 35.0,
+        appBar: AppBar(
+          centerTitle: true,
+          leading: const Icon(Icons.school),
+          title: Text("Hello ${widget.profile.fullName}"),
+          surfaceTintColor: Theme.of(context).primaryColor,
+        ),
+        body: Row(
+          children: [
+            Spacer(),
+            Expanded(
+              child: Column(
+                children: [
+                  const Spacer(flex: 4),
+                  Expanded(
+                    flex: 1,
+                    child: RawMaterialButton(
+                      onPressed: () async {
+                        if (readyForCalling) {
+                          await stopMettingSearching();
+                        } else {
+                          await startMettingSearching();
+                        }
+                        setState(() {
+                          readyForCalling = !readyForCalling;
+                        });
+                      },
+                      elevation: 2.0,
+                      fillColor: Colors.blue,
+                      constraints: const BoxConstraints(minWidth: 0.0),
+                      child: readyForCalling
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Icon(
+                              Icons.search,
+                              size: 35.0,
+                            ),
+                      padding: const EdgeInsets.all(30.0),
+                      shape: const CircleBorder(),
+                    ),
                   ),
-            padding: const EdgeInsets.all(15.0),
-            shape: const CircleBorder(),
-          ),
+                ],
+              ),
+            ),
+            Spacer()
+          ],
         ),
       );
 }
