@@ -4,7 +4,7 @@ import "package:getteacher/net/net.dart";
 import "package:getteacher/utils/local_jwt.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 
-Future<Widget> mainScreen() async {
+Future<Widget> mainScreenFromLogin() async {
   final String? jwt = await LocalJwt.getLocalJwt();
   if (jwt != null) {
     getClient().authorize(jwt);
@@ -18,7 +18,7 @@ Future<Widget> mainScreen() async {
 }
 
 void main() async {
-  final Widget initialScreen = await mainScreen();
+  final Widget initialScreen = await mainScreenFromLogin();
 
   runApp(
     App(
