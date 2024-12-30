@@ -13,6 +13,8 @@ dependencies:
   http: ^1.2.2
   json_annotation: ^4.9.0
   progress_state_button: ^1.0.4
+  shared_preferences: ^2.3.4
+  web_socket_channel: ^3.0.1
 
 dev_dependencies:
   build_runner: ^2.3.3

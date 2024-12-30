@@ -4,8 +4,10 @@ part "teacher_subject_selector.g.dart";
 
 @JsonSerializable()
 class TeacherSubjectSelectorRequestModel {
-  TeacherSubjectSelectorRequestModel(
-      {required this.grades, required this.subjects});
+  TeacherSubjectSelectorRequestModel({
+    required this.grades,
+    required this.subjects,
+  });
 
   Map<String, dynamic> toJson() =>
       _$TeacherSubjectSelectorRequestModelToJson(this);
@@ -22,7 +24,8 @@ class TeacherSubjectSelectorResponseModel {
   });
 
   factory TeacherSubjectSelectorResponseModel.fromJson(
-          final Map<String, dynamic> json) =>
+    final Map<String, dynamic> json,
+  ) =>
       _$TeacherSubjectSelectorResponseModelFromJson(json);
 
   final List<String> grades;

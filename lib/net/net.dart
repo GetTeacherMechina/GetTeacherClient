@@ -12,9 +12,22 @@ final GetTeacherClient _client = GetTeacherClient();
 
 GetTeacherClient getClient() => _client;
 
-Uri uriOfEndpoint(final String path, [final Map<String, dynamic>? query]) {
+Uri httpUri(final String path) {
   if (kDebugMode) {
-    return Uri.https("localhost:$debugPort", path, query);
+    return Uri.https("localhost:$debugPort", baseUrl + path);
+  } else {
+    throw Exception("No release url");
+  }
+}
+
+Uri wsUri(final String path) {
+  if (kDebugMode) {
+    return Uri(
+      scheme: "wss",
+      host: "localhost",
+      port: debugPort,
+      path: baseUrl + path,
+    );
   } else {
     throw Exception("No release url");
   }
@@ -28,6 +41,8 @@ class GetTeacherClient {
     _jwt = jwt;
   }
 
+  String? jwt() => _jwt;
+
   Map<String, String> headers() => <String, String>{
         HttpHeaders.contentTypeHeader: "application/json",
         if (_jwt != null) HttpHeaders.authorizationHeader: "Bearer ${_jwt!}",
@@ -40,12 +55,9 @@ class GetTeacherClient {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> getJson(
-    final String endpoint, [
-    final Map<String, dynamic>? query,
-  ]) async {
-    final http.Response response = await _client
-        .get(uriOfEndpoint(baseUrl + endpoint, query), headers: headers());
+  Future<Map<String, dynamic>> getJson(final String endpoint) async {
+    final http.Response response =
+        await _client.get(httpUri(endpoint), headers: headers());
     return handleResponse(response);
   }
 
@@ -55,7 +67,7 @@ class GetTeacherClient {
     final Map<String, dynamic>? query,
   ]) async {
     final http.Response response = await _client.post(
-      uriOfEndpoint(baseUrl + endpoint, query),
+      httpUri(endpoint),
       headers: headers(),
       body: jsonEncode(json),
     );

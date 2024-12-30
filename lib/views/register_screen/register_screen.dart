@@ -1,5 +1,6 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/register/register.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
@@ -23,11 +24,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController(text: model.email);
   late final TextEditingController nameController =
       TextEditingController(text: model.fullName);
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -137,6 +133,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await register(model.intoRegisterRequest(), context);
+                        final Widget nextScreen = await getMainScreen();
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) => nextScreen,
+                          ),
+                        );
                       },
                     ),
                     const Spacer(),
