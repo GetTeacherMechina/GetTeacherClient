@@ -26,5 +26,11 @@ class _TeacherSubjectEditorScreenState
             title: Text("subject: ${item.subject}, grade: ${item.grade}"),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog<String>(context: context, builder: (BuildContext context)=>Dialog<>(),);
+          },
+          child: const Icon(Icons.add),
+        ),
       );
 }
