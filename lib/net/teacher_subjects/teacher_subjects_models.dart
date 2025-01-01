@@ -1,32 +1,31 @@
 import "package:json_annotation/json_annotation.dart";
 
-part "teacher_subject_selector.g.dart";
+part "teacher_subjects_models.g.dart";
 
 @JsonSerializable()
-class TeacherSubjectSelectorRequestModel {
-  TeacherSubjectSelectorRequestModel({
+class GetTeacherSubjectsRequestModel {
+  GetTeacherSubjectsRequestModel({
     required this.grades,
     required this.subjects,
   });
 
-  Map<String, dynamic> toJson() =>
-      _$TeacherSubjectSelectorRequestModelToJson(this);
+  Map<String, dynamic> toJson() => _$GetTeacherSubjectsRequestModelToJson(this);
 
   final List<String> grades;
   final List<String> subjects;
 }
 
 @JsonSerializable()
-class TeacherSubjectSelectorResponseModel {
-  const TeacherSubjectSelectorResponseModel({
+class GetTeacherSubjectsResponseModel {
+  const GetTeacherSubjectsResponseModel({
     required this.grades,
     required this.subjects,
   });
 
-  factory TeacherSubjectSelectorResponseModel.fromJson(
+  factory GetTeacherSubjectsResponseModel.fromJson(
     final Map<String, dynamic> json,
   ) =>
-      _$TeacherSubjectSelectorResponseModelFromJson(json);
+      _$GetTeacherSubjectsResponseModelFromJson(json);
 
   final List<String> grades;
   final List<String> subjects;
