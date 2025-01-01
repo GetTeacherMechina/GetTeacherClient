@@ -41,7 +41,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-    drawer: MainScreenDrawer(profile: widget.profile),
+        drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
           leading: const Icon(Icons.book),
