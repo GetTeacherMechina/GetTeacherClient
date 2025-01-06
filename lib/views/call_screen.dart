@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
-import "package:getteacher/net/call/call_model.dart";
+import "package:getteacher/net/call/meeting_response.dart";
 
 class CallScreen extends StatelessWidget {
   const CallScreen({super.key, required this.message});
 
-  final CallModel message;
+  final MeetingResponse message;
 
   @override
   Widget build(final BuildContext context) => Scaffold(

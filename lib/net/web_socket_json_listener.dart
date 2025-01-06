@@ -19,9 +19,18 @@ class WebSocketJson {
         } else if (message is List<int>) {
         } else {}
       },
-      onError: (final Object error) {},
-      onDone: () {},
+      onError: (final Object error) {
+        print("Error: ${error}");
+      },
+      onDone: () {
+        // TODO move to main screen
+        print("Done");
+      },
     );
+  }
+
+  void close() {
+    webSocket.sink.close();
   }
 
   void Function(Map<String, dynamic>) onNewData;
