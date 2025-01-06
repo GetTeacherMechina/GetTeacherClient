@@ -13,6 +13,14 @@ class SubjectSearchWidget extends StatelessWidget {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text("Search Subjects - student"),
+          leading: Builder(
+            builder: (final BuildContext context) => IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
