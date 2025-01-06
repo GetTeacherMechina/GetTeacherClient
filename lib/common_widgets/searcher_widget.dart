@@ -19,16 +19,14 @@ class SearcherWidget<T> extends StatefulWidget {
 }
 
 class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
-  
   @override
-  void didUpdateWidget (covariant final SearcherWidget<T> oldWidget) {
+  void didUpdateWidget(covariant final SearcherWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     future = widget.fetchItems;
-    
   }
 
   TextEditingController _searchController = TextEditingController();
-  late Future<List<T>> future ;
+  late Future<List<T>> future;
   String query = "";
 
   @override
