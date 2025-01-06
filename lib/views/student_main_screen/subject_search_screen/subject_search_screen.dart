@@ -17,7 +17,7 @@ class SubjectSearchWidget extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SearcherWidget<String>(
-            fetchItems: fetchSubjectsFromApi,
+            fetchItems: fetchSubjectsFromApi(),
             itemBuilder: (final BuildContext context, final String item) =>
                 Card(
               shape: RoundedRectangleBorder(

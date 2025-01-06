@@ -16,37 +16,61 @@ class _TeacherSubjectEditorScreenState
   final TextEditingController _subjectSearchEditingController =
       TextEditingController();
 
+  Future<List<TeacherSubjectModel>> _getTeacherFuture =
+      getTeacherSubjectSelector();
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("teacher subject selector"),
-        ),
-        body: SearcherWidget<TeacherSubjectModel>(
-          searchController: _subjectSearchEditingController,
-          fetchItems: getTeacherSubjectSelector,
-          itemBuilder:
-              (final BuildContext context, final TeacherSubjectModel item) =>
-                  ListTile(
-            title: Text("subject: ${item.subject}, grade: ${item.grade}"),
+  Widget build(final BuildContext context) {
+    print("builded");
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("teacher subject selector"),
+      ),
+      body: SearcherWidget<TeacherSubjectModel>(
+        searchController: _subjectSearchEditingController,
+        fetchItems: _getTeacherFuture,
+        itemBuilder:
+            (final BuildContext context, final TeacherSubjectModel item) =>
+                ListTile(
+          title: Text("subject: ${item.subject}, grade: ${item.grade}"),
+          trailing: IconButton(
+            icon: const Icon(Icons.delete),
+            color: Colors.red,
+            onPressed: () async {
+              await removeTeacherSubject(item.subject, item.grade);
+              final Future<List<TeacherSubjectModel>> f =
+                  getTeacherSubjectSelector();
+              setState(() {
+                _getTeacherFuture = f;
+              });
+            },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            final data = await showDialog<(String, String)>(
-              context: context,
-              builder: (final BuildContext context) => AddSubjectDialog(
-                input: _subjectSearchEditingController.text,
-              ),
-            );
-            if (data != null) {
-              final (String subject, String grade) = data;
-              await addTeacherSubject(subject, grade);
-              setState(() {});
-            }
-          },
-          child: const Icon(Icons.add),
-        ),
-      );
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final (String, String)? data = await showDialog<(String, String)>(
+            context: context,
+            builder: (final BuildContext context) => AddSubjectDialog(
+              input: _subjectSearchEditingController.text,
+            ),
+          );
+          if (data != null) {
+            final (String subject, String grade) = data;
+            await addTeacherSubject(subject, grade);
+          }
+          final Future<List<TeacherSubjectModel>> f =
+              getTeacherSubjectSelector();
+          setState(
+            () {
+              _getTeacherFuture = f;
+            },
+          );
+          print("????");
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 }
 
 class AddSubjectDialog extends StatefulWidget {

@@ -4,12 +4,13 @@ import "dart:async";
 import "package:getteacher/net/net.dart";
 
 class SearcherWidget<T> extends StatefulWidget {
-  SearcherWidget(
-      {required this.fetchItems,
-      required this.itemBuilder,
-      this.hintText = "Search...",
-      this.searchController}) {}
-  final Future<List<T>> Function() fetchItems;
+  SearcherWidget({
+    required this.fetchItems,
+    required this.itemBuilder,
+    this.hintText = "Search...",
+    this.searchController,
+  });
+  final Future<List<T>> fetchItems;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final String hintText;
   final TextEditingController? searchController;
@@ -18,8 +19,16 @@ class SearcherWidget<T> extends StatefulWidget {
 }
 
 class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
+  
+  @override
+  void didUpdateWidget (covariant final SearcherWidget<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    future = widget.fetchItems;
+    
+  }
+
   TextEditingController _searchController = TextEditingController();
-  late final Future<List<T>> future = widget.fetchItems();
+  late Future<List<T>> future ;
   String query = "";
 
   @override
@@ -27,6 +36,7 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
     super.initState();
     setState(() {
       _searchController = widget.searchController ?? _searchController;
+      future = widget.fetchItems;
     });
   }
 
