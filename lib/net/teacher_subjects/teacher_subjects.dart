@@ -18,7 +18,7 @@ Future<List<TeacherSubjectModel>> getTeacherSubjectSelector() async {
 
 Future<void> addTeacherSubject(final String subject, final String grade) async {
   await getClient().postJson(
-    "/teacher_subjects/add",
+    "/teacher-subjects/add",
     <String, String>{"Name": subject, "Grade": grade},
   );
 }
@@ -26,7 +26,7 @@ Future<void> addTeacherSubject(final String subject, final String grade) async {
 Future<void> removeTeacherSubject(
     final String subject, final String grade) async {
   await getClient().postJson(
-    "/teacher_subjects/remove",
+    "/teacher-subjects/remove",
     <String, String>{"Name": subject, "Grade": grade},
   );
 }
