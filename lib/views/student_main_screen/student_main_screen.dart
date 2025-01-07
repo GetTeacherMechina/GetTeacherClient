@@ -1,9 +1,13 @@
+import "dart:async";
+import "dart:convert";
+
 import "package:flutter/material.dart";
-import "package:getteacher/net/call/call_model.dart";
+import "package:getteacher/net/call/student_call_model.dart";
 import "package:getteacher/net/call_teacher/call_teacher.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key, required this.profile});
@@ -14,21 +18,35 @@ class StudentMainScreen extends StatefulWidget {
 }
 
 class _StudentMainScreenState extends State<StudentMainScreen> {
-  WebSocketJson? webSocketJson;
+  late WebSocketJson webSocketJson;
 
   final TextEditingController controller = TextEditingController();
+  bool waitingForCall = false;
 
   @override
   void initState() {
     super.initState();
 
-    WebSocketJson.connect((final Map<String, dynamic> json) {
-      final CallModel callModel = CallModel.fromJson(json);
+    WebSocketJson.connect((final Map<String, dynamic> json) async {
+      final StudentCallModel studentCall = StudentCallModel.fromJson(json);
+      final bool approved = await showApproveTeacher(context, studentCall);
+      if (!approved) {
+        webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
+        return;
+      }
+
+      webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+      setState(() {
+        waitingForCall = false;
+      });
+
       if (mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (final BuildContext context) =>
-                CallScreen(message: callModel),
+        unawaited(
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (final BuildContext context) =>
+                  CallScreen(message: studentCall.meetingResponse),
+            ),
           ),
         );
       }
@@ -65,16 +83,25 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     child: ElevatedButton(
                       onPressed: () async {
                         await callTeacher(controller.text);
+                        setState(() {
+                          waitingForCall = true;
+                        });
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.call),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("Call a teacher"),
-                        ],
+                        children: waitingForCall
+                            ? <Widget>[
+                                const CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ]
+                            : <Widget>[
+                                const Icon(Icons.call),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text("Call a teacher"),
+                              ],
                       ),
                     ),
                   ),
