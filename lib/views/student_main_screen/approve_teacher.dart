@@ -12,9 +12,13 @@ class ApproveTeacher extends StatelessWidget {
           "You can chat with ${call.meetingResponse.companionName}",
         ),
         content: Column(
-          children: [Text(call.teacherBio), Text("Rated: ${call.teacherRank}")],
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(call.teacherBio),
+            Text("Rated: ${call.teacherRank}"),
+          ],
         ),
-        actionsAlignment: MainAxisAlignment.center,
+        actionsAlignment: MainAxisAlignment.spaceEvenly,
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -29,7 +33,7 @@ class ApproveTeacher extends StatelessWidget {
             },
             icon: const Icon(Icons.close),
             color: Colors.red,
-          )
+          ),
         ],
       );
 }

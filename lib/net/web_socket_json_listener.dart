@@ -1,5 +1,6 @@
 import "dart:convert";
 
+import "package:flutter/foundation.dart";
 import "package:getteacher/net/net.dart";
 import "package:web_socket_channel/web_socket_channel.dart";
 
@@ -20,11 +21,15 @@ class WebSocketJson {
         } else {}
       },
       onError: (final Object error) {
-        print("Error: ${error}");
+        if (kDebugMode) {
+          print("Websocket Error: $error");
+        }
       },
       onDone: () {
         // TODO move to main screen
-        print("Done");
+        if (kDebugMode) {
+          print("Done");
+        }
       },
     );
   }
