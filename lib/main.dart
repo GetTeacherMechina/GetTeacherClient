@@ -8,11 +8,10 @@ import "package:getteacher/views/register_screen/register_screen.dart";
 Future<Widget> mainScreenFromLogin() async {
   final String? jwt = await LocalJwt.getLocalJwt();
   if (jwt != null) {
-    getClient().authorize(jwt);
     try {
-      // TOOD handle exit codes for unauthorized versos online
-      await validate();
+      // TOOD handle exit codes for unauthorized versus online
       getClient().authorize(jwt);
+      await validate();
       return await getMainScreen();
     } catch (e) {
       LocalJwt.clearJwt();
