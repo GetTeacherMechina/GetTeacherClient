@@ -19,58 +19,54 @@ class _TeacherSubjectEditorScreenState
   Future<List<TeacherSubjectModel>> _getTeacherFuture =
       getTeacherSubjectSelector();
   @override
-  Widget build(final BuildContext context) {
-    print("builded");
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("teacher subject selector"),
-      ),
-      body: SearcherWidget<TeacherSubjectModel>(
-        searchController: _subjectSearchEditingController,
-        fetchItems: _getTeacherFuture,
-        itemBuilder:
-            (final BuildContext context, final TeacherSubjectModel item) =>
-                ListTile(
-          title: Text("subject: ${item.subject}, grade: ${item.grade}"),
-          trailing: IconButton(
-            icon: const Icon(Icons.delete),
-            color: Colors.red,
-            onPressed: () async {
-              await removeTeacherSubject(item.subject, item.grade);
-              final Future<List<TeacherSubjectModel>> f =
-                  getTeacherSubjectSelector();
-              setState(() {
-                _getTeacherFuture = f;
-              });
-            },
+  Widget build(final BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text("teacher subject selector"),
+        ),
+        body: SearcherWidget<TeacherSubjectModel>(
+          searchController: _subjectSearchEditingController,
+          fetchItems: _getTeacherFuture,
+          itemBuilder:
+              (final BuildContext context, final TeacherSubjectModel item) =>
+                  ListTile(
+            title: Text("subject: ${item.subject}, grade: ${item.grade}"),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              color: Colors.red,
+              onPressed: () async {
+                await removeTeacherSubject(item.subject, item.grade);
+                final Future<List<TeacherSubjectModel>> f =
+                    getTeacherSubjectSelector();
+                setState(() {
+                  _getTeacherFuture = f;
+                });
+              },
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final (String, String)? data = await showDialog<(String, String)>(
-            context: context,
-            builder: (final BuildContext context) => AddSubjectDialog(
-              input: _subjectSearchEditingController.text,
-            ),
-          );
-          if (data != null) {
-            final (String subject, String grade) = data;
-            await addTeacherSubject(subject, grade);
-          }
-          final Future<List<TeacherSubjectModel>> f =
-              getTeacherSubjectSelector();
-          setState(
-            () {
-              _getTeacherFuture = f;
-            },
-          );
-          print("????");
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final (String, String)? data = await showDialog<(String, String)>(
+              context: context,
+              builder: (final BuildContext context) => AddSubjectDialog(
+                input: _subjectSearchEditingController.text,
+              ),
+            );
+            if (data != null) {
+              final (String subject, String grade) = data;
+              await addTeacherSubject(subject, grade);
+            }
+            final Future<List<TeacherSubjectModel>> f =
+                getTeacherSubjectSelector();
+            setState(
+              () {
+                _getTeacherFuture = f;
+              },
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
+      );
 }
 
 class AddSubjectDialog extends StatefulWidget {
@@ -99,7 +95,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
     "ט",
     "י",
     "יא",
-    "יב"
+    "יב",
   ];
 
   String? selectedGrade;
@@ -111,7 +107,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               const Text(
                 "Add Subject",
                 style: TextStyle(
@@ -157,7 +153,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: const Text("Cancel"),

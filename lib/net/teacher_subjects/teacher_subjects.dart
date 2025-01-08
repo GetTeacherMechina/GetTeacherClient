@@ -12,7 +12,6 @@ Future<List<TeacherSubjectModel>> getTeacherSubjectSelector() async {
       TeacherSubjectModel(grade: data.grades[i], subject: data.subjects[i]),
     );
   }
-  print(ans);
   return ans;
 }
 
@@ -24,7 +23,9 @@ Future<void> addTeacherSubject(final String subject, final String grade) async {
 }
 
 Future<void> removeTeacherSubject(
-    final String subject, final String grade) async {
+  final String subject,
+  final String grade,
+) async {
   await getClient().postJson(
     "/teacher-subjects/remove",
     <String, String>{"Name": subject, "Grade": grade},

@@ -9,7 +9,6 @@ import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
-import "package:getteacher/views/student_main_screen/subject_search_screen/subject_search_screen.dart";
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key, required this.profile});
@@ -76,7 +75,9 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 4,
                   ),
                   Expanded(
-                    child: SubjectSearchWidget(),
+                    child: TextField(
+                      controller: controller,
+                    ),
                   ),
                   Expanded(
                     flex: 1,
