@@ -9,6 +9,7 @@ import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
+import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key, required this.profile});
@@ -21,7 +22,7 @@ class StudentMainScreen extends StatefulWidget {
 class _StudentMainScreenState extends State<StudentMainScreen> {
   late WebSocketJson webSocketJson;
 
-  final TextEditingController controller = TextEditingController();
+  String subject = "";
   bool waitingForCall = false;
 
   @override
@@ -82,15 +83,24 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 4,
                   ),
                   Expanded(
-                    child: TextField(
-                      controller: controller,
+                    flex: 7,
+                    child: StudentSearchWidget(
+                      selectedItem: subject,
+                      onSubjectSelected: (final String subject) {
+                        setState(() {
+                          this.subject = subject;
+                        });
+                      },
                     ),
                   ),
                   Expanded(
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await callTeacher(controller.text);
+                        if (subject.isEmpty) {
+                          return;
+                        }
+                        await callTeacher(subject);
                         setState(() {
                           waitingForCall = true;
                         });

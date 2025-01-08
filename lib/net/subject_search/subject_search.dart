@@ -6,8 +6,8 @@ Future<List<String>> subjectSearch() async {
     "/subjects/search",
   );
 
-  final List<String> subjects =
-      SubjectSearchResponseModel.fromJson(response).subjects;
+  final SubjectSearchResponseModel subjects =
+      SubjectSearchResponseModel.fromJson(response);
 
-  return subjects;
+  return subjects.subjects.toSet().toList();
 }

@@ -84,7 +84,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                         if (readyForCalling) {
                           await stopMettingSearching();
                         } else {
-                          // await startMettingSearching();
+                          await startMettingSearching();
                         }
                         setState(() {
                           readyForCalling = !readyForCalling;
