@@ -61,7 +61,14 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
         drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
-          leading: const Icon(Icons.book),
+          leading: Builder(
+            builder: (final BuildContext context) => IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
           title: Text("Hello ${widget.profile.fullName}"),
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
