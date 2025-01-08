@@ -3,8 +3,11 @@ import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/subject_search/subject_search.dart";
 
 class StudentSearchWidget extends StatelessWidget {
-  StudentSearchWidget(
-      {super.key, required this.onSubjectSelected, required this.selectedItem});
+  StudentSearchWidget({
+    super.key,
+    required this.onSubjectSelected,
+    required this.selectedItem,
+  });
 
   final void Function(String) onSubjectSelected;
   final String selectedItem;
@@ -12,7 +15,7 @@ class StudentSearchWidget extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
 
   @override
-  Widget build(final BuildContext context) => SearcherWidget(
+  Widget build(final BuildContext context) => SearcherWidget<String>(
         fetchItems: subjectSearch,
         itemBuilder: (final BuildContext context, final String item) => Card(
           shape: RoundedRectangleBorder(

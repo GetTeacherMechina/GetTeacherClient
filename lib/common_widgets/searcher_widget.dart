@@ -80,8 +80,10 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
               child: ListView(
                 children: Fuzzy<T>(items)
                     .search(query)
-                    .map((final Result<T> item) =>
-                        widget.itemBuilder(context, item.item))
+                    .map(
+                      (final Result<T> item) =>
+                          widget.itemBuilder(context, item.item),
+                    )
                     .toList(),
               ),
             ),

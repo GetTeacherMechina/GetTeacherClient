@@ -23,7 +23,7 @@ class _TeacherSubjectEditorScreenState
         appBar: AppBar(
           title: const Text("teacher subject selector"),
         ),
-        body: SearcherWidget(
+        body: SearcherWidget<TeacherSubjectModel>(
           searchController: _subjectSearchEditingController,
           fetchItems: () => _getTeacherFuture,
           itemBuilder:
