@@ -41,6 +41,10 @@ class GetTeacherClient {
     _jwt = jwt;
   }
 
+  void unauthorize() {
+    _jwt = null;
+  }
+
   String? jwt() => _jwt;
 
   Map<String, String> headers() => <String, String>{

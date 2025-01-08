@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
-import "package:getteacher/net/call/call_model.dart";
+import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/set_online_status/set_online_status.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
@@ -24,11 +24,20 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   bool readyForCalling = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    connection?.close();
+  }
+
+  @override
   void initState() {
     super.initState();
     WebSocketJson.connect(
       (final Map<String, dynamic> json) {
-        final CallModel callModel = CallModel.fromJson(json);
+        final MeetingResponse callModel = MeetingResponse.fromJson(json);
+        setState(() {
+          readyForCalling = false;
+        });
         if (mounted) {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
