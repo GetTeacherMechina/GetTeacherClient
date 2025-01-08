@@ -1,15 +1,7 @@
 import "package:getteacher/net/net.dart";
 
 Future<void> startMettingSearching() async {
-  await getClient().postJson(
-    "/meeting/teacher/start",
-    <String, dynamic>{
-      "Subject": <String, String>{
-        "Name": "Math",
-      },
-      "Grade": <String, String>{"Name": "יב"},
-    },
-  );
+  await getClient().postJson("/meeting/teacher/start", <String, dynamic>{});
 }
 
 Future<void> stopMettingSearching() async {

@@ -67,8 +67,9 @@ class GetTeacherClient {
 
   Future<Map<String, dynamic>> postJson(
     final String endpoint,
-    final Map<String, dynamic> json,
-  ) async {
+    final Map<String, dynamic> json, [
+    final Map<String, dynamic>? query,
+  ]) async {
     final http.Response response = await _client.post(
       httpUri(endpoint),
       headers: headers(),

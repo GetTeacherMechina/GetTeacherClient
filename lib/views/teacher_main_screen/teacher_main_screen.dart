@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/set_online_status/set_online_status.dart";
@@ -55,9 +56,19 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          leading: const Icon(Icons.school),
+          leading: Builder(
+            builder: (final BuildContext context) => IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
           title: Text("Hello ${widget.profile.fullName}"),
-          surfaceTintColor: Theme.of(context).primaryColor,
+          // surfaceTintColor: Theme.of(context).primaryColor,
+        ),
+        drawer: MainScreenDrawer(
+          profile: widget.profile,
         ),
         body: Row(
           children: <Widget>[

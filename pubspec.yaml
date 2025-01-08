@@ -10,6 +10,7 @@ dependencies:
   email_validator: ^3.0.0
   flutter:
     sdk: flutter
+  fuzzy: ^0.5.1
   http: ^1.2.2
   json_annotation: ^4.9.0
   progress_state_button: ^1.0.4
