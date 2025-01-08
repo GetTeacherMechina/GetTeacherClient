@@ -30,5 +30,5 @@ class SubjectSearchResponseModel {
   ) =>
       _$SubjectSearchResponseModelFromJson(json);
 
-  final List<SubjectModel> subjects;
+  final List<String> subjects;
 }
