@@ -76,7 +76,6 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
               ),
             ),
             const SizedBox(height: 20),
-<<<<<<< Updated upstream
             Expanded(
               child: ListView(
                 children: Fuzzy<T>(items)
@@ -87,12 +86,6 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
                     )
                     .toList(),
               ),
-=======
-            ListView(
-              children: items!
-                  .map((final T item) => widget.itemBuilder(context, item))
-                  .toList(),
->>>>>>> Stashed changes
             ),
           ],
         )
