@@ -4,7 +4,7 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/student_call_model.dart";
-import "package:getteacher/net/call_teacher/call_teacher.dart";
+import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
@@ -100,10 +100,17 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                         if (subject.isEmpty) {
                           return;
                         }
-                        await callTeacher(subject);
-                        setState(() {
-                          waitingForCall = true;
-                        });
+                        if (!waitingForCall) {
+                          await startSearchingForTeacher(subject);
+                          setState(() {
+                            waitingForCall = true;
+                          });
+                        } else {
+                          await stopSearchingForTeacher();
+                          setState(() {
+                            waitingForCall = false;
+                          });
+                        }
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
