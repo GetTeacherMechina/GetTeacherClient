@@ -47,7 +47,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (final BuildContext context) =>
-                  CallScreen(message: studentCall.meetingResponse),
+                   CallScreen(guid:studentCall.meetingResponse.meetingGuid,shouldStartCall: false,),
             ),
           ),
         );

@@ -5,10 +5,41 @@ import "package:flutter/material.dart";
 import "package:getteacher/net/ip_constants.dart";
 import "package:http/http.dart" as http;
 
+<<<<<<< HEAD
+=======
+const int debugPort = 44300;
+const String baseUrl = "/api/v1";
+const String host = "localhost";
+
+>>>>>>> 2ee7f82 (Web rtc initial intigration)
 final GetTeacherClient _client = GetTeacherClient();
 
 GetTeacherClient getClient() => _client;
 
+<<<<<<< HEAD
+=======
+Uri httpUri(final String path) {
+  if (kDebugMode) {
+    return Uri.https("$host:$debugPort", baseUrl + path);
+  } else {
+    throw Exception("No release url");
+  }
+}
+
+Uri wsUri(final String path) {
+  if (kDebugMode) {
+    return Uri(
+      scheme: "wss",
+      host: host,
+      port: debugPort,
+      path: baseUrl + path,
+    );
+  } else {
+    throw Exception("No release url");
+  }
+}
+
+>>>>>>> 2ee7f82 (Web rtc initial intigration)
 class GetTeacherClient {
   final http.Client _client = http.Client();
   String? _jwt;
