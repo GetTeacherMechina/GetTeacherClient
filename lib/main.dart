@@ -22,6 +22,7 @@ Future<Widget> mainScreenFromLogin() async {
 }
 
 void main() async {
+  // ignore: unused_local_variable
   final Widget initialScreen = await mainScreenFromLogin();
 
   runApp(
