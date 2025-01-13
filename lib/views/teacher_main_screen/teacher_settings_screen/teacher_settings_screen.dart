@@ -30,8 +30,10 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
               child: SearcherWidget<TeacherSubjectModel>(
                 searchController: _subjectSearchEditingController,
                 fetchItems: () => _getTeacherFuture,
-                itemBuilder: (final BuildContext context,
-                        final TeacherSubjectModel item,) =>
+                itemBuilder: (
+                  final BuildContext context,
+                  final TeacherSubjectModel item,
+                ) =>
                     ListTile(
                   title: Text("subject: ${item.subject}, grade: ${item.grade}"),
                   trailing: IconButton(
