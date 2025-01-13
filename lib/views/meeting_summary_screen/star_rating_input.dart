@@ -8,11 +8,11 @@ class StarWidget extends StatelessWidget {
 
   Widget buildStar(final BuildContext context, final int index) => IconButton(
         onPressed: () {
-          onChanged(index+1);
+          onChanged(index + 1);
         },
         icon: Icon(
-          index+1 > rating ? Icons.star_border : Icons.star,
-          color: index+1 > rating ? Colors.grey : Colors.yellow,
+          index + 1 > rating ? Icons.star_border : Icons.star,
+          color: index + 1 > rating ? Colors.grey : Colors.yellow,
         ),
         iconSize: 64,
       );
