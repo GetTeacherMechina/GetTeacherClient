@@ -3,11 +3,11 @@ import "package:getteacher/net/net.dart";
 
 Future<List<String>> subjectSearch() async {
   final Map<String, dynamic> response = await getClient().getJson(
-    "/subjects/search",
+    "/subjects/",
   );
 
   final SubjectSearchResponseModel subjects =
       SubjectSearchResponseModel.fromJson(response);
 
-  return subjects.subjects.toSet().toList();
+  return subjects.subjects;
 }
