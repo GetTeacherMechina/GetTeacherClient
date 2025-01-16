@@ -31,10 +31,10 @@ class _StudentSettingsScreenState extends State<StudentSettingsScreen> {
                 children: <Widget>[
                   Text("cheaper teachers"),
                   Text("balanced"),
-                  Text("better teachers")
+                  Text("better teachers"),
                 ],
               ),
-              Slider(value: sliderValue, onChanged: _onSlider)
+              Slider(value: sliderValue, onChanged: _onSlider),
             ],
           ),
         ),

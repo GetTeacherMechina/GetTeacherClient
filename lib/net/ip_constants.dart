@@ -3,7 +3,7 @@ import "package:flutter/foundation.dart";
 const int debugPort = 443;
 const String baseUrl = "/api/v1";
 
-const String debugHost = "172.20.20.49";
+const String debugHost = "192.168.220.83";
 
 Uri httpUri(final String path) {
   if (kDebugMode) {

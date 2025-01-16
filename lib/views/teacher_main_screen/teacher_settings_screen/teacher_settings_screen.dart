@@ -14,7 +14,7 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
   final TextEditingController _subjectSearchEditingController =
       TextEditingController();
 
-  Future<List<TeacherSubjectModel>> _getTeacherFuture =
+  Future<List<TeacherSubjectsModel>> _getTeacherFuture =
       getTeacherSubjectSelector();
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -22,26 +22,31 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
           title: const Text("teacher subject selector"),
         ),
         body: Column(
-          children: [
+          children: <Widget>[
             const Text("Change Bio:"),
             const TextField(),
             const Text("Subjects:"),
             Expanded(
-              child: SearcherWidget<TeacherSubjectModel>(
+              child: SearcherWidget<TeacherSubjectsModel>(
                 searchController: _subjectSearchEditingController,
                 fetchItems: () => _getTeacherFuture,
                 itemBuilder: (
                   final BuildContext context,
-                  final TeacherSubjectModel item,
+                  final TeacherSubjectsModel item,
                 ) =>
                     ListTile(
-                  title: Text("subject: ${item.subject}, grade: ${item.grade}"),
+                  title: Text(
+                    "subject: ${item.subject.name}, grade: ${item.grade.name}",
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     color: Colors.red,
                     onPressed: () async {
-                      await removeTeacherSubject(item.subject, item.grade);
-                      final Future<List<TeacherSubjectModel>> f =
+                      await removeTeacherSubject(
+                        item.subject.name,
+                        item.grade.name,
+                      );
+                      final Future<List<TeacherSubjectsModel>> f =
                           getTeacherSubjectSelector();
                       setState(() {
                         _getTeacherFuture = f;
@@ -65,7 +70,7 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
               final (String subject, String grade) = data;
               await addTeacherSubject(subject, grade);
             }
-            final Future<List<TeacherSubjectModel>> f =
+            final Future<List<TeacherSubjectsModel>> f =
                 getTeacherSubjectSelector();
             setState(
               () {
