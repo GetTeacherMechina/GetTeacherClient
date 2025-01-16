@@ -37,8 +37,12 @@ class StarRatingScreenState extends State<StarRatingScreen> {
               ElevatedButton(
                 child: const Text("Submit"),
                 onPressed: () async {
-                  await rateMeeting(RateMeetingRequestModel(
-                      guid: widget.meetingGuid, rating: currentRating));
+                  await rateMeeting(
+                    RateMeetingRequestModel(
+                      guid: widget.meetingGuid,
+                      rating: currentRating,
+                    ),
+                  );
 
                   Navigator.of(context).pop();
                 },
