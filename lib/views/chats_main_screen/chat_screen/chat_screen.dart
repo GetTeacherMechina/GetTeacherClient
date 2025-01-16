@@ -13,8 +13,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(),
         body: ListView.builder(
-          
-          itemBuilder: (final BuildContext context, final int index) => Container(),
+          itemBuilder: (final BuildContext context, final int index) =>
+              Container(),
         ),
       );
 }
