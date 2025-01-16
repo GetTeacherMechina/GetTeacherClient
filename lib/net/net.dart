@@ -1,37 +1,13 @@
 import "dart:convert";
 import "dart:io";
 
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:getteacher/net/ip_constants.dart";
 import "package:http/http.dart" as http;
-
-const int debugPort = 44300;
-const String baseUrl = "/api/v1";
 
 final GetTeacherClient _client = GetTeacherClient();
 
 GetTeacherClient getClient() => _client;
-
-Uri httpUri(final String path) {
-  if (kDebugMode) {
-    return Uri.https("localhost:$debugPort", baseUrl + path);
-  } else {
-    throw Exception("No release url");
-  }
-}
-
-Uri wsUri(final String path) {
-  if (kDebugMode) {
-    return Uri(
-      scheme: "wss",
-      host: "localhost",
-      port: debugPort,
-      path: baseUrl + path,
-    );
-  } else {
-    throw Exception("No release url");
-  }
-}
 
 class GetTeacherClient {
   final http.Client _client = http.Client();

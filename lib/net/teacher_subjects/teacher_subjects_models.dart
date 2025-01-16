@@ -18,8 +18,7 @@ class GetTeacherSubjectsRequestModel {
 @JsonSerializable()
 class GetTeacherSubjectsResponseModel {
   const GetTeacherSubjectsResponseModel({
-    required this.grades,
-    required this.subjects,
+    required this.teacherSubjects,
   });
 
   factory GetTeacherSubjectsResponseModel.fromJson(
@@ -27,13 +26,36 @@ class GetTeacherSubjectsResponseModel {
   ) =>
       _$GetTeacherSubjectsResponseModelFromJson(json);
 
-  final List<String> grades;
-  final List<String> subjects;
+  final List<TeacherSubjectsModel> teacherSubjects;
 }
 
-class TeacherSubjectModel {
-  TeacherSubjectModel({required this.grade, required this.subject});
+@JsonSerializable()
+class Subject {
+  Subject({required this.name});
 
-  final String grade;
-  final String subject;
+  factory Subject.fromJson(final Map<String, dynamic> json) =>
+      _$SubjectFromJson(json);
+
+  final String name;
+}
+
+@JsonSerializable()
+class Grade {
+  Grade({required this.name});
+
+  factory Grade.fromJson(final Map<String, dynamic> json) =>
+      _$GradeFromJson(json);
+
+  final String name;
+}
+
+@JsonSerializable()
+class TeacherSubjectsModel {
+  TeacherSubjectsModel({required this.grade, required this.subject});
+
+  factory TeacherSubjectsModel.fromJson(final Map<String, dynamic> json) =>
+      _$TeacherSubjectsModelFromJson(json);
+
+  final Grade grade;
+  final Subject subject;
 }
