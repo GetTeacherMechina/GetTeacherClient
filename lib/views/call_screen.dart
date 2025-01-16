@@ -63,8 +63,6 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   void dispose() async {
-    await _hangUp();
-    _socket.dispose();
     super.dispose();
   }
 
@@ -348,6 +346,16 @@ class _CallScreenState extends State<CallScreen> {
                   ),
                   onPressed: _toggleAudio,
                 ),
+                IconButton(
+                  onPressed: () async {
+                    await _hangUp();
+                    await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (final context) => Scaffold()));
+                  },
+                  icon: Icon(Icons.call),
+                  color: Colors.red,
+                )
               ],
             ),
             const SizedBox(height: 10),

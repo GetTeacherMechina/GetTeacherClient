@@ -57,7 +57,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
               MaterialPageRoute<void>(
                 builder: (final BuildContext context) => CallScreen(
                   guid: meeting.meetingGuid,
-                  shouldStartCall: false,
+                  shouldStartCall: true,
                 ),
               ),
             ),
