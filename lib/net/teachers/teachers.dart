@@ -13,27 +13,30 @@ Future<List<DbTeacher>> getAllTeachers() async {
 
 @JsonSerializable()
 class DbTeacher {
-  factory DbTeacher.fromJson(final Map<String, dynamic> data) =>
-      _$DbTeacherFromJson(data);
   DbTeacher(
       {required this.bio,
       required this.id,
       required this.numOfMeetings,
       required this.numOfRankers,
-      required this.rank});
+      required this.rank,required this.userName});
+  factory DbTeacher.fromJson(final Map<String, dynamic> data) =>
+      _$DbTeacherFromJson(data);
 
   @JsonKey(name: "id")
   int id;
+
+  @JsonKey(name: "userName")
+  String userName;
 
   @JsonKey(name: "bio")
   String bio;
 
   @JsonKey(name: "numOfRankers")
-  int numOfRankers;
+  int? numOfRankers;
   @JsonKey(name: "rank")
-  double rank;
+  double? rank;
   @JsonKey(name: "numOfMeetings")
-  int numOfMeetings;
+  int? numOfMeetings;
 
   Map<String, dynamic> toJson() => _$DbTeacherToJson(this);
 }
