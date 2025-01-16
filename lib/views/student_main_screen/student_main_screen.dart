@@ -31,38 +31,46 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   String subject = "";
   bool waitingForCall = false;
 
+  void startMeeting(final Map<String, dynamic> json) {
+    final MeetingResponse meeting = MeetingResponse.fromJson(json);
+    setState(() {
+      waitingForCall = false;
+    });
+
+    if (mounted) {
+      unawaited(
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (final BuildContext context) => CallScreen(
+              guid: meeting.meetingGuid,
+              shouldStartCall: false,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  void csgoApprove(final Map<String, dynamic> json) async {
+    final StudentCallModel studentCall = StudentCallModel.fromJson(json);
+    final bool approved = await showApproveTeacher(context, studentCall);
+    if (!approved) {
+      webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
+      return;
+    }
+
+    webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+  }
+
   @override
   void initState() {
     super.initState();
 
     WebSocketJson.connect((final Map<String, dynamic> json) async {
       if (json[messageType] == csgoContract) {
-        final StudentCallModel studentCall = StudentCallModel.fromJson(json);
-        final bool approved = await showApproveTeacher(context, studentCall);
-        if (!approved) {
-          webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
-          return;
-        }
-
-        webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+        csgoApprove(json);
       } else if (json[messageType] == meetingStartNotification) {
-        final MeetingResponse meeting = MeetingResponse.fromJson(json);
-        setState(() {
-          waitingForCall = false;
-        });
-
-        if (mounted) {
-          unawaited(
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (final BuildContext context) => CallScreen(
-                  guid: meeting.meetingGuid,
-                  shouldStartCall: false,
-                ),
-              ),
-            ),
-          );
-        }
+        startMeeting(json);
       } else if (json[messageType] == error) {}
     }).then((final WebSocketJson ws) {
       webSocketJson = ws;
