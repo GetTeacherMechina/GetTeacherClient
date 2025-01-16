@@ -9,8 +9,10 @@ Future<void> createChat(final List<int> users) async {
 }
 
 Future<void> createMessage(final int chatId, final String content) async {
-  await getClient().postJson("/chats/send-message/$chatId",
-      MessageCreationModel(content: content).toJson());
+  await getClient().postJson(
+    "/chats/send-message/$chatId",
+    MessageCreationModel(content: content).toJson(),
+  );
 }
 
 Future<ChatModel> getChat(final int chatId) async {
