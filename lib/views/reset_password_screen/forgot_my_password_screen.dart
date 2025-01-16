@@ -15,19 +15,19 @@ class ForgotMyPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
-    ForgotMyPasswordModel model = const ForgotMyPasswordModel();
+  ForgotMyPasswordModel model = const ForgotMyPasswordModel();
 
-    late final TextEditingController emailController =
+  late final TextEditingController emailController =
       TextEditingController(text: model.email);
 
-    final GlobalKey<FormState> _formKey = GlobalKey();
-    
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(final BuildContext context) => Scaffold(
-    body: Form(
-      key: _formKey,
-      child: Row(
-        children: <Widget>[
+        body: Form(
+          key: _formKey,
+          child: Row(
+            children: <Widget>[
               const Spacer(
                 flex: 1,
               ),
@@ -81,13 +81,14 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        await forgotPassword(ForgotPasswordRequestModel(email: model.email));
+                        await forgotPassword(
+                            ForgotPasswordRequestModel(email: model.email));
                         await Navigator.of(context).pushReplacement(
-                                MaterialPageRoute<void>(
-                                  builder: (final BuildContext context) =>
-                                      ResetPasswordScreen(email: model.email),
-                                ),
-                         );
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                ResetPasswordScreen(email: model.email),
+                          ),
+                        );
                       },
                     ),
                     const Spacer(),
@@ -98,8 +99,7 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                 flex: 1,
               ),
             ],
-      ),
-    ),
-  );
-
+          ),
+        ),
+      );
 }

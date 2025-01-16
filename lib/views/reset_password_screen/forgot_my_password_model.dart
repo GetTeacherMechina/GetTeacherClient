@@ -1,6 +1,5 @@
 class ForgotMyPasswordModel {
-  const ForgotMyPasswordModel()
-      : email = "";
+  const ForgotMyPasswordModel() : email = "";
 
   const ForgotMyPasswordModel._hidden({
     required this.email,

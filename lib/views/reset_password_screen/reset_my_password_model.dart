@@ -1,12 +1,13 @@
 class ResetMyPasswordModel {
   const ResetMyPasswordModel()
       : password = "",
-       confirmPassword = "",
-       code = "";
+        confirmPassword = "",
+        code = "";
 
-  const ResetMyPasswordModel._hidden({
-   required this.password, required this.confirmPassword, required this.code
-  });
+  const ResetMyPasswordModel._hidden(
+      {required this.password,
+      required this.confirmPassword,
+      required this.code});
 
   final String password;
   final String confirmPassword;
@@ -19,7 +20,8 @@ class ResetMyPasswordModel {
   }) =>
       ResetMyPasswordModel._hidden(
         password: password != null ? password() : this.password,
-        confirmPassword: confirmPassword != null ? confirmPassword() : this.confirmPassword,
+        confirmPassword:
+            confirmPassword != null ? confirmPassword() : this.confirmPassword,
         code: code != null ? code() : this.code,
       );
 }

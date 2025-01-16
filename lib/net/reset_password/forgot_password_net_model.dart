@@ -11,12 +11,11 @@ class ForgotPasswordRequestModel {
   final String email;
 }
 
-
 @JsonSerializable()
 class ForgotPasswordResponseModel {
   ForgotPasswordResponseModel();
   factory ForgotPasswordResponseModel.fromJson(
     final Map<String, dynamic> json,
-  ) => 
-    _$ForgotPasswordResponseModelFromJson(json);
+  ) =>
+      _$ForgotPasswordResponseModelFromJson(json);
 }

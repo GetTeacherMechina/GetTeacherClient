@@ -18,7 +18,7 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
   _ResetPasswordScreen({required this.email});
 
   final String email;
-  
+
   ResetMyPasswordModel model = const ResetMyPasswordModel();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -32,7 +32,7 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-    body: Form(
+        body: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
           child: Row(
@@ -68,7 +68,8 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
                               hintText: "Confirm Password",
                             ),
                             onChanged: (final String value) {
-                              model = model.copyWith(confirmPassword: () => value);
+                              model =
+                                  model.copyWith(confirmPassword: () => value);
                             },
                           ),
                           TextField(
@@ -89,15 +90,17 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        await resetPassword(ResetPasswordResponseModel(
-                          email: email,
-                          code: model.code,
-                          password: model.password,
-                          confirmPassword: model.confirmPassword
-                        ),);
+                        await resetPassword(
+                          ResetPasswordResponseModel(
+                              email: email,
+                              code: model.code,
+                              password: model.password,
+                              confirmPassword: model.confirmPassword),
+                        );
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
-                            builder: (final BuildContext context) => LoginScreen(),
+                            builder: (final BuildContext context) =>
+                                LoginScreen(),
                           ),
                         );
                       },
@@ -113,5 +116,4 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
           ),
         ),
       );
-
 }
