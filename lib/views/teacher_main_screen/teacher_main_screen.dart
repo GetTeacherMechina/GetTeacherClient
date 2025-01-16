@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
-import "package:getteacher/net/set_online_status/set_online_status.dart";
+import "package:getteacher/net/teacher_meeting_searching/teacher_meeting_searching.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
 
@@ -41,8 +41,11 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
         if (mounted) {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
-              builder: (final BuildContext context) =>
-                  CallScreen(message: callModel),
+              builder: (final BuildContext context) => CallScreen(
+                guid: callModel.meetingGuid,
+                shouldStartCall: true,
+                isStudent: false,
+              ),
             ),
           );
         }
@@ -82,9 +85,9 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     child: RawMaterialButton(
                       onPressed: () async {
                         if (readyForCalling) {
-                          await stopMettingSearching();
+                          await stopMeetingSearching();
                         } else {
-                          await startMettingSearching();
+                          await startMeetingSearching();
                         }
                         setState(() {
                           readyForCalling = !readyForCalling;

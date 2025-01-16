@@ -11,6 +11,7 @@
 .svn/
 migrate_working_dir/
 
+back/node_modules/
 # IntelliJ related
 *.iml
 *.ipr
