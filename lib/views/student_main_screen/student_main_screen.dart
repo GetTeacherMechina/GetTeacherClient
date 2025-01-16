@@ -3,6 +3,7 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
+import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
 import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
@@ -10,6 +11,11 @@ import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
+
+const String messageType = "MessageType";
+const String meetingStartNotification = "MeetingStartNotification";
+const String csgoContract = "CsGoContract";
+const String error = "Error";
 
 class StudentMainScreen extends StatefulWidget {
   const StudentMainScreen({super.key, required this.profile});
@@ -30,28 +36,34 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
     super.initState();
 
     WebSocketJson.connect((final Map<String, dynamic> json) async {
-      final StudentCallModel studentCall = StudentCallModel.fromJson(json);
-      final bool approved = await showApproveTeacher(context, studentCall);
-      if (!approved) {
-        webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
-        return;
-      }
+      if (json[messageType] == csgoContract) {
+        final StudentCallModel studentCall = StudentCallModel.fromJson(json);
+        final bool approved = await showApproveTeacher(context, studentCall);
+        if (!approved) {
+          webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
+          return;
+        }
 
-      webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
-      setState(() {
-        waitingForCall = false;
-      });
+        webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+      } else if (json[messageType] == meetingStartNotification) {
+        final MeetingResponse meeting = MeetingResponse.fromJson(json);
+        setState(() {
+          waitingForCall = false;
+        });
 
-      if (mounted) {
-        unawaited(
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (final BuildContext context) =>
-                   CallScreen(guid:studentCall.meetingResponse.meetingGuid,shouldStartCall: false,),
+        if (mounted) {
+          unawaited(
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (final BuildContext context) => CallScreen(
+                  guid: meeting.meetingGuid,
+                  shouldStartCall: false,
+                ),
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
+      } else if (json[messageType] == error) {}
     }).then((final WebSocketJson ws) {
       webSocketJson = ws;
     });
