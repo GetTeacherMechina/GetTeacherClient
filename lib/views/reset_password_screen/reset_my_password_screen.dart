@@ -6,19 +6,17 @@ import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/reset_password_screen/reset_my_password_model.dart";
 
 class ResetPasswordScreen extends StatefulWidget {
-  ResetPasswordScreen({super.key, required this.token, required this.email});
+  ResetPasswordScreen({super.key, required this.email});
 
   @override
-  State<StatefulWidget> createState() => _ResetPasswordScreen(token: token, email: email);
+  State<StatefulWidget> createState() => _ResetPasswordScreen(email: email);
 
-  final String token;
   final String email;
 }
 
 class _ResetPasswordScreen extends State<StatefulWidget> {
-  _ResetPasswordScreen({required this.token, required this.email});
+  _ResetPasswordScreen({required this.email});
 
-  final String token;
   final String email;
   
   ResetMyPasswordModel model = const ResetMyPasswordModel();
@@ -29,6 +27,8 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
       TextEditingController(text: model.confirmPassword);
   late final TextEditingController passwordController =
       TextEditingController(text: model.password);
+  late final TextEditingController codeController =
+      TextEditingController(text: model.code);
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -71,6 +71,15 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
                               model = model.copyWith(confirmPassword: () => value);
                             },
                           ),
+                          TextField(
+                            controller: codeController,
+                            decoration: const InputDecoration(
+                              hintText: "Code",
+                            ),
+                            onChanged: (final String value) {
+                              model = model.copyWith(code: () => value);
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -80,9 +89,9 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        await resetPassword(ResetPasswordResponsModle(
+                        await resetPassword(ResetPasswordResponseModel(
                           email: email,
-                          token: token,
+                          code: model.code,
                           password: model.password,
                           confirmPassword: model.confirmPassword
                         ),);

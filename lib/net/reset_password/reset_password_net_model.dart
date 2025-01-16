@@ -3,18 +3,18 @@ import "package:json_annotation/json_annotation.dart";
 part "reset_password_net_model.g.dart";
 
 @JsonSerializable()
-class ResetPasswordResponsModle {
-  const ResetPasswordResponsModle({
+class ResetPasswordResponseModel {
+  const ResetPasswordResponseModel({
     required this.email,
-    required this.token,
+    required this.code,
     required this.password,
     required this.confirmPassword,
   });
 
-  Map<String, dynamic> toJson() => _$ResetPasswordResponsModleToJson(this);
+  Map<String, dynamic> toJson() => _$ResetPasswordResponseModelToJson(this);
 
   final String email;
-  final String token;
+  final String code;
   final String password;
   final String confirmPassword;
 }

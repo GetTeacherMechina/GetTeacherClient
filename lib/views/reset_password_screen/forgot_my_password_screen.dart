@@ -5,7 +5,7 @@ import "package:getteacher/net/reset_password/forgot_password.dart";
 import "package:getteacher/net/reset_password/forgot_password_net_model.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/reset_password_screen/forgot_my_password_model.dart";
-import "package:getteacher/views/reset_password_screen/reset_password_code_screen.dart";
+import "package:getteacher/views/reset_password_screen/reset_my_password_screen.dart";
 
 class ForgotMyPasswordScreen extends StatefulWidget {
   ForgotMyPasswordScreen({super.key});
@@ -81,11 +81,11 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        final String token = await forgotPassword(ForgotPasswordModelRequest(email: model.email));
+                        await forgotPassword(ForgotPasswordRequestModel(email: model.email));
                         await Navigator.of(context).pushReplacement(
                                 MaterialPageRoute<void>(
                                   builder: (final BuildContext context) =>
-                                      ResetPasswordScreenCode(token: token, email: model.email),
+                                      ResetPasswordScreen(email: model.email),
                                 ),
                          );
                       },

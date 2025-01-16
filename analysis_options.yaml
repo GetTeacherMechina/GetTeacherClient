@@ -1,8 +1,6 @@
 include: package:lints/recommended.yaml
 
 analyzer:
-  errors:
-    empty_constructor_bodies: ignore
   exclude: [build/**, lib/generated_plugin_registrant.dart, "**/*.g.dart"]
   language:
     strict-raw-types: true
