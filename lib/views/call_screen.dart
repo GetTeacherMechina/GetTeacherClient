@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 import "package:flutter_webrtc/flutter_webrtc.dart";
-import "package:getteacher/net/net.dart";
+import "package:getteacher/net/ip_constants.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "dart:io" show Platform; // Allows Platform checks
 import "package:flutter/foundation.dart" show kIsWeb; // Detects web
 
 final String url = kIsWeb
-    ? "http://$host:4433"
+    ? "http://$debugHost:4433"
     : Platform.isAndroid
         ? "http://10.0.2.2:4433"
         : "http://localhost:4433";
@@ -62,10 +62,8 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   @override
-  void dispose() {
-    _localRenderer.dispose();
-    _remoteRenderer.dispose();
-    _localStream?.dispose();
+  void dispose() async {
+    await _hangUp();
     _socket.dispose();
     super.dispose();
   }
@@ -269,15 +267,28 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Future<void> _hangUp() async {
+    // Close the peer connection
     await _peerConnection?.close();
     _peerConnection = null;
 
-    await _localStream?.dispose();
-    _localStream = null;
+    // Stop and dispose local tracks
+    if (_localStream != null) {
+      for (final track in _localStream!.getTracks()) {
+        await track.stop();
+      }
+      await _localStream!.dispose();
+      _localStream = null;
+    }
+
+    // Clear the renderers
+    _localRenderer.srcObject = null;
+    _remoteRenderer.srcObject = null;
+
+    // Dispose of the renderers
+    await _localRenderer.dispose();
+    await _remoteRenderer.dispose();
 
     setState(() {
-      _remoteRenderer.srcObject = null;
-      _localRenderer.srcObject = null;
       _isCalling = false;
     });
   }

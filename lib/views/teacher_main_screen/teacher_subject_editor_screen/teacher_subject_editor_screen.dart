@@ -30,7 +30,8 @@ class _TeacherSubjectEditorScreenState
               (final BuildContext context, final TeacherSubjectsModel item) =>
                   ListTile(
             title: Text(
-                "subject: ${item.subject.name}, grade: ${item.grade.name}"),
+              "subject: ${item.subject.name}, grade: ${item.grade.name}",
+            ),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.red,
