@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
+import "package:getteacher/views/chats_main_screen/chats_main_screen.dart";
 import "package:getteacher/views/profile_screen/profile_screen.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 import "package:getteacher/views/teacher_main_screen/teacher_subject_editor_screen/teacher_subject_editor_screen.dart";
@@ -49,6 +50,17 @@ class MainScreenDrawer extends StatelessWidget {
                   );
                 },
               ),
+            ListTile(
+              leading: const Icon(Icons.chat),
+              title: const Text("chats"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (final BuildContext context) => const ChatsMainScreen(),
+                    ));
+              },
+            ),
             Expanded(
               child: Container(),
             ),
