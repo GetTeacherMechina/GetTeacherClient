@@ -273,7 +273,7 @@ class _CallScreenState extends State<CallScreen> {
 
     // Stop and dispose local tracks
     if (_localStream != null) {
-      for (final track in _localStream!.getTracks()) {
+      for (final MediaStreamTrack track in _localStream!.getTracks()) {
         await track.stop();
       }
       await _localStream!.dispose();
