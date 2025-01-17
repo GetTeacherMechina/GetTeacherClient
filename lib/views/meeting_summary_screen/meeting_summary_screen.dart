@@ -13,6 +13,7 @@ class StarRatingScreen extends StatefulWidget {
 
 class StarRatingScreenState extends State<StarRatingScreen> {
   int currentRating = 5;
+  bool isFavoriteTeacher = false;
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -34,6 +35,22 @@ class StarRatingScreenState extends State<StarRatingScreen> {
                   });
                 },
               ),
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(
+                    value: isFavoriteTeacher,
+                    onChanged: (bool? newValue) {
+                      setState(() {
+                        isFavoriteTeacher = newValue ?? false;
+                      });
+                    },
+                  ),
+                  const Text("Mark as favorite teacher"),
+                ],
+              ),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 child: const Text("Submit"),
                 onPressed: () async {
@@ -41,6 +58,7 @@ class StarRatingScreenState extends State<StarRatingScreen> {
                     RateMeetingRequestModel(
                       guid: widget.meetingGuid,
                       rating: currentRating,
+                      favoriteTeacher: isFavoriteTeacher,
                     ),
                   );
 
