@@ -38,10 +38,10 @@ class StarRatingScreenState extends State<StarRatingScreen> {
               const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Checkbox(
                     value: isFavoriteTeacher,
-                    onChanged: (bool? newValue) {
+                    onChanged: (final bool? newValue) {
                       setState(() {
                         isFavoriteTeacher = newValue ?? false;
                       });
