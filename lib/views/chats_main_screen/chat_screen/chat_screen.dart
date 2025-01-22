@@ -1,10 +1,14 @@
 import "dart:io";
+import "dart:typed_data";
 
+import "package:file_picker/_internal/file_picker_web.dart";
+import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/latex_text_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/chats/get_chat_model.dart";
 import "package:getteacher/net/chats/message_model.dart";
+import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 
@@ -139,6 +143,22 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
+                  IconButton(
+                      onPressed: () async {
+                        final FilePickerResult? result =
+                            await FilePicker.platform.pickFiles(
+                                type: FileType.any, allowMultiple: false);
+
+                        if (result != null) {
+                          final Uint8List? fileBytes = result.files.first.bytes;
+                          if (fileBytes != null) {
+                            final Map<String, dynamic> x = await getClient()
+                                .postImage("/images", fileBytes);
+                            print(x);
+                          }
+                        }
+                      },
+                      icon: Icon(Icons.image)),
                   IconButton(
                     icon: const Icon(Icons.send),
                     color: Colors.blueAccent,
