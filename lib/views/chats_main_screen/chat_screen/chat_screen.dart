@@ -8,11 +8,12 @@ import "package:getteacher/net/web_socket_json_listener.dart";
 const String messageType = "MessageType";
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen(
-      {super.key,
-      required this.chatId,
-      required this.webSocketJson,
-      required this.profile});
+  ChatScreen({
+    super.key,
+    required this.chatId,
+    required this.webSocketJson,
+    required this.profile,
+  });
 
   final int chatId;
   final WebSocketJson webSocketJson;
@@ -74,7 +75,6 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                reverse: true,
                 itemCount: messages.length,
                 itemBuilder: (final BuildContext context, final int index) {
                   final MessageModel message = messages[index];

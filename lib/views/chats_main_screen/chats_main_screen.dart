@@ -18,6 +18,15 @@ class ChatsMainScreen extends StatefulWidget {
 }
 
 class _ChatsMainScreenState extends State<ChatsMainScreen> {
+  bool noneFlag = false;
+
+  @override
+  void didUpdateWidget(final ChatsMainScreen state) {
+    super.didUpdateWidget(state);
+    setState(() {});
+    print("???");
+  }
+
   @override
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -50,12 +59,14 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => CreateChatScreen(),
-                ));
+          onPressed: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => CreateChatScreen(),
+              ),
+            );
+            setState(() {});
           },
         ),
       );
