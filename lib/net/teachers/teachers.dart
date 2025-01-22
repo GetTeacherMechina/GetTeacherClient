@@ -18,7 +18,8 @@ class DbTeacher {
       required this.id,
       required this.numOfMeetings,
       required this.numOfRankers,
-      required this.rank,required this.userName});
+      required this.rank,
+      required this.userName});
   factory DbTeacher.fromJson(final Map<String, dynamic> data) =>
       _$DbTeacherFromJson(data);
 
