@@ -29,7 +29,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void handleNewMessage(final Map<String, dynamic> json) {
     final MessageModel msg = MessageModel.fromJson(json);
-
     setState(() {
       messages.add(msg);
     });

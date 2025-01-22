@@ -20,6 +20,7 @@ class TeacherMainScreen extends StatefulWidget {
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
   WebSocketJson? connection;
+  bool wsInitialized = false;
 
   bool readyForCalling = false;
 
@@ -52,6 +53,9 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
       },
     ).then((final WebSocketJson socket) {
       connection = socket;
+      setState(() {
+        wsInitialized = true;
+      });
     });
   }
 
@@ -70,10 +74,12 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
           title: Text("Hello ${widget.profile.fullName}"),
           // surfaceTintColor: Theme.of(context).primaryColor,
         ),
-        drawer: MainScreenDrawer(
-          profile: widget.profile,
-          webSocketJson: connection!,
-        ),
+        drawer: wsInitialized
+            ? MainScreenDrawer(
+                profile: widget.profile,
+                webSocketJson: connection!,
+              )
+            : null,
         body: Row(
           children: <Widget>[
             const Spacer(),
