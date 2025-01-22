@@ -649,10 +649,7 @@ packages:
     dependency: transitive
     description: flutter
     source: sdk
-<<<<<<< HEAD
     version: "0.0.99"
-=======
-    version: "0.0.0"
   socket_io_client:
     dependency: "direct main"
     description:
@@ -669,7 +666,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
->>>>>>> 9de5b31e7e12ba4590734db675587c317cf54ca5
   source_gen:
     dependency: transitive
     description:

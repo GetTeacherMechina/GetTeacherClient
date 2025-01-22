@@ -3,10 +3,12 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/register/register.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
 import "package:getteacher/views/register_screen/user_role_selector.dart";
+import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
@@ -29,9 +31,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late final TextEditingController confirmPasswordController =
       TextEditingController(text: model.confirmedPassword);
 
+  bool _obscurePassword = true;
+
   @override
   Widget build(final BuildContext context) => Scaffold(
-        backgroundColor: const Color(0xFFf5f5f5),
+        backgroundColor: AppTheme.backgroundColor,
         body: ListView(
           padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width / 8,),
@@ -49,15 +53,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              _menuItem(title: "Home"),
-              _menuItem(title: "Chat"),
-              _menuItem(title: "Something"),
-              _menuItem(title: "Help"),
+              AppTheme.menuItem(title: "Home"),
+              AppTheme.menuItem(title: "Chat"),
+              AppTheme.menuItem(title: "Something"),
+              AppTheme.menuItem(title: "Help"),
             ],
           ),
           Row(
             children: <Widget>[
-              _menuItem(title: "Sign Up", isActive: false),
+              AppTheme.menuItem(title: "Sign Up", isActive: false),
               _loginButton(context),
             ],
           ),
@@ -65,38 +69,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
 
-  Widget _menuItem({required final String title, final bool isActive = false}) => Padding(
-      padding: const EdgeInsets.only(right: 75),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Text(
-          title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: isActive ? Colors.deepPurple : Colors.grey,
-          ),
-        ),
-      ),
-    );
-
   Widget _loginButton(final BuildContext context) => GestureDetector(
       onTap: () {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (final BuildContext context) => LoginScreen()),
+          MaterialPageRoute<void>(builder: (final BuildContext context) => LoginScreen()),
         );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppTheme.defaultButtonBack,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.grey[200]!,
-              spreadRadius: 10,
-              blurRadius: 12,
-            ),
-          ],
+          boxShadow: <BoxShadow>[AppTheme.defaultShadow],
         ),
         child: const MouseRegion(
           cursor: SystemMouseCursors.click,
@@ -104,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             "Login",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple,
+              color: AppTheme.linkColor,
             ),
           ),
         ),
@@ -131,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 30),
                 Text(
                   "Join us by creating a new account",
-                  style: TextStyle(color: Colors.black54, fontSize: 16),
+                  style: TextStyle(color: AppTheme.secondaryTextColor, fontSize: 16),
                 ),
               ],
             ),
@@ -156,28 +140,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           TextFormField(
             controller: nameController,
-            decoration: const InputDecoration(hintText: "Full Name"),
+            decoration: AppTheme.inputDecoration(hint: "Full Name"),
             onChanged: (final String value) => model = model.copyWith(fullName: () => value),
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: emailController,
-            decoration: const InputDecoration(hintText: "Email"),
+            decoration: AppTheme.inputDecoration(hint: "Email"),
             validator: (final String? value) => value != null && value.isNotEmpty && EmailValidator.validate(value) ? null : "Invalid email",
             onChanged: (final String value) => model = model.copyWith(email: () => value),
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(hintText: "Password"),
+            obscureText: _obscurePassword,
+            decoration: AppTheme.inputDecoration(
+              hint: "Password",
+              obscureText: _obscurePassword,
+              passField: true,
+              onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+            ),
             onChanged: (final String value) => model = model.copyWith(password: () => value),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute<void>(
+                    builder: (final BuildContext context) =>
+                        ForgotMyPasswordScreen(),
+                  ),
+                );
+              },
+              child: const MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Padding(
+                padding: EdgeInsets.only(top: 8.0, right: 2.0),
+                child: Text(
+                  "Forgot your password?",
+                  style: TextStyle(
+                    color: AppTheme.linkColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: confirmPasswordController,
-            obscureText: true,
-            decoration: const InputDecoration(hintText: "Confirm Password"),
+            obscureText: _obscurePassword,
+            decoration: AppTheme.inputDecoration(
+              hint: "Confirm Password",
+              obscureText: _obscurePassword,
+              passField: true,
+              onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+            ),
             validator: (final String? value) => value == passwordController.text ? null : "Passwords don't match",
             onChanged: (final String value) => model = model.copyWith(confirmedPassword: () => value),
           ),
@@ -201,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               await register(model.intoRegisterRequest(), context);
               final Widget nextScreen = await getMainScreen();
               await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (final BuildContext context) => nextScreen),
+                MaterialPageRoute<void>(builder: (final BuildContext context) => nextScreen),
               );
             },
           ),
