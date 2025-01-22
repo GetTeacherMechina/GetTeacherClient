@@ -10,6 +10,7 @@ dependencies:
   email_validator: ^3.0.0
   flutter:
     sdk: flutter
+  flutter_tex: ^4.0.13
   flutter_webrtc: ^0.12.5+hotfix.2
   fuzzy: ^0.5.1
   http: ^1.2.2
