@@ -4,10 +4,11 @@ class ResetMyPasswordModel {
         confirmPassword = "",
         code = "";
 
-  const ResetMyPasswordModel._hidden(
-      {required this.password,
-      required this.confirmPassword,
-      required this.code,});
+  const ResetMyPasswordModel._hidden({
+    required this.password,
+    required this.confirmPassword,
+    required this.code,
+  });
 
   final String password;
   final String confirmPassword;

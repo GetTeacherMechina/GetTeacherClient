@@ -27,79 +27,81 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: AppTheme.backgroundColor,
-        
         body: Stack(
           children: <Widget>[
-
             AppWidgets.fadedBigLogo(),
             AppWidgets.bubblesImage(),
-
-          Center(
-          child: Container(
-            width: 500,
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: AppTheme.whiteColor,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [AppTheme.defaultShadow],
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text(
-                    "Reset your password",
-                    style: AppTheme.secondaryHeadingStyle,
+            Center(
+              child: Container(
+                width: 500,
+                padding: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: AppTheme.whiteColor,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [AppTheme.defaultShadow],
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Text(
+                        "Reset your password",
+                        style: AppTheme.secondaryHeadingStyle,
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Enter the email address associated with your account and we'll send you a code to reset your password.",
+                        style: TextStyle(
+                            color: AppTheme.secondaryTextColor, fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: emailController,
+                        decoration: AppWidgets.inputDecoration(hint: "Email"),
+                        validator: (final String? value) =>
+                            value != null && EmailValidator.validate(value)
+                                ? null
+                                : "Invalid email",
+                        onChanged: (final String value) {
+                          setState(() {
+                            model = model.copyWith(email: () => value);
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      SubmitButton(
+                        validate: () => _formKey.currentState!.validate(),
+                        submit: () async {
+                          await forgotPassword(
+                              ForgotPasswordRequestModel(email: model.email));
+                          await Navigator.of(context).pushReplacement(
+                            MaterialPageRoute<void>(
+                              builder: (final BuildContext context) =>
+                                  ResetPasswordScreen(email: model.email),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      TextButton(
+                        child: const Text("Back to Login",
+                            style: AppTheme.linkTextStyle),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute<void>(
+                              builder: (final BuildContext context) =>
+                                  LoginScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 15),
-                  const Text(
-                    "Enter the email address associated with your account and we'll send you a code to reset your password.",
-                    style: TextStyle(color: AppTheme.secondaryTextColor, fontSize: 16),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: AppWidgets.inputDecoration(hint: "Email"),
-                    validator: (final String? value) =>
-                        value != null && EmailValidator.validate(value) ? null : "Invalid email",
-                    onChanged: (final String value) {
-                      setState(() {
-                        model = model.copyWith(email: () => value);
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  SubmitButton(
-                    validate: () => _formKey.currentState!.validate(),
-                    submit: () async {
-                      await forgotPassword(
-                          ForgotPasswordRequestModel(email: model.email));
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (final BuildContext context) =>
-                              ResetPasswordScreen(email: model.email),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  TextButton(
-                    child: const Text("Back to Login", style: AppTheme.linkTextStyle),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (final BuildContext context) => LoginScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 }

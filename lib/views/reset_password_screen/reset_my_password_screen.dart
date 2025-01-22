@@ -19,9 +19,8 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreen extends State<ResetPasswordScreen> {
-
   _ResetPasswordScreen({required this.email});
-  
+
   ResetMyPasswordModel model = const ResetMyPasswordModel();
 
   final String email;
@@ -41,18 +40,18 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: Colors.white,
-        body: 
-            Stack(
-              children: <Widget>[
-
-                AppWidgets.fadedBigLogo(),
-                AppWidgets.bubblesImage(),
-
+        body: Stack(
+          children: <Widget>[
+            AppWidgets.fadedBigLogo(),
+            AppWidgets.bubblesImage(),
             Center(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 1000),
-                transitionBuilder: (final Widget child, final Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-                child: _isPasswordReset ? _successContent() : _resetPasswordForm(),
+                transitionBuilder:
+                    (final Widget child, final Animation<double> animation) =>
+                        FadeTransition(opacity: animation, child: child),
+                child:
+                    _isPasswordReset ? _successContent() : _resetPasswordForm(),
               ),
             ),
           ],
@@ -78,29 +77,35 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
           child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Text(
-                  "Reset your password",
-                  style: AppTheme.secondaryHeadingStyle,
-                ),
-                const SizedBox(height: 15),
-                Text(
-                  "Code sent to $email",
-                style: const TextStyle(color: AppTheme.secondaryTextColor, fontSize: 16),
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                "Reset your password",
+                style: AppTheme.secondaryHeadingStyle,
+              ),
+              const SizedBox(height: 15),
+              Text(
+                "Code sent to $email",
+                style: const TextStyle(
+                    color: AppTheme.secondaryTextColor, fontSize: 16),
               ),
               const SizedBox(height: 20),
               TextFormField(
-              controller: passwordController,
-              obscureText: _obscurePassword,
-              decoration: AppWidgets.inputDecoration(
-                hint: "Password",
+                controller: passwordController,
                 obscureText: _obscurePassword,
-                passField: true,
-                onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
-            ),
-            onChanged: (final String value) => model = model.copyWith(password: () => value),
-          ),
+                decoration: AppWidgets.inputDecoration(
+                  hint: "Password",
+                  obscureText: _obscurePassword,
+                  passField: true,
+                  onTap: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+                onChanged: (final String value) =>
+                    model = model.copyWith(password: () => value),
+              ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: confirmPasswordController,
@@ -109,10 +114,18 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
                   hint: "Confirm Password",
                   obscureText: _obscurePassword,
                   passField: true,
-                  onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+                  onTap: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
                 ),
-                validator: (final String? value) => value == passwordController.text ? null : "Passwords don't match",
-                onChanged: (final String value) => model = model.copyWith(confirmPassword: () => value),
+                validator: (final String? value) =>
+                    value == passwordController.text
+                        ? null
+                        : "Passwords don't match",
+                onChanged: (final String value) =>
+                    model = model.copyWith(confirmPassword: () => value),
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -141,15 +154,17 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
               ),
               const SizedBox(height: 20),
               TextButton(
-                    child: Text("$email - not your email?", style: AppTheme.linkTextStyle),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute<void>(
-                          builder: (final BuildContext context) => ForgotMyPasswordScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                child: Text("$email - not your email?",
+                    style: AppTheme.linkTextStyle),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute<void>(
+                      builder: (final BuildContext context) =>
+                          ForgotMyPasswordScreen(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -188,15 +203,18 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,  // Change button background color
-              foregroundColor: Colors.white,  // Change text/icon color
-              shadowColor: Colors.deepPurpleAccent,  // Change shadow color
-              elevation: 5,  // Adjust shadow elevation
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),  // Adjust padding
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),  // Add rounded corners
+                backgroundColor:
+                    Colors.deepPurple, // Change button background color
+                foregroundColor: Colors.white, // Change text/icon color
+                shadowColor: Colors.deepPurpleAccent, // Change shadow color
+                elevation: 5, // Adjust shadow elevation
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 30, vertical: 15), // Adjust padding
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(20), // Add rounded corners
+                ),
               ),
-            ),
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute<void>(
