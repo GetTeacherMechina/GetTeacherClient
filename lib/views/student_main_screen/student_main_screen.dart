@@ -8,6 +8,8 @@ import "package:getteacher/net/call/student_call_model.dart";
 import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
@@ -69,9 +71,10 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
       webSocketJson = ws;
     });
   }
-
+  
   @override
   Widget build(final BuildContext context) => Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
         drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
@@ -84,73 +87,67 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             ),
           ),
           title: Text("Hello ${widget.profile.fullName}"),
-          surfaceTintColor: Theme.of(context).primaryColor,
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
-        body: Row(
+        body: Stack(
           children: <Widget>[
-            const Spacer(),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  const Spacer(
-                    flex: 4,
-                  ),
-                  Expanded(
-                    flex: 7,
-                    child: StudentSearchWidget(
-                      selectedItem: subject,
-                      onSubjectSelected: (final String subject) {
-                        setState(() {
-                          this.subject = subject;
-                        });
-                      },
+
+          AppWidgets.homepageLogo(),
+          AppWidgets.coverBubblesImage(),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                StudentSearchWidget(
+                  selectedItem: subject,
+                  onSubjectSelected: (final String subject) {
+                    setState(() {
+                      this.subject = subject;
+                    });
+                    print("Selected subject: $subject");
+                  },
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    print("Button pressed, subject: $subject");
+                    if (subject.isEmpty) {
+                      print("Subject is empty, returning");
+                      return;
+                    }
+                    if (!waitingForCall) {
+                      print("Starting search for subject: $subject");
+                      await startSearchingForTeacher(subject);
+                      setState(() {
+                        waitingForCall = true;
+                      });
+                    } else {
+                      print("Stopping search");
+                      await stopSearchingForTeacher();
+                      setState(() {
+                        waitingForCall = false;
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: AppTheme.whiteColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15,),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (subject.isEmpty) {
-                          return;
-                        }
-                        if (!waitingForCall) {
-                          await startSearchingForTeacher(subject);
-                          setState(() {
-                            waitingForCall = true;
-                          });
-                        } else {
-                          await stopSearchingForTeacher();
-                          setState(() {
-                            waitingForCall = false;
-                          });
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: waitingForCall
-                            ? <Widget>[
-                                const CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ]
-                            : <Widget>[
-                                const Icon(Icons.call),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Call a teacher"),
-                              ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(
-                    flex: 4,
-                  ),
-                ],
-              ),
+                  child: waitingForCall
+                      ? const CircularProgressIndicator(color: AppTheme.whiteColor)
+                      : const Text("Call a Teacher"),
+                ),
+              ],
             ),
-            const Spacer(),
-          ],
-        ),
-      );
+          ),
+      ],
+    ),
+  );
 }

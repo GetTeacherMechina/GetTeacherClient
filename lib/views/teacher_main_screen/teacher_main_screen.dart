@@ -4,7 +4,9 @@ import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/teacher_meeting_searching/teacher_meeting_searching.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/theme/theme.dart";
 
 class TeacherMainScreen extends StatefulWidget {
   const TeacherMainScreen({
@@ -20,7 +22,6 @@ class TeacherMainScreen extends StatefulWidget {
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
   WebSocketJson? connection;
-
   bool readyForCalling = false;
 
   @override
@@ -67,51 +68,77 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
               },
             ),
           ),
-          title: Text("Hello ${widget.profile.fullName}"),
-          // surfaceTintColor: Theme.of(context).primaryColor,
+          title: Text(
+            "Hello ${widget.profile.fullName}",
+            style: AppTheme.bodyTextStyle,
+          ),
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
         drawer: MainScreenDrawer(
           profile: widget.profile,
         ),
-        body: Row(
+        body: 
+        Stack(
           children: <Widget>[
-            const Spacer(),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  const Spacer(flex: 4),
-                  Expanded(
-                    flex: 1,
-                    child: RawMaterialButton(
-                      onPressed: () async {
-                        if (readyForCalling) {
-                          await stopMeetingSearching();
-                        } else {
-                          await startMeetingSearching();
-                        }
-                        setState(() {
-                          readyForCalling = !readyForCalling;
-                        });
-                      },
-                      elevation: 2.0,
-                      fillColor: Colors.blue,
-                      constraints: const BoxConstraints(minWidth: 0.0),
-                      child: readyForCalling
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Icon(
-                              Icons.search,
-                              size: 35.0,
-                            ),
-                      padding: const EdgeInsets.all(30.0),
-                      shape: const CircleBorder(),
-                    ),
-                  ),
-                ],
-              ),
+
+          AppWidgets.homepageLogo(),
+          AppWidgets.coverBubblesImage(),
+        Center(
+          child: Container(
+            width: 400,
+            padding: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: AppTheme.whiteColor,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [AppTheme.defaultShadow],
             ),
-            const Spacer(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text(
+                  "Ready to receive calls",
+                  style: AppTheme.headingStyle,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () async {
+                    if (readyForCalling) {
+                      await stopMeetingSearching();
+                    } else {
+                      await startMeetingSearching();
+                    }
+                    setState(() {
+                      readyForCalling = !readyForCalling;
+                    });
+                  },
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: readyForCalling
+                        ? AppTheme.primaryColor
+                        : AppTheme.hintTextColor,
+                    child: readyForCalling
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Icon(
+                            Icons.search,
+                            size: 50.0,
+                            color: Colors.white,
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  readyForCalling ? "Searching for students..." : "Tap to start searching",
+                  style: AppTheme.bodyTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
           ],
         ),
       );

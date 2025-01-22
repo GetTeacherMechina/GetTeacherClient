@@ -50,6 +50,20 @@ class AppWidgets {
       ),
     );
 
+    static Center homepageLogo() => Center(
+      child: Positioned(
+      bottom: 2,
+      child: Opacity(
+        opacity: 0.3,
+        child: Image.asset(
+          "assets/images/logo1.png",
+          width: 384,
+          height: 384,
+        ),
+      ),
+      ),
+    );
+
   static Positioned bubblesImage() => Positioned(
       top: 0,
       left: 0,
@@ -57,6 +71,18 @@ class AppWidgets {
         opacity: 0.3,
         child: Image.asset(
           "assets/images/bubbles.png",
+          width: 1536,
+          height: 960,
+        ),
+      ),
+    );
+
+    static Positioned coverBubblesImage() => Positioned(
+      bottom: 0,
+      child: Opacity(
+        opacity: 0.3,
+        child: Image.asset(
+          "assets/images/bubblescover.png",
           width: 1536,
           height: 960,
         ),
