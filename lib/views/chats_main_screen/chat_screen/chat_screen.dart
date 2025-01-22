@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/latex_text_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
@@ -27,18 +29,27 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> messages = <MessageModel>[];
   final TextEditingController controller = TextEditingController();
+  ScrollController scrollController = ScrollController();
 
   void handleNewMessage(final Map<String, dynamic> json) {
     final MessageModel msg = MessageModel.fromJson(json);
     setState(() {
       messages.add(msg);
     });
+    jumpBottomNextFrame();
   }
 
   void webSocketHandler(final Map<String, dynamic> json) async {
     if (json[messageType] == "chat_message") {
       handleNewMessage(json);
     }
+  }
+
+  void jumpBottomNextFrame() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (final _) =>
+          scrollController.jumpTo(scrollController.position.maxScrollExtent),
+    );
   }
 
   @override
@@ -63,6 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       messages = chat.messages;
     });
+    jumpBottomNextFrame();
   }
 
   @override
@@ -75,6 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
+                controller: scrollController,
                 itemCount: messages.length,
                 itemBuilder: (final BuildContext context, final int index) {
                   final MessageModel message = messages[index];
@@ -140,6 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       setState(() {
                         messages.add(msg);
                         controller.clear();
+                        jumpBottomNextFrame();
                       });
                     },
                   ),
