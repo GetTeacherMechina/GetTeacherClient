@@ -2,15 +2,21 @@ import "package:flutter/material.dart";
 import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/chats/get_chat_model.dart";
 import "package:getteacher/net/chats/message_model.dart";
+import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 
 const String messageType = "MessageType";
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key, required this.chatId, required this.webSocketJson});
+  ChatScreen(
+      {super.key,
+      required this.chatId,
+      required this.webSocketJson,
+      required this.profile});
 
   final int chatId;
   final WebSocketJson webSocketJson;
+  final ProfileResponseModel profile;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -19,8 +25,13 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> messages = <MessageModel>[];
   final TextEditingController controller = TextEditingController();
+
   void handleNewMessage(final Map<String, dynamic> json) {
-    //final MessageModel msg = MessageModel.fromJson(json);
+    final MessageModel msg = MessageModel.fromJson(json);
+
+    setState(() {
+      messages.add(msg);
+    });
   }
 
   void webSocketHandler(final Map<String, dynamic> json) async {
@@ -117,7 +128,21 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                     icon: const Icon(Icons.send),
                     color: Colors.blueAccent,
-                    onPressed: (){},
+                    onPressed: () async {
+                      await createMessage(widget.chatId, controller.text);
+                      final MessageModel msg = MessageModel(
+                        id: -1,
+                        senderId: -1,
+                        content: controller.text,
+                        dateTime: DateTime.now(),
+                        senderName: widget.profile.fullName,
+                      );
+
+                      setState(() {
+                        messages.add(msg);
+                        controller.clear();
+                      });
+                    },
                   ),
                 ],
               ),
