@@ -24,7 +24,6 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
   void didUpdateWidget(final ChatsMainScreen state) {
     super.didUpdateWidget(state);
     setState(() {});
-    print("???");
   }
 
   @override
@@ -62,8 +61,9 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
           onPressed: () async {
             await Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => CreateChatScreen(),
+              MaterialPageRoute<dynamic>(
+                builder: (final BuildContext context) =>
+                    const CreateChatScreen(),
               ),
             );
             setState(() {});

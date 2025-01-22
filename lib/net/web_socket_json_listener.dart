@@ -62,6 +62,8 @@ class WebSocketJson {
     websocket.sink.add(getClient().jwt());
 
     return WebSocketJson._(
-        websocket, <void Function(Map<String, dynamic>)>[onNewData],);
+      websocket,
+      <void Function(Map<String, dynamic>)>[onNewData],
+    );
   }
 }
