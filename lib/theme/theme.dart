@@ -43,6 +43,12 @@ class AppTheme {
     color: textColor,
   );
 
+  static const TextStyle secondaryHeadingStyle = TextStyle(
+    fontSize: 36,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+  );
+
   static const TextStyle bodyTextStyle = TextStyle(
     fontSize: 16,
     color: textColor,
@@ -53,44 +59,4 @@ class AppTheme {
     fontWeight: FontWeight.bold,
     color: linkColor,
   );
-
-  static InputDecoration inputDecoration({
-  required final String hint,
-  final bool obscureText = false, 
-  final bool passField = false,
-  final VoidCallback? onTap,  
-}) => InputDecoration(
-    hintText: hint,
-    filled: true,
-    fillColor: inputFieldBackground,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(15),
-      borderSide: BorderSide.none,
-    ),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    hintStyle: const TextStyle(color: hintTextColor),
-    suffixIcon: passField
-        ? IconButton(
-            icon: Icon(
-              obscureText ? Icons.visibility_off : Icons.visibility,
-              color: hintTextColor,
-            ),
-            onPressed: onTap,
-          )
-        : null,
-  );
-
-  static Widget menuItem({required final String title, final bool isActive = false}) => Padding(
-        padding: const EdgeInsets.only(right: 75),
-        child: MouseRegion(
-          cursor: isActive ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isActive ? AppTheme.linkColor : AppTheme.hintTextColor,
-            ),
-          ),
-        ),
-      );
 }

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
 
@@ -23,7 +24,7 @@ class _SubmitButtonState extends State<SubmitButton> {
           ButtonState.idle: const IconedButton(
             text: "Submit",
             icon: Icon(Icons.send, color: Colors.white),
-            color: Colors.deepPurple,
+            color: AppTheme.primaryColor,
           ),
           ButtonState.loading: IconedButton(
             text: "Loading",

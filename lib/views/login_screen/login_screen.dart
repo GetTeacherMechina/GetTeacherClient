@@ -4,6 +4,7 @@ import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
@@ -28,17 +29,23 @@ class _LoginScreen extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        backgroundColor: AppTheme.backgroundColor,
-        body: ListView(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width / 8,),
-          children: <Widget>[
-            _menuBar(context),
-            _loginBody(context),
-          ],
-        ),
-      );
+Widget build(final BuildContext context) => Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      body: Stack(
+        children: [
+          ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width / 8,
+            ),
+            children: <Widget>[
+              _menuBar(context),
+              _loginBody(context),
+            ],
+          ),
+          AppWidgets.logoImage(),
+        ],
+      ),
+    );
 
   Widget _menuBar(final BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -47,15 +54,15 @@ class _LoginScreen extends State<LoginScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              AppTheme.menuItem(title: "Home"),
-              AppTheme.menuItem(title: "Chat"),
-              AppTheme.menuItem(title: "Something"),
-              AppTheme.menuItem(title: "Help"),
+              AppWidgets.menuItem(title: "Home"),
+              AppWidgets.menuItem(title: "Chat"),
+              AppWidgets.menuItem(title: "Something"),
+              AppWidgets.menuItem(title: "Help"),
             ],
           ),
           Row(
             children: <Widget>[
-              AppTheme.menuItem(title: "Sign In", isActive: false),
+              AppWidgets.menuItem(title: "Sign In", isActive: false),
               _registerButton(context),
             ],
           ),
@@ -79,7 +86,7 @@ class _LoginScreen extends State<LoginScreen> {
         child: const MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Text(
-            "Register",
+            "Sign Up",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AppTheme.linkColor,
@@ -148,7 +155,7 @@ class _LoginScreen extends State<LoginScreen> {
         children: <Widget>[
           TextFormField(
             controller: emailController,
-            decoration: AppTheme.inputDecoration(hint: "Email"),
+            decoration: AppWidgets.inputDecoration(hint: "Email"),
             validator: (final String? value) => value != null && EmailValidator.validate(value) ? null : "Invalid email",
             onChanged: (final String value) => model = model.copyWith(email: () => value),
           ),
@@ -156,7 +163,7 @@ class _LoginScreen extends State<LoginScreen> {
           TextField(
             obscureText: true,
             controller: passwordController,
-            decoration: AppTheme.inputDecoration(
+            decoration: AppWidgets.inputDecoration(
               hint: "Password",
               obscureText: _obscurePassword,
               passField: true,

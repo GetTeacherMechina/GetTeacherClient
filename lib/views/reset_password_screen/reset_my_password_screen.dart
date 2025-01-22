@@ -8,17 +8,13 @@ import "package:getteacher/views/reset_password_screen/reset_my_password_model.d
 class ResetPasswordScreen extends StatefulWidget {
   ResetPasswordScreen({super.key, required this.email});
 
-  @override
-  State<StatefulWidget> createState() => _ResetPasswordScreen(email: email);
-
   final String email;
+
+  @override
+  State<StatefulWidget> createState() => _ResetPasswordScreen();
 }
 
-class _ResetPasswordScreen extends State<StatefulWidget> {
-  _ResetPasswordScreen({required this.email});
-
-  final String email;
-
+class _ResetPasswordScreen extends State<ResetPasswordScreen> {
   ResetMyPasswordModel model = const ResetMyPasswordModel();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -30,90 +26,130 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
   late final TextEditingController codeController =
       TextEditingController(text: model.code);
 
+  bool _isPasswordReset = false;
+
   @override
   Widget build(final BuildContext context) => Scaffold(
-        body: Form(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            transitionBuilder: (final Widget child, final Animation<double> animation) => FadeTransition(opacity: animation, child: child),
+            child: _isPasswordReset ? _successContent() : _resetPasswordForm(),
+          ),
+        ),
+      );
+
+  Widget _resetPasswordForm() => Container(
+        key: const ValueKey<int>(1),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        width: 500,
+        child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Spacer(
-                flex: 1,
+              TextFormField(
+                obscureText: true,
+                controller: passwordController,
+                decoration: const InputDecoration(hintText: "Password"),
+                onChanged: (final String value) {
+                  model = model.copyWith(password: () => value);
+                },
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  children: <Widget>[
-                    const Spacer(
-                      flex: 1,
-                    ),
-                    Expanded(
-                      flex: 8,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            obscureText: true,
-                            controller: passwordController,
-                            decoration: const InputDecoration(
-                              hintText: "Password",
-                            ),
-                            onChanged: (final String value) {
-                              model = model.copyWith(password: () => value);
-                            },
-                          ),
-                          TextField(
-                            obscureText: true,
-                            controller: confirmPasswordController,
-                            decoration: const InputDecoration(
-                              hintText: "Confirm Password",
-                            ),
-                            onChanged: (final String value) {
-                              model =
-                                  model.copyWith(confirmPassword: () => value);
-                            },
-                          ),
-                          TextField(
-                            controller: codeController,
-                            decoration: const InputDecoration(
-                              hintText: "Code",
-                            ),
-                            onChanged: (final String value) {
-                              model = model.copyWith(code: () => value);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(
-                      flex: 1,
-                    ),
-                    SubmitButton(
-                      validate: () => _formKey.currentState!.validate(),
-                      submit: () async {
-                        await resetPassword(
-                          ResetPasswordResponseModel(
-                              email: email,
-                              code: model.code,
-                              password: model.password,
-                              confirmPassword: model.confirmPassword),
-                        );
-                        await Navigator.of(context).pushReplacement(
-                          MaterialPageRoute<void>(
-                            builder: (final BuildContext context) =>
-                                LoginScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+              const SizedBox(height: 20),
+              TextFormField(
+                obscureText: true,
+                controller: confirmPasswordController,
+                decoration: const InputDecoration(hintText: "Confirm Password"),
+                onChanged: (final String value) {
+                  model = model.copyWith(confirmPassword: () => value);
+                },
               ),
-              const Spacer(
-                flex: 1,
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: codeController,
+                decoration: const InputDecoration(hintText: "Code"),
+                onChanged: (final String value) {
+                  model = model.copyWith(code: () => value);
+                },
+              ),
+              const SizedBox(height: 20),
+              SubmitButton(
+                validate: () => _formKey.currentState!.validate(),
+                submit: () async {
+                  await resetPassword(
+                    ResetPasswordResponseModel(
+                      email: widget.email,
+                      code: model.code,
+                      password: model.password,
+                      confirmPassword: model.confirmPassword,
+                    ),
+                  );
+                  setState(() {
+                    _isPasswordReset = true;
+                  });
+                },
               ),
             ],
           ),
+        ),
+      );
+
+  Widget _successContent() => Container(
+        key: const ValueKey<int>(2),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 15,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        width: 400,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Icon(Icons.check_circle, color: Colors.green, size: 100),
+            const SizedBox(height: 20),
+            const Text(
+              "Password Reset Successfully!",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "You can now log in with your new password.",
+              style: TextStyle(color: Colors.grey[700]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute<void>(
+                    builder: (final BuildContext context) => LoginScreen(),
+                  ),
+                );
+              },
+              child: const Text("Go to Login"),
+            ),
+          ],
         ),
       );
 }

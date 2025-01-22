@@ -4,6 +4,7 @@ import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/register/register.dart";
 import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 import "package:getteacher/views/register_screen/user_role_input.dart";
@@ -34,17 +35,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
 
   @override
-  Widget build(final BuildContext context) => Scaffold(
-        backgroundColor: AppTheme.backgroundColor,
-        body: ListView(
-          padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width / 8,),
-          children: <Widget>[
-            _menuBar(context),
-            _registerBody(context),
-          ],
-        ),
-      );
+Widget build(final BuildContext context) => Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
+      body: Stack(
+        children: [
+          ListView(
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width / 8,
+            ),
+            children: <Widget>[
+              _menuBar(context),
+              _registerBody(context),
+            ],
+          ),
+          AppWidgets.logoImage(),
+        ],
+      ),
+    );
+
 
   Widget _menuBar(final BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -53,15 +61,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              AppTheme.menuItem(title: "Home"),
-              AppTheme.menuItem(title: "Chat"),
-              AppTheme.menuItem(title: "Something"),
-              AppTheme.menuItem(title: "Help"),
+              AppWidgets.menuItem(title: "Home"),
+              AppWidgets.menuItem(title: "Chat"),
+              AppWidgets.menuItem(title: "Something"),
+              AppWidgets.menuItem(title: "Help"),
             ],
           ),
           Row(
             children: <Widget>[
-              AppTheme.menuItem(title: "Sign Up", isActive: false),
+              AppWidgets.menuItem(title: "Sign Up", isActive: false),
               _loginButton(context),
             ],
           ),
@@ -85,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: const MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Text(
-            "Login",
+            "Sign In",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AppTheme.linkColor,
@@ -140,13 +148,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           TextFormField(
             controller: nameController,
-            decoration: AppTheme.inputDecoration(hint: "Full Name"),
+            decoration: AppWidgets.inputDecoration(hint: "Full Name"),
             onChanged: (final String value) => model = model.copyWith(fullName: () => value),
           ),
           const SizedBox(height: 20),
           TextFormField(
             controller: emailController,
-            decoration: AppTheme.inputDecoration(hint: "Email"),
+            decoration: AppWidgets.inputDecoration(hint: "Email"),
             validator: (final String? value) => value != null && value.isNotEmpty && EmailValidator.validate(value) ? null : "Invalid email",
             onChanged: (final String value) => model = model.copyWith(email: () => value),
           ),
@@ -154,7 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextFormField(
             controller: passwordController,
             obscureText: _obscurePassword,
-            decoration: AppTheme.inputDecoration(
+            decoration: AppWidgets.inputDecoration(
               hint: "Password",
               obscureText: _obscurePassword,
               passField: true,
@@ -193,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           TextFormField(
             controller: confirmPasswordController,
             obscureText: _obscurePassword,
-            decoration: AppTheme.inputDecoration(
+            decoration: AppWidgets.inputDecoration(
               hint: "Confirm Password",
               obscureText: _obscurePassword,
               passField: true,

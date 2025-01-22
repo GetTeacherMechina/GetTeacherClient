@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:getteacher/views/register_screen/register_model.dart";
 
 class TeacherInput extends StatelessWidget {
@@ -15,19 +16,13 @@ class TeacherInput extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blueGrey[50],
               borderRadius: BorderRadius.circular(15),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+              boxShadow: <BoxShadow>[AppTheme.defaultShadow],
             ),
             child: TextFormField(
               initialValue: teacher.bio,
               decoration: InputDecoration(
                 hintText: "Tell Us About Yourself\nWrite a short bio about your teaching experience...",
+                hintStyle: const TextStyle(color: AppTheme.hintTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
