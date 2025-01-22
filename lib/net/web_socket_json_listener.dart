@@ -13,7 +13,8 @@ class WebSocketJson {
           try {
             final dynamic data = jsonDecode(message);
             if (data is Map<String, dynamic>) {
-              for (final void Function(Map<String, dynamic>) onNewData in onNewDatas) {
+              for (final void Function(Map<String, dynamic>) onNewData
+                  in onNewDatas) {
                 onNewData(data);
               }
             } else {}
@@ -44,10 +45,11 @@ class WebSocketJson {
   List<void Function(Map<String, dynamic>)> onNewDatas;
   WebSocketChannel webSocket;
 
-  void addNewListener(final void Function(Map<String,dynamic>) onNewData) {
+  void addNewListener(final void Function(Map<String, dynamic>) onNewData) {
     onNewDatas.add(onNewData);
   }
-  void removeListener(final void Function(Map<String,dynamic>) onNewData) {
+
+  void removeListener(final void Function(Map<String, dynamic>) onNewData) {
     onNewDatas.remove(onNewData);
   }
 
@@ -60,6 +62,6 @@ class WebSocketJson {
     websocket.sink.add(getClient().jwt());
 
     return WebSocketJson._(
-        websocket, <void Function(Map<String, dynamic>)>[onNewData]);
+        websocket, <void Function(Map<String, dynamic>)>[onNewData],);
   }
 }

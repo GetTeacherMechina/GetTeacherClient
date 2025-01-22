@@ -27,7 +27,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
           itemCount: teachers.length,
           itemBuilder: (final BuildContext context, final int index) =>
               ListTile(
-                title: Text(teachers[index].$1.userName),
+            title: Text(teachers[index].$1.userName),
             leading: Checkbox(
               value: teachers[index].$2,
               onChanged: (final bool? value) {

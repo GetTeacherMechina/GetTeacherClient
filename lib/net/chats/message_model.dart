@@ -9,7 +9,7 @@ class MessageModel {
       required this.senderId,
       required this.content,
       required this.dateTime,
-      required this.senderName});
+      required this.senderName,});
 
   factory MessageModel.fromJson(final Map<String, dynamic> json) =>
       _$MessageModelFromJson(json);

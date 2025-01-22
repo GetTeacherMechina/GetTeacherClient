@@ -22,7 +22,11 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CreateChatScreen(),));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => CreateChatScreen(),
+                ));
           },
         ),
       );
