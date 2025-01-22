@@ -4,7 +4,11 @@ part "rate_meeting_net_model.g.dart";
 
 @JsonSerializable()
 class RateMeetingRequestModel {
-  RateMeetingRequestModel({required this.guid, required this.rating, required this.favoriteTeacher});
+  RateMeetingRequestModel({
+    required this.guid,
+    required this.rating,
+    required this.favoriteTeacher,
+  });
 
   final String guid;
 
