@@ -44,6 +44,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             builder: (final BuildContext context) => CallScreen(
               guid: meeting.meetingGuid,
               shouldStartCall: false,
+              isStudent: false,
             ),
           ),
         ),
@@ -70,7 +71,24 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
       if (json[messageType] == csgoContract) {
         csgoApprove(json);
       } else if (json[messageType] == meetingStartNotification) {
-        startMeeting(json);
+        final MeetingResponse meeting = MeetingResponse.fromJson(json);
+        setState(() {
+          waitingForCall = false;
+        });
+
+        if (mounted) {
+          unawaited(
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (final BuildContext context) => CallScreen(
+                  guid: meeting.meetingGuid,
+                  shouldStartCall: false,
+                  isStudent: true,
+                ),
+              ),
+            ),
+          );
+        }
       } else if (json[messageType] == error) {}
     }).then((final WebSocketJson ws) {
       webSocketJson = ws;

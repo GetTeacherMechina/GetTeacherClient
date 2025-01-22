@@ -1,26 +1,24 @@
 import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
-import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
-import "package:getteacher/net/login/login.dart";
-import "package:getteacher/views/login_screen/login_model.dart";
-import "package:getteacher/views/register_screen/register_screen.dart";
-import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
+import "package:getteacher/net/reset_password/forgot_password.dart";
+import "package:getteacher/net/reset_password/forgot_password_net_model.dart";
+import "package:getteacher/views/login_screen/login_screen.dart";
+import "package:getteacher/views/reset_password_screen/forgot_my_password_model.dart";
+import "package:getteacher/views/reset_password_screen/reset_my_password_screen.dart";
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+class ForgotMyPasswordScreen extends StatefulWidget {
+  ForgotMyPasswordScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _LoginScreen();
+  State<StatefulWidget> createState() => _ForgotMyPasswordScreen();
 }
 
-class _LoginScreen extends State<LoginScreen> {
-  LoginModel model = const LoginModel();
+class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
+  ForgotMyPasswordModel model = const ForgotMyPasswordModel();
 
   late final TextEditingController emailController =
       TextEditingController(text: model.email);
-  late final TextEditingController passwordController =
-      TextEditingController(text: model.password);
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -28,7 +26,6 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(final BuildContext context) => Scaffold(
         body: Form(
           key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
           child: Row(
             children: <Widget>[
               const Spacer(
@@ -58,26 +55,22 @@ class _LoginScreen extends State<LoginScreen> {
                                     ? null
                                     : "Invalid email",
                           ),
-                          TextField(
-                            obscureText: true,
-                            controller: passwordController,
-                            decoration: const InputDecoration(
-                              hintText: "Password",
-                            ),
-                            onChanged: (final String value) {
-                              model = model.copyWith(password: () => value);
-                            },
+                          const Spacer(
+                            flex: 1,
                           ),
                           TextButton(
-                            child: const Text("forgot my password"),
+                            child: const Text("login"),
                             onPressed: () {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute<void>(
                                   builder: (final BuildContext context) =>
-                                      ForgotMyPasswordScreen(),
+                                      LoginScreen(),
                                 ),
                               );
                             },
+                          ),
+                          const Spacer(
+                            flex: 20,
                           ),
                         ],
                       ),
@@ -85,25 +78,15 @@ class _LoginScreen extends State<LoginScreen> {
                     const Spacer(
                       flex: 1,
                     ),
-                    TextButton(
-                      child: const Text("Don't have a profile?"),
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute<void>(
-                            builder: (final BuildContext context) =>
-                                RegisterScreen(),
-                          ),
-                        );
-                      },
-                    ),
                     SubmitButton(
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
-                        await login(model.toRequest(), context);
-                        final Widget nextScreen = await getMainScreen();
+                        await forgotPassword(
+                            ForgotPasswordRequestModel(email: model.email));
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
-                            builder: (final BuildContext context) => nextScreen,
+                            builder: (final BuildContext context) =>
+                                ResetPasswordScreen(email: model.email),
                           ),
                         );
                       },

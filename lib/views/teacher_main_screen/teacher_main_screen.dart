@@ -44,6 +44,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
               builder: (final BuildContext context) => CallScreen(
                 guid: callModel.meetingGuid,
                 shouldStartCall: true,
+                isStudent: false,
               ),
             ),
           );
