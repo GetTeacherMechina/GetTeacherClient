@@ -1,6 +1,6 @@
-
-import "package:getteacher/net/credit/credit_net_model.dart";
+import "package:getteacher/views/credit_screen/credit_model.dart";
 import "package:getteacher/net/net.dart";
 
-Future<CreditRequestModel> getCreditRsponsModel() async =>
-  CreditRequestModel.fromJson((await getClient().getJson("/payment/credit-prices")));
+Future<ItemPricesResponseModel> getCreditResponseModel() async =>
+    ItemPricesResponseModel.fromJson(
+        (await getClient().getJson("/payment/credits")));

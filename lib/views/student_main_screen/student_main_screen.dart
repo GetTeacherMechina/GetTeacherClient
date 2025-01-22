@@ -9,6 +9,7 @@ import "package:getteacher/net/student_meeting_searching/student_meeting_searchi
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/views/credit_screen/credit_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
 
@@ -71,6 +72,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   }
 
   @override
+  @override
   Widget build(final BuildContext context) => Scaffold(
         drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
@@ -86,70 +88,114 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
           title: Text("Hello ${widget.profile.fullName}"),
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
-        body: Row(
-          children: <Widget>[
-            const Spacer(),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  const Spacer(
-                    flex: 4,
-                  ),
-                  Expanded(
-                    flex: 7,
-                    child: StudentSearchWidget(
-                      selectedItem: subject,
-                      onSubjectSelected: (final String subject) {
-                        setState(() {
-                          this.subject = subject;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (subject.isEmpty) {
-                          return;
-                        }
-                        if (!waitingForCall) {
-                          await startSearchingForTeacher(subject);
-                          setState(() {
-                            waitingForCall = true;
-                          });
-                        } else {
-                          await stopSearchingForTeacher();
-                          setState(() {
-                            waitingForCall = false;
-                          });
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: waitingForCall
-                            ? <Widget>[
-                                const CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ]
-                            : <Widget>[
-                                const Icon(Icons.call),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Call a teacher"),
-                              ],
+        body: Stack(
+          children: [
+            Row(
+              children: <Widget>[
+                const Spacer(),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      const Spacer(
+                        flex: 4,
                       ),
-                    ),
+                      Expanded(
+                        flex: 7,
+                        child: StudentSearchWidget(
+                          selectedItem: subject,
+                          onSubjectSelected: (final String subject) {
+                            setState(() {
+                              this.subject = subject;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (subject.isEmpty) {
+                              return;
+                            }
+                            if (!waitingForCall) {
+                              await startSearchingForTeacher(subject);
+                              setState(() {
+                                waitingForCall = true;
+                              });
+                            } else {
+                              await stopSearchingForTeacher();
+                              setState(() {
+                                waitingForCall = false;
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: waitingForCall
+                                ? <Widget>[
+                                    const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ]
+                                : <Widget>[
+                                    const Icon(Icons.call),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text("Call a teacher"),
+                                  ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(
+                        flex: 4,
+                      ),
+                    ],
                   ),
-                  const Spacer(
-                    flex: 4,
-                  ),
-                ],
-              ),
+                ),
+                const Spacer(),
+              ],
             ),
-            const Spacer(),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (final BuildContext context) => CreditScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.credit_score, color: Colors.green),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Credits: ${widget.profile.credits}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       );
