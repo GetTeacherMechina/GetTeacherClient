@@ -11,6 +11,7 @@ import "package:getteacher/net/chats/message_model.dart";
 import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/views/chats_main_screen/chat_screen/image_displayer.dart";
 
 const String messageType = "MessageType";
 
@@ -95,6 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemCount: messages.length,
                 itemBuilder: (final BuildContext context, final int index) {
                   final MessageModel message = messages[index];
+                  print(messages[index].content);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
@@ -115,9 +117,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                            LatexTextWidget(
-                              text: message.content,
-                            ),
+                            (message.content.startsWith("####") &&
+                                    message.content.endsWith("####") &&
+                                    message.content.length > 8)
+                                ? ImageDisplayer(
+                                    url: message.content.replaceAll("####", ""),
+                                  )
+                                : LatexTextWidget(
+                                    text: message.content,
+                                  ),
                           ],
                         ),
                       ),
@@ -154,7 +162,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           if (fileBytes != null) {
                             final Map<String, dynamic> x = await getClient()
                                 .postImage("/images", fileBytes);
-                            print(x);
+                            await createMessage(
+                                widget.chatId, "####${x["url"]}####");
                           }
                         }
                       },

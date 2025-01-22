@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/net/ip_constants.dart";
 
 class ImageDisplayer extends StatelessWidget {
   const ImageDisplayer({super.key, required this.url});
@@ -7,7 +8,7 @@ class ImageDisplayer extends StatelessWidget {
   Widget build(final BuildContext context) => Hero(
         tag: url,
         child: Image(
-          image: NetworkImage(url),
+          image: NetworkImage(httpUri(url).toString()),
           width: 100,
         ),
       );
