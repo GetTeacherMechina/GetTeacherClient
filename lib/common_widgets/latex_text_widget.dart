@@ -8,8 +8,9 @@ class LatexTextWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => LaTexT(
-          laTeXCode: Text(
-        text,
-        style: const TextStyle(color: Colors.white),
-      ));
+        laTeXCode: Text(
+          text,
+          style: const TextStyle(color: Colors.white),
+        ),
+      );
 }
