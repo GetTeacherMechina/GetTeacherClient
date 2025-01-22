@@ -4,7 +4,9 @@ part "report_teacher_net_model.g.dart";
 
 @JsonSerializable()
 class ReportTeacherNetModel {
-  ReportTeacherNetModel({required this.report,});
+  ReportTeacherNetModel({
+    required this.report,
+  });
 
   Map<String, dynamic> toJson() => _$ReportTeacherNetModelToJson(this);
 

@@ -1,7 +1,6 @@
 class ReportTeacherModel {
-  const ReportTeacherModel()
-    : report = "";
-  
+  const ReportTeacherModel() : report = "";
+
   const ReportTeacherModel._hidden({
     required this.report,
   });
@@ -10,8 +9,8 @@ class ReportTeacherModel {
 
   ReportTeacherModel copyWith({
     final String Function()? report,
-  }) => 
-        ReportTeacherModel._hidden(
-          report: report != null ? report() : this.report,
-        );
+  }) =>
+      ReportTeacherModel._hidden(
+        report: report != null ? report() : this.report,
+      );
 }

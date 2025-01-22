@@ -1,4 +1,3 @@
-
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/report_techer/report.dart";
@@ -16,39 +15,40 @@ class _ReportTeacher extends State<ReportTeacher> {
   ReportTeacherModel model = const ReportTeacherModel();
 
   late final TextEditingController reportTextEditingController =
-    TextEditingController(text: model.report);
+      TextEditingController(text: model.report);
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(final BuildContext context) => AlertDialog(
-      title: const Text("report techer"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        key: _formKey,
-        children: <Widget>[
-          TextField(
-            controller: reportTextEditingController,
-            decoration: const InputDecoration(
-              hintText: "report",
+        title: const Text("report techer"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          key: _formKey,
+          children: <Widget>[
+            TextField(
+              controller: reportTextEditingController,
+              decoration: const InputDecoration(
+                hintText: "report",
+              ),
+              onChanged: (final String value) => {
+                model.copyWith(
+                  report: () => value,
+                ),
+              },
             ),
-            onChanged: (final String value) => {
-              model.copyWith(report: () => value,),
-            },
-          ),
-          TextButton(
-            child: const Text("Cancel"),
-            onPressed: () async => Navigator.pop(context),
-          ),
-          SubmitButton(
-            validate: () => _formKey.currentState!.validate(),
-            submit: () async {
-              await report(ReportTeacherNetModel(report: model.report));
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-  );
-
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () async => Navigator.pop(context),
+            ),
+            SubmitButton(
+              validate: () => _formKey.currentState!.validate(),
+              submit: () async {
+                await report(ReportTeacherNetModel(report: model.report));
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      );
 }
