@@ -28,18 +28,34 @@ class StudentInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Slider(
-            value: student.grade.toDouble(),
-            max: 12,
-            min: 1,
-            divisions: 11,
-            label: student.grade.toString(),
-            onChanged: (final double value) {
-              onChanged(Student(value.toInt()));
-            },
+          const SizedBox(height: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey[50],
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: student.grade,
+                isExpanded: true,
+                items: grades.entries
+                    .map((final MapEntry<int, String> entry) => DropdownMenuItem<int>(
+                          value: entry.key,
+                          child: Text("כיתה ${entry.value}"),
+                        ))
+                    .toList(),
+                onChanged: (final int? value) {
+                  if (value != null) {
+                    onChanged(Student(value));
+                  }
+                },
+              ),
+            ),
           ),
-          Text(grades[student.grade]!, style: const TextStyle(fontSize: 40)),
         ],
       );
 }
