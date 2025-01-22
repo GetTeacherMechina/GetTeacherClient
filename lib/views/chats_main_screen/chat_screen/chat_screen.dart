@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/latex_text_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/chats/get_chat_model.dart";
 import "package:getteacher/net/chats/message_model.dart";
@@ -97,9 +98,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                            Text(
-                              message.content,
-                              style: const TextStyle(color: Colors.white),
+                            LatexTextWidget(
+                              text: message.content,
                             ),
                           ],
                         ),
