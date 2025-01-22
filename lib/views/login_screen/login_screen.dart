@@ -5,6 +5,7 @@ import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
+import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});

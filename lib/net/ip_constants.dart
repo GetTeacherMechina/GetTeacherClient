@@ -1,13 +1,13 @@
 import "package:flutter/foundation.dart";
 
-const int debugPort = 443;
+const int debugPort = 80;
 const String baseUrl = "/api/v1";
 
-const String debugHost = "172.20.20.200";
+const String debugHost = "127.0.0.1";
 
 Uri httpUri(final String path) {
   if (kDebugMode) {
-    return Uri.https("$debugHost:$debugPort", baseUrl + path);
+    return Uri.http("$debugHost:$debugPort", baseUrl + path);
   } else {
     throw Exception("No release url");
   }
@@ -16,7 +16,7 @@ Uri httpUri(final String path) {
 Uri wsUri(final String path) {
   if (kDebugMode) {
     return Uri(
-      scheme: "wss",
+      scheme: "ws",
       host: debugHost,
       port: debugPort,
       path: baseUrl + path,

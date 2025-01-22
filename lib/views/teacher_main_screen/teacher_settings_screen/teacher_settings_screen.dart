@@ -3,16 +3,14 @@ import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
 import "package:getteacher/net/teacher_subjects/teacher_subjects.dart";
 
-class TeacherSubjectEditorScreen extends StatefulWidget {
-  const TeacherSubjectEditorScreen({super.key});
+class TeacherSettingsScreen extends StatefulWidget {
+  const TeacherSettingsScreen({super.key});
 
   @override
-  State<TeacherSubjectEditorScreen> createState() =>
-      _TeacherSubjectEditorScreenState();
+  State<TeacherSettingsScreen> createState() => _TeacherSettingsScreenState();
 }
 
-class _TeacherSubjectEditorScreenState
-    extends State<TeacherSubjectEditorScreen> {
+class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
   final TextEditingController _subjectSearchEditingController =
       TextEditingController();
 
@@ -23,28 +21,42 @@ class _TeacherSubjectEditorScreenState
         appBar: AppBar(
           title: const Text("teacher subject selector"),
         ),
-        body: SearcherWidget<TeacherSubjectsModel>(
-          searchController: _subjectSearchEditingController,
-          fetchItems: () => _getTeacherFuture,
-          itemBuilder:
-              (final BuildContext context, final TeacherSubjectsModel item) =>
-                  ListTile(
-            title: Text(
-              "subject: ${item.subject.name}, grade: ${item.grade.name}",
+        body: Column(
+          children: <Widget>[
+            const Text("Change Bio:"),
+            const TextField(),
+            const Text("Subjects:"),
+            Expanded(
+              child: SearcherWidget<TeacherSubjectsModel>(
+                searchController: _subjectSearchEditingController,
+                fetchItems: () => _getTeacherFuture,
+                itemBuilder: (
+                  final BuildContext context,
+                  final TeacherSubjectsModel item,
+                ) =>
+                    ListTile(
+                  title: Text(
+                    "subject: ${item.subject.name}, grade: ${item.grade.name}",
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () async {
+                      await removeTeacherSubject(
+                        item.subject.name,
+                        item.grade.name,
+                      );
+                      final Future<List<TeacherSubjectsModel>> f =
+                          getTeacherSubjectSelector();
+                      setState(() {
+                        _getTeacherFuture = f;
+                      });
+                    },
+                  ),
+                ),
+              ),
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              color: Colors.red,
-              onPressed: () async {
-                await removeTeacherSubject(item.subject.name, item.grade.name);
-                final Future<List<TeacherSubjectsModel>> f =
-                    getTeacherSubjectSelector();
-                setState(() {
-                  _getTeacherFuture = f;
-                });
-              },
-            ),
-          ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
