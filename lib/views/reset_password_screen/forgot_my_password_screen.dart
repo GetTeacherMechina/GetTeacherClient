@@ -82,7 +82,8 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                       validate: () => _formKey.currentState!.validate(),
                       submit: () async {
                         await forgotPassword(
-                            ForgotPasswordRequestModel(email: model.email));
+                          ForgotPasswordRequestModel(email: model.email),
+                        );
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
                             builder: (final BuildContext context) =>

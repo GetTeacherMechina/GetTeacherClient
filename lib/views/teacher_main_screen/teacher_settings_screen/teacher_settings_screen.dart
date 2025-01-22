@@ -35,9 +35,7 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
                   final TeacherSubjectsModel item,
                 ) =>
                     ListTile(
-                  title: Text(
-                    "subject: ${item.subject.name}, grade: ${item.grade.name}",
-                  ),
+                  title: Text(item.toString()),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     color: Colors.red,
