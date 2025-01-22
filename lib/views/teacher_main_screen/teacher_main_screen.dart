@@ -1,10 +1,14 @@
 import "package:flutter/material.dart";
+import "package:flutter_webrtc/flutter_webrtc.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/teacher_meeting_searching/teacher_meeting_searching.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/call_screen.dart";
+
+const String messageType = "MessageType";
+const String meetingStartNotification = "MeetingStartNotification";
 
 class TeacherMainScreen extends StatefulWidget {
   const TeacherMainScreen({
@@ -35,6 +39,9 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
     super.initState();
     WebSocketJson.connect(
       (final Map<String, dynamic> json) {
+        if (json[messageType] != meetingStartNotification) {
+          return;
+        }
         final MeetingResponse callModel = MeetingResponse.fromJson(json);
         setState(() {
           readyForCalling = false;
