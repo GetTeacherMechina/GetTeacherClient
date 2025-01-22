@@ -128,6 +128,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      maxLines: null, // Allows unlimited lines
+                      keyboardType: TextInputType.multiline,
                       controller: controller,
                       decoration: InputDecoration(
                         hintText: "Type a message...",

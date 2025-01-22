@@ -1,5 +1,6 @@
 import "dart:convert";
 import "dart:io";
+import "dart:typed_data";
 
 import "package:flutter/material.dart";
 import "package:getteacher/net/ip_constants.dart";
@@ -52,6 +53,22 @@ class GetTeacherClient {
       body: jsonEncode(json),
     );
     return handleResponse(response);
+  }
+
+  Future<Map<String, dynamic>> postImage(
+    final String endpoint,
+    final Uint8List bytes,
+  ) async {
+    final http.MultipartRequest request =
+        http.MultipartRequest("POST", httpUri(endpoint));
+
+    request.headers[HttpHeaders.authorizationHeader] = "Bearer ${_jwt!}";
+    request.headers[HttpHeaders.contentTypeHeader] = "multipart/form-data";
+
+    request.files.add(http.MultipartFile.fromBytes("file", bytes));
+    final http.StreamedResponse resp = await request.send();
+    return jsonDecode(await resp.stream.bytesToString())
+        as Map<String, dynamic>;
   }
 }
 
