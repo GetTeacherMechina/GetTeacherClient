@@ -35,3 +35,26 @@ class ItemPricesResponseModel {
 
   final List<PaymentItemDescriptor> itemPrices;
 }
+
+@JsonSerializable()
+class BuyItemRequestModel {
+  BuyItemRequestModel({
+    required this.item,
+  });
+
+  Map<String, dynamic> toJson() => _$BuyItemRequestModelToJson(this);
+
+  final PaymentItemDescriptor item;
+}
+
+@JsonSerializable()
+class ItemBuyResponseModel {
+  ItemBuyResponseModel({
+    required this.statusCode,
+  });
+
+  factory ItemBuyResponseModel.fromJson(final Map<String, dynamic> json) =>
+      _$ItemBuyResponseModelFromJson(json);
+
+  final String statusCode;
+}

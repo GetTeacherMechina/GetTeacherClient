@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
+import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/views/credit_screen/credit_model.dart";
 import "package:getteacher/net/credit/credit.dart";
+import "package:getteacher/net/profile/profile.dart";
 
 class CreditScreen extends StatefulWidget {
   const CreditScreen({super.key});
@@ -10,7 +12,7 @@ class CreditScreen extends StatefulWidget {
 }
 
 class _CreditScreenState extends State<CreditScreen> {
-  final Future<ItemPricesResponseModel> response = getCreditResponseModel();
+  final Future<ItemPricesResponseModel> response = getCreditsResponseModel();
 
   @override
   Widget build(final BuildContext context) => Scaffold(
@@ -51,7 +53,7 @@ class _CreditScreenState extends State<CreditScreen> {
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         onTap: () {
-                          _showItemDetails(context, item);
+                          _buyItem(context, item);
                         },
                       ),
                     ),
@@ -67,33 +69,41 @@ class _CreditScreenState extends State<CreditScreen> {
         ),
       );
 
-  void _showItemDetails(BuildContext context, PaymentItemDescriptor item) {
+  void _buyItem(BuildContext context, PaymentItemDescriptor item) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Item Details"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Description: ${item.description}"),
-              const SizedBox(height: 8),
-              Text("Amount: ${item.amount}"),
-              const SizedBox(height: 8),
-              Text("Price: \$${item.priceInDollars.toStringAsFixed(2)}"),
-              const SizedBox(height: 8),
-              Text("Item ID: ${item.itemId}"),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
+      builder: (final BuildContext context) => AlertDialog(
+        title: const Text("Item Details"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Description: ${item.description}"),
+            const SizedBox(height: 8),
+            Text("Amount: ${item.amount}"),
+            const SizedBox(height: 8),
+            Text("Price: \$${item.priceInDollars.toStringAsFixed(2)}"),
+            const SizedBox(height: 8),
+            Text("Item ID: ${item.itemId}"),
           ],
-        );
-      },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Close"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _confirmPurchase(item);
+              Navigator.of(context).pop();
+            },
+            child: const Text("Buy"),
+          ),
+        ],
+      ),
     );
   }
+
+  Future<void> _confirmPurchase(final PaymentItemDescriptor item) async =>
+      buyCreditsDev(BuyItemRequestModel(item: item));
 }
