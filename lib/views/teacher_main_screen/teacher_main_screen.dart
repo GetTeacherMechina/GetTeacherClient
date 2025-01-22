@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/is_online.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
@@ -19,20 +20,20 @@ class TeacherMainScreen extends StatefulWidget {
 }
 
 class _TeacherMainScreenState extends State<TeacherMainScreen> {
-  WebSocketJson? connection;
+  late WebSocketJson connection;
 
   bool readyForCalling = false;
 
   @override
   void dispose() {
     super.dispose();
-    connection?.close();
+    connection.close();
   }
 
   @override
   void initState() {
     super.initState();
-    WebSocketJson.connect(
+    connection = WebSocketJson.connect(
       (final Map<String, dynamic> json) {
         final MeetingResponse callModel = MeetingResponse.fromJson(json);
         setState(() {
@@ -50,9 +51,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
           );
         }
       },
-    ).then((final WebSocketJson socket) {
-      connection = socket;
-    });
+    );
   }
 
   @override
@@ -73,45 +72,53 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
         drawer: MainScreenDrawer(
           profile: widget.profile,
         ),
-        body: Row(
+        body: Stack(
           children: <Widget>[
-            const Spacer(),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  const Spacer(flex: 4),
-                  Expanded(
-                    flex: 1,
-                    child: RawMaterialButton(
-                      onPressed: () async {
-                        if (readyForCalling) {
-                          await stopMeetingSearching();
-                        } else {
-                          await startMeetingSearching();
-                        }
-                        setState(() {
-                          readyForCalling = !readyForCalling;
-                        });
-                      },
-                      elevation: 2.0,
-                      fillColor: Colors.blue,
-                      constraints: const BoxConstraints(minWidth: 0.0),
-                      child: readyForCalling
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : const Icon(
-                              Icons.search,
-                              size: 35.0,
-                            ),
-                      padding: const EdgeInsets.all(30.0),
-                      shape: const CircleBorder(),
-                    ),
-                  ),
-                ],
-              ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IsOnline(connection: connection),
             ),
-            const Spacer(),
+            Row(
+              children: <Widget>[
+                const Spacer(),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      const Spacer(flex: 4),
+                      Expanded(
+                        flex: 1,
+                        child: RawMaterialButton(
+                          onPressed: () async {
+                            if (readyForCalling) {
+                              await stopMeetingSearching();
+                            } else {
+                              await startMeetingSearching();
+                            }
+                            setState(() {
+                              readyForCalling = !readyForCalling;
+                            });
+                          },
+                          elevation: 2.0,
+                          fillColor: Colors.blue,
+                          constraints: const BoxConstraints(minWidth: 0.0),
+                          child: readyForCalling
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Icon(
+                                  Icons.search,
+                                  size: 35.0,
+                                ),
+                          padding: const EdgeInsets.all(30.0),
+                          shape: const CircleBorder(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ],
         ),
       );
