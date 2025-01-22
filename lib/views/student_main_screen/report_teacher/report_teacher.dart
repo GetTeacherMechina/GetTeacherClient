@@ -3,16 +3,16 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
 import "package:getteacher/net/report_techer/report.dart";
 import "package:getteacher/net/report_techer/report_teacher_net_model.dart";
-import "package:getteacher/views/student_main_screen/report_techer/report_teacher_model.dart";
+import "package:getteacher/views/student_main_screen/report_teacher/report_teacher_model.dart";
 
-class ReportTecher extends StatefulWidget {
-  ReportTecher({super.key});
+class ReportTeacher extends StatefulWidget {
+  ReportTeacher({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ReportTecher();
+  State<StatefulWidget> createState() => _ReportTeacher();
 }
 
-class _ReportTecher extends State<ReportTecher> {
+class _ReportTeacher extends State<ReportTeacher> {
   ReportTeacherModel model = const ReportTeacherModel();
 
   late final TextEditingController reportTextEditingController =
@@ -24,6 +24,7 @@ class _ReportTecher extends State<ReportTecher> {
   Widget build(final BuildContext context) => AlertDialog(
       title: const Text("report techer"),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         key: _formKey,
         children: <Widget>[
           TextField(
