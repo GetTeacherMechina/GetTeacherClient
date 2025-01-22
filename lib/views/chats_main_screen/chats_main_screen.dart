@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/chats/get_chats_model.dart";
-import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
