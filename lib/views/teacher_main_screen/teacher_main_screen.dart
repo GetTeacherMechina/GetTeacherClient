@@ -72,6 +72,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
         ),
         drawer: MainScreenDrawer(
           profile: widget.profile,
+          webSocketJson: connection!,
         ),
         body: Row(
           children: <Widget>[

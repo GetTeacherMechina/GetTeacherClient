@@ -7,7 +7,7 @@ Future<List<DbTeacher>> getAllTeachers() async {
   final data = await getClient().getJson("/teachers");
 
   return (data["teachers"] as List<dynamic>)
-      .map((a) => DbTeacher.fromJson(a as Map<String, dynamic>))
+      .map((final a) => DbTeacher.fromJson(a as Map<String, dynamic>))
       .toList();
 }
 

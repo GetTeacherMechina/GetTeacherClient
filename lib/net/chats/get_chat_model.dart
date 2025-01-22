@@ -10,9 +10,9 @@ class ChatModel {
   factory ChatModel.fromJson(final Map<String, dynamic> json) =>
       _$ChatModelFromJson(json);
 
-  @JsonKey(name: "Users")
+  @JsonKey(name: "users")
   final List<int> users;
 
-  @JsonKey(name: "Messages")
+  @JsonKey(name: "messages")
   final List<MessageModel> messages;
 }

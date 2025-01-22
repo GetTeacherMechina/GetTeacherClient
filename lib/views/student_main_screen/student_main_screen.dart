@@ -27,6 +27,7 @@ class StudentMainScreen extends StatefulWidget {
 
 class _StudentMainScreenState extends State<StudentMainScreen> {
   late WebSocketJson webSocketJson;
+  bool doneInitWebSocket = false;
 
   String subject = "";
   bool waitingForCall = false;
@@ -92,12 +93,20 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
       } else if (json[messageType] == error) {}
     }).then((final WebSocketJson ws) {
       webSocketJson = ws;
+      setState(() {
+        doneInitWebSocket = true;
+      });
     });
   }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        drawer: MainScreenDrawer(profile: widget.profile),
+        drawer: doneInitWebSocket
+            ? MainScreenDrawer(
+                profile: widget.profile,
+                webSocketJson: webSocketJson,
+              )
+            : null,
         appBar: AppBar(
           centerTitle: true,
           leading: Builder(

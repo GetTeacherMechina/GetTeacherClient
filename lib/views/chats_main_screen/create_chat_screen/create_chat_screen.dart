@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/teachers/teachers.dart";
 
 class CreateChatScreen extends StatefulWidget {
@@ -10,12 +11,27 @@ class CreateChatScreen extends StatefulWidget {
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
   List<(DbTeacher, bool)> teachers = [];
+
+  Future<void> onCreateChat() async {
+    final list = teachers
+        .where((final (DbTeacher, bool) a) => a.$2)
+        .map((final (DbTeacher, bool) a) => a.$1.id)
+        .toList();
+    if (list.isEmpty) {
+      return;
+    }
+    await createChat(list);
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
-    getAllTeachers().then((final List<DbTeacher> v) => setState(() {
-          teachers = v.map((final DbTeacher a) => (a, false)).toList();
-        }));
+    getAllTeachers().then(
+      (final List<DbTeacher> v) => setState(() {
+        teachers = v.map((final DbTeacher a) => (a, false)).toList();
+      }),
+    );
   }
 
   @override
@@ -37,6 +53,12 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
               },
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            onCreateChat();
+          },
+          child: const Icon(Icons.create),
         ),
       );
 }
