@@ -1,7 +1,5 @@
-import "dart:io";
 import "dart:typed_data";
 
-import "package:file_picker/_internal/file_picker_web.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/latex_text_widget.dart";
@@ -96,7 +94,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemCount: messages.length,
                 itemBuilder: (final BuildContext context, final int index) {
                   final MessageModel message = messages[index];
-                  print(messages[index].content);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(

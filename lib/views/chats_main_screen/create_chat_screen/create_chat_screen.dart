@@ -10,10 +10,10 @@ class CreateChatScreen extends StatefulWidget {
 }
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
-  List<(DbTeacher, bool)> teachers = [];
+  List<(DbTeacher, bool)> teachers = <(DbTeacher, bool)>[];
 
   Future<void> onCreateChat() async {
-    final list = teachers
+    final List<int> list = teachers
         .where((final (DbTeacher, bool) a) => a.$2)
         .map((final (DbTeacher, bool) a) => a.$1.id)
         .toList();
@@ -55,9 +55,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            onCreateChat();
-          },
+          onPressed: onCreateChat,
           child: const Icon(Icons.create),
         ),
       );
