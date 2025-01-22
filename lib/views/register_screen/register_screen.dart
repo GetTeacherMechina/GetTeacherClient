@@ -39,6 +39,7 @@ Widget build(final BuildContext context) => Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: Stack(
         children: [
+          AppWidgets.bottomBubblesImage(),
           ListView(
             padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width / 8,
@@ -107,24 +108,44 @@ Widget build(final BuildContext context) => Scaffold(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Expanded(
+        Expanded(
           child: Padding(
-            padding: EdgeInsets.only(left: 50.0, top: 100.0),
+            padding: const EdgeInsets.only(left: 50.0, top: 100.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
+                const Text(
                   "Create Your Account",
                   style: TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 30),
-                Text(
-                  "Join us by creating a new account",
+                const SizedBox(height: 30),
+                const Text(
+                  "Already have an account?",
                   style: TextStyle(color: AppTheme.secondaryTextColor, fontSize: 16),
                 ),
+                const SizedBox(height: 10,),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                RegisterScreen()),
+                      );
+                    },
+                    child: const MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Text(
+                        "Sign In here!",
+                        style: TextStyle(
+                          color: AppTheme.linkColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -186,7 +207,7 @@ Widget build(final BuildContext context) => Scaffold(
                 child: Padding(
                 padding: EdgeInsets.only(top: 8.0, right: 2.0),
                 child: Text(
-                  "Forgot your password?",
+                  " Forgot your password?",
                   style: TextStyle(
                     color: AppTheme.linkColor,
                     fontWeight: FontWeight.bold,

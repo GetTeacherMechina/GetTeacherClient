@@ -33,7 +33,7 @@ class AppWidgets {
             right: 5,
             child: Image.asset(
               "assets/images/logo1.png",
-              width: 190,
+              width: 180,
             ),
           );
 
@@ -51,14 +51,27 @@ class AppWidgets {
     );
 
   static Positioned bubblesImage() => Positioned(
-      top: 5,
-      left: 5,
+      top: 0,
+      left: 0,
       child: Opacity(
         opacity: 0.3,
         child: Image.asset(
           "assets/images/bubbles.png",
           width: 1536,
           height: 960,
+        ),
+      ),
+    );
+
+    static Positioned bottomBubblesImage() => Positioned(
+      bottom: 0,
+      right: 0,
+      child: Opacity(
+        opacity: 0.3,
+        child: Image.asset(
+          "assets/images/bubbles2.png",
+          width: 1459.2,
+          height: 912,
         ),
       ),
     );

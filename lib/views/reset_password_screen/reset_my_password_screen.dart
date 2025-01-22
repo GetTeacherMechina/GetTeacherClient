@@ -1,8 +1,12 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
+import "package:getteacher/net/reset_password/forgot_password.dart";
 import "package:getteacher/net/reset_password/reset_password.dart";
 import "package:getteacher/net/reset_password/reset_password_net_model.dart";
+import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
+import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
 import "package:getteacher/views/reset_password_screen/reset_my_password_model.dart";
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -11,11 +15,16 @@ class ResetPasswordScreen extends StatefulWidget {
   final String email;
 
   @override
-  State<StatefulWidget> createState() => _ResetPasswordScreen();
+  State<StatefulWidget> createState() => _ResetPasswordScreen(email: email);
 }
 
 class _ResetPasswordScreen extends State<ResetPasswordScreen> {
+
+  _ResetPasswordScreen({required this.email});
+  
   ResetMyPasswordModel model = const ResetMyPasswordModel();
+
+  final String email;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -27,16 +36,26 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
       TextEditingController(text: model.code);
 
   bool _isPasswordReset = false;
+  bool _obscurePassword = true;
 
   @override
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            transitionBuilder: (final Widget child, final Animation<double> animation) => FadeTransition(opacity: animation, child: child),
-            child: _isPasswordReset ? _successContent() : _resetPasswordForm(),
-          ),
+        body: 
+            Stack(
+              children: <Widget>[
+
+                AppWidgets.fadedBigLogo(),
+                AppWidgets.bubblesImage(),
+
+            Center(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 1000),
+                transitionBuilder: (final Widget child, final Animation<double> animation) => FadeTransition(opacity: animation, child: child),
+                child: _isPasswordReset ? _successContent() : _resetPasswordForm(),
+              ),
+            ),
+          ],
         ),
       );
 
@@ -59,29 +78,46 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
           key: _formKey,
           autovalidateMode: AutovalidateMode.always,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextFormField(
-                obscureText: true,
-                controller: passwordController,
-                decoration: const InputDecoration(hintText: "Password"),
-                onChanged: (final String value) {
-                  model = model.copyWith(password: () => value);
-                },
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const Text(
+                  "Reset your password",
+                  style: AppTheme.secondaryHeadingStyle,
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  "Code sent to $email",
+                style: const TextStyle(color: AppTheme.secondaryTextColor, fontSize: 16),
               ),
               const SizedBox(height: 20),
               TextFormField(
-                obscureText: true,
+              controller: passwordController,
+              obscureText: _obscurePassword,
+              decoration: AppWidgets.inputDecoration(
+                hint: "Password",
+                obscureText: _obscurePassword,
+                passField: true,
+                onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+            ),
+            onChanged: (final String value) => model = model.copyWith(password: () => value),
+          ),
+              const SizedBox(height: 20),
+              TextFormField(
                 controller: confirmPasswordController,
-                decoration: const InputDecoration(hintText: "Confirm Password"),
-                onChanged: (final String value) {
-                  model = model.copyWith(confirmPassword: () => value);
-                },
+                obscureText: _obscurePassword,
+                decoration: AppWidgets.inputDecoration(
+                  hint: "Confirm Password",
+                  obscureText: _obscurePassword,
+                  passField: true,
+                  onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+                ),
+                validator: (final String? value) => value == passwordController.text ? null : "Passwords don't match",
+                onChanged: (final String value) => model = model.copyWith(confirmPassword: () => value),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: codeController,
-                decoration: const InputDecoration(hintText: "Code"),
+                decoration: AppWidgets.inputDecoration(hint: "Code"),
                 onChanged: (final String value) {
                   model = model.copyWith(code: () => value);
                 },
@@ -103,6 +139,17 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
                   });
                 },
               ),
+              const SizedBox(height: 20),
+              TextButton(
+                    child: Text("$email - not your email?", style: AppTheme.linkTextStyle),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute<void>(
+                          builder: (final BuildContext context) => ForgotMyPasswordScreen(),
+                        ),
+                      );
+                    },
+                  ),
             ],
           ),
         ),
@@ -126,7 +173,7 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Icon(Icons.check_circle, color: Colors.green, size: 100),
+            const Icon(Icons.check_circle, color: Colors.deepPurple, size: 100),
             const SizedBox(height: 20),
             const Text(
               "Password Reset Successfully!",
@@ -140,6 +187,16 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,  // Change button background color
+              foregroundColor: Colors.white,  // Change text/icon color
+              shadowColor: Colors.deepPurpleAccent,  // Change shadow color
+              elevation: 5,  // Adjust shadow elevation
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),  // Adjust padding
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),  // Add rounded corners
+              ),
+            ),
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute<void>(
@@ -147,7 +204,7 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
                   ),
                 );
               },
-              child: const Text("Go to Login"),
+              child: const Text("Login"),
             ),
           ],
         ),

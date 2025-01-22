@@ -19,7 +19,7 @@ class UserRoleSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         selectedColor: Colors.deepPurple,
         fillColor: Colors.deepPurple.shade100,
-        color: Colors.black26,
+        color: Colors.black87,
         selectedBorderColor: Colors.deepPurple,
         splashColor: Colors.deepPurple.shade50,
         children: const <Widget>[
