@@ -3,7 +3,8 @@ import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/views/chats_main_screen/chats_main_screen.dart";
 import "package:getteacher/views/profile_screen/profile_screen.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
-import "package:getteacher/views/teacher_main_screen/teacher_subject_editor_screen/teacher_subject_editor_screen.dart";
+import "package:getteacher/views/student_main_screen/student_settings_screen/student_settings_screen.dart";
+import "package:getteacher/views/teacher_main_screen/teacher_settings_screen/teacher_settings_screen.dart";
 import "package:getteacher/utils/local_jwt.dart";
 
 class MainScreenDrawer extends StatelessWidget {
@@ -40,12 +41,25 @@ class MainScreenDrawer extends StatelessWidget {
             if (profile.isTeacher)
               ListTile(
                 leading: const Icon(Icons.list),
-                title: const Text("Subjects"),
+                title: const Text("Teacher Settings"),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (final BuildContext context) =>
-                          const TeacherSubjectEditorScreen(),
+                          const TeacherSettingsScreen(),
+                    ),
+                  );
+                },
+              ),
+            if (profile.isStudent)
+              ListTile(
+                leading: const Icon(Icons.list),
+                title: const Text("Student Settings"),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (final BuildContext context) =>
+                          const StudentSettingsScreen(),
                     ),
                   );
                 },

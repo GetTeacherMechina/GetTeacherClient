@@ -1,6 +1,9 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:flutter_webrtc/flutter_webrtc.dart";
 import "package:getteacher/net/ip_constants.dart";
+import "package:getteacher/views/meeting_summary_screen/meeting_summary_screen.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "dart:io" show Platform; // Allows Platform checks
 import "package:flutter/foundation.dart" show kIsWeb; // Detects web
@@ -16,9 +19,11 @@ class CallScreen extends StatefulWidget {
     super.key,
     required this.guid,
     required this.shouldStartCall,
+    required this.isStudent,
   });
   final String guid;
   final bool shouldStartCall;
+  final bool isStudent;
   @override
   State<CallScreen> createState() => _CallScreenState();
 }
@@ -63,7 +68,6 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   void dispose() async {
-    await _hangUp();
     _socket.dispose();
     super.dispose();
   }
@@ -316,6 +320,7 @@ class _CallScreenState extends State<CallScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text("Call ID: ${widget.guid}"),
         ),
         body: Column(
@@ -347,6 +352,25 @@ class _CallScreenState extends State<CallScreen> {
                     _isAudioEnabled ? Icons.mic : Icons.mic_off,
                   ),
                   onPressed: _toggleAudio,
+                ),
+                IconButton(
+                  onPressed: () async {
+                    await _hangUp();
+                    if (widget.isStudent) {
+                      unawaited(
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                StarRatingScreen(meetingGuid: widget.guid),
+                          ),
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  icon: const Icon(Icons.call),
+                  color: Colors.red,
                 ),
               ],
             ),
