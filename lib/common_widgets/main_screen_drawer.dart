@@ -39,13 +39,15 @@ class MainScreenDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading:  const Icon(Icons.history),
+              leading: const Icon(Icons.history),
               title: const Text("Meeting history"),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (final BuildContext context) =>
-                        MeetingHistoryScreen(),
+                        MeetingHistoryScreen(
+                      profile: profile,
+                    ),
                   ),
                 );
               },
