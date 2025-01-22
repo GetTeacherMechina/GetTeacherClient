@@ -2,6 +2,7 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/is_online.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
@@ -27,7 +28,6 @@ class StudentMainScreen extends StatefulWidget {
 
 class _StudentMainScreenState extends State<StudentMainScreen> {
   late WebSocketJson webSocketJson;
-  bool doneInitWebSocket = false;
 
   String subject = "";
   bool waitingForCall = false;
@@ -68,7 +68,8 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   void initState() {
     super.initState();
 
-    WebSocketJson.connect((final Map<String, dynamic> json) async {
+    webSocketJson =
+        WebSocketJson.connect((final Map<String, dynamic> json) async {
       if (json[messageType] == csgoContract) {
         csgoApprove(json);
       } else if (json[messageType] == meetingStartNotification) {
@@ -91,22 +92,15 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
           );
         }
       } else if (json[messageType] == error) {}
-    }).then((final WebSocketJson ws) {
-      webSocketJson = ws;
-      setState(() {
-        doneInitWebSocket = true;
-      });
     });
   }
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        drawer: doneInitWebSocket
-            ? MainScreenDrawer(
-                profile: widget.profile,
-                webSocketJson: webSocketJson,
-              )
-            : null,
+        drawer: MainScreenDrawer(
+          profile: widget.profile,
+          webSocketJson: webSocketJson,
+        ),
         appBar: AppBar(
           centerTitle: true,
           leading: Builder(
@@ -120,70 +114,78 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
           title: Text("Hello ${widget.profile.fullName}"),
           surfaceTintColor: Theme.of(context).primaryColor,
         ),
-        body: Row(
+        body: Stack(
           children: <Widget>[
-            const Spacer(),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  const Spacer(
-                    flex: 4,
-                  ),
-                  Expanded(
-                    flex: 7,
-                    child: StudentSearchWidget(
-                      selectedItem: subject,
-                      onSubjectSelected: (final String subject) {
-                        setState(() {
-                          this.subject = subject;
-                        });
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (subject.isEmpty) {
-                          return;
-                        }
-                        if (!waitingForCall) {
-                          await startSearchingForTeacher(subject);
-                          setState(() {
-                            waitingForCall = true;
-                          });
-                        } else {
-                          await stopSearchingForTeacher();
-                          setState(() {
-                            waitingForCall = false;
-                          });
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: waitingForCall
-                            ? <Widget>[
-                                const CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ]
-                            : <Widget>[
-                                const Icon(Icons.call),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Call a teacher"),
-                              ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(
-                    flex: 4,
-                  ),
-                ],
-              ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IsOnline(connection: webSocketJson),
             ),
-            const Spacer(),
+            Row(
+              children: <Widget>[
+                const Spacer(),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      const Spacer(
+                        flex: 4,
+                      ),
+                      Expanded(
+                        flex: 7,
+                        child: StudentSearchWidget(
+                          selectedItem: subject,
+                          onSubjectSelected: (final String subject) {
+                            setState(() {
+                              this.subject = subject;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (subject.isEmpty) {
+                              return;
+                            }
+                            if (!waitingForCall) {
+                              await startSearchingForTeacher(subject);
+                              setState(() {
+                                waitingForCall = true;
+                              });
+                            } else {
+                              await stopSearchingForTeacher();
+                              setState(() {
+                                waitingForCall = false;
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: waitingForCall
+                                ? <Widget>[
+                                    const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  ]
+                                : <Widget>[
+                                    const Icon(Icons.call),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text("Call a teacher"),
+                                  ],
+                          ),
+                        ),
+                      ),
+                      const Spacer(
+                        flex: 4,
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ],
         ),
       );

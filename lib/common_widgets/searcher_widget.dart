@@ -10,11 +10,13 @@ class SearcherWidget<T> extends StatefulWidget {
     required this.itemBuilder,
     this.hintText = "Search...",
     this.searchController,
+    this.search = false,
   });
   final Future<List<T>> Function() fetchItems;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final String hintText;
   final TextEditingController? searchController;
+  final bool search;
   @override
   SearcherWidgetState<T> createState() => SearcherWidgetState<T>();
 }
@@ -78,7 +80,18 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
             const SizedBox(height: 20),
             Expanded(
               child: ListView(
-                children: Fuzzy<T>(items)
+                children: Fuzzy<T>(
+                  items,
+                  options: FuzzyOptions<T>(
+                    keys: <WeightedKey<T>>[
+                      WeightedKey<T>(
+                        name: "",
+                        getter: (final T item) => item.toString(),
+                        weight: 0.5,
+                      ),
+                    ],
+                  ),
+                )
                     .search(query)
                     .map(
                       (final Result<T> item) =>

@@ -92,10 +92,11 @@ class _ResetPasswordScreen extends State<StatefulWidget> {
                       submit: () async {
                         await resetPassword(
                           ResetPasswordResponseModel(
-                              email: email,
-                              code: model.code,
-                              password: model.password,
-                              confirmPassword: model.confirmPassword),
+                            email: email,
+                            code: model.code,
+                            password: model.password,
+                            confirmPassword: model.confirmPassword,
+                          ),
                         );
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute<void>(
