@@ -10,6 +10,7 @@ import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/theme/theme.dart";
 
 const String messageType = "MessageType";
+const String endMeeting = "EndMeeting";
 const String meetingStartNotification = "MeetingStartNotification";
 
 class TeacherMainScreen extends StatefulWidget {
@@ -39,24 +40,25 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   void initState() {
     super.initState();
     connection = WebSocketJson.connect(
-      (final Map<String, dynamic> json) {
-        if (json[messageType] != meetingStartNotification) {
-          return;
-        }
-        final MeetingResponse callModel = MeetingResponse.fromJson(json);
-        setState(() {
-          readyForCalling = false;
-        });
-        if (mounted) {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (final BuildContext context) => CallScreen(
-                guid: callModel.meetingGuid,
-                shouldStartCall: true,
-                isStudent: false,
+      (final Map<String, dynamic> json) async {
+        if (json[messageType] == meetingStartNotification) {
+          final MeetingResponse callModel = MeetingResponse.fromJson(json);
+          setState(() {
+            readyForCalling = false;
+          });
+          if (mounted) {
+            await Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (final BuildContext context) => CallScreen(
+                  guid: callModel.meetingGuid,
+                  shouldStartCall: true,
+                  isStudent: false,
+                  webSocketJson: connection,
+                ),
               ),
-            ),
-          );
+            );
+            setState(() {});
+          }
         }
       },
     );

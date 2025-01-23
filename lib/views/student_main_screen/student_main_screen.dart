@@ -97,17 +97,17 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
         });
 
         if (mounted) {
-          unawaited(
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (final BuildContext context) => CallScreen(
-                  guid: meeting.meetingGuid,
-                  shouldStartCall: false,
-                  isStudent: true,
-                ),
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (final BuildContext context) => CallScreen(
+                guid: meeting.meetingGuid,
+                shouldStartCall: false,
+                isStudent: true,
+                webSocketJson: webSocketJson,
               ),
             ),
           );
+          setState(() {});
         }
       } else if (json[messageType] == readyTeachersMessageType) {
         setState(() {
