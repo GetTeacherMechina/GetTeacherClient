@@ -9,12 +9,14 @@ environment:
 dependencies:
   circular_countdown_timer: ^0.2.4
   email_validator: ^3.0.0
+  file_picker: ^8.1.7
   flutter:
     sdk: flutter
   flutter_webrtc: ^0.12.5+hotfix.2
   fuzzy: ^0.5.1
   http: ^1.2.2
   json_annotation: ^4.9.0
+  latext: ^0.5.0
   progress_state_button: ^1.0.4
   shared_preferences: ^2.3.4
   socket_io_client: ^3.0.2

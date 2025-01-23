@@ -1,12 +1,21 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
+import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/views/chats_main_screen/chats_main_screen.dart";
 import "package:getteacher/views/meeting_history/meeting_history_screen.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 import "package:getteacher/views/teacher_main_screen/teacher_settings_screen/teacher_settings_screen.dart";
 import "package:getteacher/utils/local_jwt.dart";
 
 class MainScreenDrawer extends StatelessWidget {
-  const MainScreenDrawer({super.key, required this.profile});
+  const MainScreenDrawer({
+    super.key,
+    required this.profile,
+    required this.webSocketJson,
+  });
+
+  final WebSocketJson webSocketJson;
+
   final ProfileResponseModel profile;
   @override
   Widget build(final BuildContext context) => Drawer(
@@ -37,6 +46,20 @@ class MainScreenDrawer extends StatelessWidget {
                   );
                 },
               ),
+
+            ListTile(
+              leading: const Icon(Icons.chat),
+              title: const Text("chats"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (final BuildContext context) => ChatsMainScreen(
+                        webSocketJson: webSocketJson,
+                      ),
+                    ));
+              },
+            ),
             Expanded(
               child: Container(),
             ),

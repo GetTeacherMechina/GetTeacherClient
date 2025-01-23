@@ -9,10 +9,17 @@ Future<List<TeacherSubjectsModel>> getTeacherSubjectSelector() async {
   return data.teacherSubjects;
 }
 
-Future<void> addTeacherSubject(final String subject, final String grade) async {
-  await getClient().postJson(
-    "/teacher-subjects/add",
-    <String, String>{"Subject": subject, "Grade": grade},
+Future<void> addTeacherSubjects(
+  final String subject,
+  final List<String> grade,
+) async {
+  await Future.wait(
+    grade.map(
+      (final String g) => getClient().postJson(
+        "/teacher-subjects/add",
+        <String, String>{"Subject": subject, "Grade": g},
+      ),
+    ),
   );
 }
 
