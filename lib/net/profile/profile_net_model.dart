@@ -9,6 +9,7 @@ class ProfileResponseModel {
     required this.fullName,
     required this.isStudent,
     required this.isTeacher,
+    required this.credits,
   });
 
   factory ProfileResponseModel.fromJson(final Map<String, dynamic> json) =>
@@ -18,6 +19,7 @@ class ProfileResponseModel {
   final String fullName;
   final bool isStudent;
   final bool isTeacher;
+  final double credits;
 
   Map<String, dynamic> toJson() => _$ProfileResponseModelToJson(this);
 }
