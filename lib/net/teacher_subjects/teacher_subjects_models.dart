@@ -58,4 +58,7 @@ class TeacherSubjectsModel {
 
   final Grade grade;
   final Subject subject;
+
+  @override
+  String toString() => "subject: ${subject.name}, grade: ${grade.name}";
 }
