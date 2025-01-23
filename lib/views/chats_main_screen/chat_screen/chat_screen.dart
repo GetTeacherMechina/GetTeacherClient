@@ -76,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final ChatModel chat = await getChat(widget.chatId);
 
     setState(() {
-      messages = chat.messages;
+      messages = chat.messages ?? <MessageModel>[];
     });
     jumpBottomNextFrame();
   }

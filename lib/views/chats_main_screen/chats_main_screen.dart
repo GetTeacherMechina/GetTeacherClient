@@ -64,9 +64,7 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
                   );
                 },
                 title: Text(
-                  item.users
-                      .map((final ChatUserModel a) => a.username)
-                      .join(", "),
+                  item.users.join(", "),
                   style: AppTheme.bodyTextStyle
                       .copyWith(fontWeight: FontWeight.w600),
                 ),

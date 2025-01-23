@@ -14,5 +14,5 @@ class ChatModel {
   final List<int> users;
 
   @JsonKey(name: "messages")
-  final List<MessageModel> messages;
+  final List<MessageModel>? messages;
 }
