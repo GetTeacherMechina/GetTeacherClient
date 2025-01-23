@@ -83,20 +83,6 @@ class _SettingsEditorState extends State<SettingsEditor> {
         ],
       );
 
-  // child: FutureBuilder<TeacherSettingsModel>(
-  //   future: getTeacherSettings(),
-  //   builder: (
-  //     final BuildContext context,
-  //     final AsyncSnapshot<TeacherSettingsModel>
-  //         snapshot,
-  //   ) =>
-  //       snapshot.mapSnapshot(
-  //     onSuccess:
-  //         (final TeacherSettingsModel settings) =>
-  //             SettingsEditor(settings: settings),
-  //   ),
-  // ),
-
   @override
   Widget build(final BuildContext context) => Form(
         autovalidateMode: AutovalidateMode.always,
@@ -113,55 +99,59 @@ class _SettingsEditorState extends State<SettingsEditor> {
               onSuccess: (final TeacherSettingsModel settings) {
                 _bioController.text = settings.bio;
                 _tariffController.text = settings.tariffPerMinute.toString();
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    _buildEditableField(
-                      onChange: () {
-                        setState(() {
-                          _bioEdited = true;
-                        });
-                      },
-                      minLines: 3,
-                      validate: (final _) => null,
-                      label: "Bio",
-                      controller: _bioController,
-                      onSubmit: _submit,
-                      isEdited: _bioEdited,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildEditableField(
-                      onChange: () {
-                        setState(() {
-                          _tariffEdited = true;
-                        });
-                      },
-                      validate: (final String? tariff) =>
-                          double.tryParse(tariff!) == null
-                              ? "Not a valid number"
-                              : null,
-                      label: "Tariff Per Minute",
-                      controller: _tariffController,
-                      onSubmit: _submit,
-                      isEdited: _tariffEdited,
-                    ),
-                    const SizedBox(height: 32),
-                    const Spacer(),
-                    SubmitButton(
-                      submit: () async {
-                        await setBio(_bioController.text);
-                        await setCreditTarif(
-                          double.parse(_tariffController.text),
-                        );
-                        setState(() {
-                          _submit();
-                          _bioEdited = false;
-                          _tariffEdited = false;
-                        });
-                      },
-                      validate: () => formKey.currentState?.validate() ?? false,
-                    ),
-                  ],
+                return StatefulBuilder(
+                  builder: (final BuildContext context, final setState) =>
+                      Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      _buildEditableField(
+                        onChange: () {
+                          setState(() {
+                            _bioEdited = true;
+                          });
+                        },
+                        minLines: 3,
+                        validate: (final _) => null,
+                        label: "Bio",
+                        controller: _bioController,
+                        onSubmit: _submit,
+                        isEdited: _bioEdited,
+                      ),
+                      const SizedBox(height: 16),
+                      _buildEditableField(
+                        onChange: () {
+                          setState(() {
+                            _tariffEdited = true;
+                          });
+                        },
+                        validate: (final String? tariff) =>
+                            double.tryParse(tariff!) == null
+                                ? "Not a valid number"
+                                : null,
+                        label: "Tariff Per Minute",
+                        controller: _tariffController,
+                        onSubmit: _submit,
+                        isEdited: _tariffEdited,
+                      ),
+                      const SizedBox(height: 32),
+                      const Spacer(),
+                      SubmitButton(
+                        submit: () async {
+                          await setBio(_bioController.text);
+                          await setCreditTarif(
+                            double.parse(_tariffController.text),
+                          );
+                          setState(() {
+                            _submit();
+                            _bioEdited = false;
+                            _tariffEdited = false;
+                          });
+                        },
+                        validate: () =>
+                            formKey.currentState?.validate() ?? false,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
