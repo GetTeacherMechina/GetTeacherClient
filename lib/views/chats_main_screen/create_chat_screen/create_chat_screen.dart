@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
-import "package:getteacher/net/teachers/teachers.dart";
+import "package:getteacher/net/users/users.dart";
+import "package:getteacher/theme/theme.dart";
 
 class CreateChatScreen extends StatefulWidget {
   const CreateChatScreen({super.key});
@@ -11,12 +12,12 @@ class CreateChatScreen extends StatefulWidget {
 }
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
-  List<(DbTeacher, bool)> teachers = [];
+  List<(UserData, bool)> users = [];
 
   Future<void> onCreateChat() async {
-    final list = teachers
-        .where((final (DbTeacher, bool) a) => a.$2)
-        .map((final (DbTeacher, bool) a) => a.$1.id)
+    final list = users
+        .where((final (UserData, bool) a) => a.$2)
+        .map((final (UserData, bool) a) => a.$1.id)
         .toList();
     if (list.isEmpty) {
       return;
@@ -28,9 +29,9 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
   @override
   void initState() {
     super.initState();
-    getAllTeachers().then(
-      (final List<DbTeacher> v) => setState(() {
-        teachers = v.map((final DbTeacher a) => (a, false)).toList();
+    getAllUsers().then(
+      (final List<UserData> v) => setState(() {
+        users = v.map((final UserData a) => (a, false)).toList();
       }),
     );
   }
@@ -44,25 +45,18 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: SearcherWidget<(UserDetails, bool)>(
-            getItemString: (final (UserDetails, bool) p0) =>
-                p0.$1.user.userName,
+          child: SearcherWidget<(UserData, bool)>(
+            getItemString: (final (UserData, bool) p0) => p0.$1.userName,
             fetchItems: () async => users,
             itemBuilder: (
               final BuildContext context,
-              final (UserDetails, bool) userDetails,
+              final (UserData, bool) userDetails,
             ) =>
                 ListTile(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
               title: Text(
-                userDetails.$1.user.userName,
-                style: AppTheme.bodyTextStyle,
-              ),
-              subtitle: Text(
-                userDetails.$1.teacher != null
-                    ? (userDetails.$1.teacher!.bio)
-                    : "",
+                userDetails.$1.userName,
                 style: AppTheme.bodyTextStyle,
               ),
               trailing: Checkbox(
