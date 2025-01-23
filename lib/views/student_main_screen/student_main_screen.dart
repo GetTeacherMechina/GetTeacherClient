@@ -2,13 +2,14 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
-import "package:getteacher/common_widgets/is_online.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
 import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
@@ -72,6 +73,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
         drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
@@ -84,79 +86,71 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             ),
           ),
           title: Text("Hello ${widget.profile.fullName}"),
-          surfaceTintColor: Theme.of(context).primaryColor,
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
         body: Stack(
           children: <Widget>[
-            Align(
-              alignment: Alignment.topLeft,
-              child: IsOnline(connection: webSocketJson),
-            ),
-            Row(
-              children: <Widget>[
-                const Spacer(),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      const Spacer(
-                        flex: 4,
-                      ),
-                      Expanded(
-                        flex: 7,
-                        child: StudentSearchWidget(
-                          selectedItem: subject,
-                          onSubjectSelected: (final String subject) {
-                            setState(() {
-                              this.subject = subject;
-                            });
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            if (subject.isEmpty) {
-                              return;
-                            }
-                            if (!waitingForCall) {
-                              await startSearchingForTeacher(subject);
-                              setState(() {
-                                waitingForCall = true;
-                              });
-                            } else {
-                              await stopSearchingForTeacher();
-                              setState(() {
-                                waitingForCall = false;
-                              });
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: waitingForCall
-                                ? <Widget>[
-                                    const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  ]
-                                : <Widget>[
-                                    const Icon(Icons.call),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    const Text("Call a teacher"),
-                                  ],
-                          ),
-                        ),
-                      ),
-                      const Spacer(
-                        flex: 4,
-                      ),
-                    ],
+            AppWidgets.homepageLogo(),
+            AppWidgets.coverBubblesImage(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    child: StudentSearchWidget(
+                      selectedItem: subject,
+                      onSubjectSelected: (final String subject) {
+                        setState(() {
+                          this.subject = subject;
+                        });
+                      },
+                    ),
                   ),
-                ),
-                const Spacer(),
-              ],
+                  const SizedBox(height: 20),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 150),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (subject.isEmpty) {
+                          return;
+                        }
+                        if (!waitingForCall) {
+                          setState(() {
+                            waitingForCall = true;
+                          });
+                          await startSearchingForTeacher(subject);
+                        } else {
+                          setState(() {
+                            waitingForCall = false;
+                          });
+                          await stopSearchingForTeacher();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: waitingForCall
+                          ? const CircularProgressIndicator(
+                              color: AppTheme.whiteColor,
+                            )
+                          : const Text("Call a Teacher"),
+                    ),
+                  ),
+                  const Spacer(
+                    flex: 2,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
