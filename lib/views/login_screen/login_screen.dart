@@ -171,9 +171,7 @@ class _LoginScreen extends State<LoginScreen> {
               controller: emailController,
               decoration: AppWidgets.inputDecoration(hint: "Email"),
               validator: (final String? value) =>
-                  value != null && EmailValidator.validate(value)
-                      ? null
-                      : "Invalid email",
+                  value != null && EmailValidator.validate(value) ? null : "Invalid email",
               onChanged: (final String value) =>
                   model = model.copyWith(email: () => value),
             ),

@@ -135,9 +135,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      readyForCalling
-                          ? "Searching for students..."
-                          : "Tap to start searching",
+                      readyForCalling ? "Searching for students..." : "Tap to start searching",
                       style: AppTheme.bodyTextStyle,
                       textAlign: TextAlign.center,
                     ),

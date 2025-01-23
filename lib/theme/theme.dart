@@ -22,6 +22,8 @@ class AppTheme {
   // Border colors
   static const Color borderColor = Colors.grey;
 
+  static const Color appBarTextColor = Colors.white;
+
   // Shadow settings
   static final BoxShadow defaultShadow = BoxShadow(
     color: Colors.grey.withAlpha((0.2 * 255).toInt()),
@@ -43,6 +45,13 @@ class AppTheme {
     color: textColor,
   );
 
+  // Text styles
+  static const TextStyle appBarTextStyle = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: appBarTextColor,
+  );
+
   static const TextStyle secondaryHeadingStyle = TextStyle(
     fontSize: 36,
     fontWeight: FontWeight.bold,
@@ -54,9 +63,21 @@ class AppTheme {
     color: textColor,
   );
 
+    static const TextStyle secondaryTextStyle = TextStyle(
+    fontSize: 16,
+    color: hintTextColor,
+  );
+
+  static const TextStyle matchTextStyle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+  );
+
   static const TextStyle linkTextStyle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
     color: linkColor,
   );
+
 }

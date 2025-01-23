@@ -1,9 +1,9 @@
 import "dart:async";
-
 import "package:flutter/material.dart";
 import "package:flutter_webrtc/flutter_webrtc.dart";
 import "package:getteacher/net/ip_constants.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:getteacher/views/meeting_summary_screen/meeting_summary_screen.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "dart:io" show Platform; // Allows Platform checks
@@ -18,6 +18,7 @@ final String url = kIsWeb
     : Platform.isAndroid
         ? "http://10.0.2.2:4433"
         : "http://localhost:4433";
+
 
 class CallScreen extends StatefulWidget {
   const CallScreen({
@@ -37,6 +38,10 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
+
+  Timer? _timer;
+  int _seconds = 0;
+
   late io.Socket _socket;
 
   RTCPeerConnection? _peerConnection;
@@ -73,7 +78,7 @@ class _CallScreenState extends State<CallScreen> {
     _connectToSignalingServer();
 
     print("Added new listener");
-    widget.webSocketJson.addNewListener((Map<String, dynamic> json) async {
+    widget.webSocketJson.addNewListener((final Map<String, dynamic> json) async {
       print("Received message: $json");
       if (json[messageType] == endMeeting) {
         await _endMeeting(this);
@@ -81,6 +86,7 @@ class _CallScreenState extends State<CallScreen> {
     });
 
     widget.shouldStartCall ? _startCall() : _joinCall();
+    _startTimer();
   }
 
   @override
@@ -89,6 +95,20 @@ class _CallScreenState extends State<CallScreen> {
     super.dispose();
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (final Timer timer) {
+      setState(() {
+        _seconds++;
+      });
+    });
+  }
+
+  String _formatTime(final int seconds) {
+    final int minutes = seconds ~/ 60;
+    final int remainingSeconds = seconds % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  }
+  
   Future<void> _initRenderers() async {
     if (_peerConnection == null) {
       await _createPeerConnection();
@@ -122,19 +142,6 @@ class _CallScreenState extends State<CallScreen> {
         data["sdp"] as String?,
         data["type"] as String?,
       );
-
-      // _socket.on("teacher-call", (data) {
-      //   final Map<String, String?> data_map = data as Map<String, String>;
-      //   debugPrint('Received "start-call" event from server with data: $data');
-      //   final callId = data_map["callId"] ?? generateCallId(); // In case we decide to generate the id in the server (essential)
-      //   _startCall(callId);
-      //   });
-
-      // _socket.on("student-call", (data) {
-      //   debugPrint('Received "start-call" event from server with data: $data');
-      //   final String callId = data["callId"] as String ?? generateCallId(); // WE MUST GET THIS FROM THE SERVER!!
-      //   _joinCall(callId);
-      //   });
 
       if (_peerConnection == null) {
         await _createPeerConnection();
@@ -336,57 +343,118 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text("Call ID: ${widget.guid}"),
+      backgroundColor: AppTheme.backgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          _formatTime(_seconds),
+          style: AppTheme.appBarTextStyle,
         ),
-        body: Column(
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: AppTheme.whiteColor,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: Row(
-                children: <Widget>[
-                  if (_isCalling)
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
+                  color: AppTheme.whiteColor,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    if (_isCalling)
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          ),
+                          child: RTCVideoView(_localRenderer, mirror: true),
+                        ),
+                      ),
                     Expanded(
-                      child: RTCVideoView(_localRenderer, mirror: true),
+                      child: ClipRRect(
+                        borderRadius: _isCalling
+                            ? const BorderRadius.only(
+                                topRight: Radius.circular(15),
+                                bottomRight: Radius.circular(15),
+                              )
+                            : BorderRadius.circular(15),
+                        child: RTCVideoView(_remoteRenderer),
+                      ),
                     ),
-                  Expanded(
-                    child: RTCVideoView(_remoteRenderer),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            Container(
+              decoration: BoxDecoration(
+                color: AppTheme.whiteColor,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: <BoxShadow>[AppTheme.defaultShadow],
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconButton(
+                    hoverColor: Colors.grey,
+                    icon: Icon(
+                      _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
+                      color: AppTheme.primaryColor,
+                      size: 30,
+                    ),
+                    onPressed: _toggleVideo,
+                  ),
+                  IconButton(
+                    hoverColor: Colors.grey,
+                    icon: Icon(
+                      _isAudioEnabled ? Icons.mic : Icons.mic_off,
+                      color: AppTheme.primaryColor,
+                      size: 30,
+                    ),
+                    onPressed: _toggleAudio,
+                  ),
+                  IconButton(
+                    hoverColor: Colors.grey,
+                    onPressed: () async {
+                      _timer?.cancel();
+                      await _hangUp();
+                      if (widget.isStudent) {
+                        unawaited(
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute<void>(
+                              builder: (final BuildContext context) =>
+                                  StarRatingScreen(meetingGuid: widget.guid),
+                            ),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    icon: const Icon(Icons.call_end),
+                    color: Colors.red,
+                    iconSize: 36,
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
-                  ),
-                  onPressed: _toggleVideo,
-                ),
-                IconButton(
-                  icon: Icon(
-                    _isAudioEnabled ? Icons.mic : Icons.mic_off,
-                  ),
-                  onPressed: _toggleAudio,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await endMeetingRequest(
-                        EndMeetingRequestModel(meetingGuid: widget.guid));
-                  },
-                  icon: const Icon(Icons.call),
-                  color: Colors.red,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
           ],
         ),
-      );
+      ),
+    );
 }
 
-Future<void> _endMeeting(_CallScreenState state) async {
+Future<void> _endMeeting(final _CallScreenState state) async {
   await state._hangUp();
 
   if (state.widget.isStudent) {

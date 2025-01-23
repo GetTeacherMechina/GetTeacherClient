@@ -208,6 +208,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   });
                 },
               ),
+              validator: (final String? value) {
+                if (value == null || value.isEmpty) { return "Password cannot be empty"; }
+                final RegExp specialCharRegex = RegExp(r'[!@#\$%^&*(),.?":{}|<>]');
+                final RegExp numberRegex = RegExp(r"[0-9]");
+                final RegExp uppercaseRegex = RegExp(r"[A-Z]");
+                if (value.length < 6) { return "Password must be at least 6 characters long"; }
+                if (!specialCharRegex.hasMatch(value)) { return "Password must contain at least one special character"; }
+                if (!numberRegex.hasMatch(value)) { return "Password must contain at least one number"; }
+                if (!uppercaseRegex.hasMatch(value)) { return "Password must contain at least one uppercase letter"; }
+                return null;
+              },
               onChanged: (final String value) =>
                   model = model.copyWith(password: () => value),
             ),
