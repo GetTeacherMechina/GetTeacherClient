@@ -1,20 +1,19 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
+import "package:getteacher/net/net.dart";
 import "package:getteacher/net/teacher_settings/teacher_settings.dart";
 import "package:getteacher/net/teacher_settings/teacher_settings_model.dart";
 
 class SettingsEditor extends StatefulWidget {
-  SettingsEditor({required this.settings});
-
-  final TeacherSettingsModel settings;
+  SettingsEditor();
 
   @override
   State<SettingsEditor> createState() => _SettingsEditorState();
 }
 
 class _SettingsEditorState extends State<SettingsEditor> {
-  late TextEditingController _bioController;
-  late TextEditingController _tariffController;
+  final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _tariffController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   bool _bioEdited = false;
   bool _tariffEdited = false;
@@ -22,9 +21,6 @@ class _SettingsEditorState extends State<SettingsEditor> {
   @override
   void initState() {
     super.initState();
-    _bioController = TextEditingController(text: widget.settings.bio);
-    _tariffController =
-        TextEditingController(text: widget.settings.tariffPerMinute.toString());
   }
 
   @override
@@ -54,7 +50,10 @@ class _SettingsEditorState extends State<SettingsEditor> {
           Row(
             spacing: 5,
             children: <Widget>[
-              Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                label,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               if (isEdited)
                 Container(
                   width: 5,
@@ -84,59 +83,88 @@ class _SettingsEditorState extends State<SettingsEditor> {
         ],
       );
 
+  // child: FutureBuilder<TeacherSettingsModel>(
+  //   future: getTeacherSettings(),
+  //   builder: (
+  //     final BuildContext context,
+  //     final AsyncSnapshot<TeacherSettingsModel>
+  //         snapshot,
+  //   ) =>
+  //       snapshot.mapSnapshot(
+  //     onSuccess:
+  //         (final TeacherSettingsModel settings) =>
+  //             SettingsEditor(settings: settings),
+  //   ),
+  // ),
+
   @override
   Widget build(final BuildContext context) => Form(
         autovalidateMode: AutovalidateMode.always,
         key: formKey,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _buildEditableField(
-                onChange: () {
-                  setState(() {
-                    _bioEdited = true;
-                  });
-                },
-                minLines: 3,
-                validate: (final _) => null,
-                label: "Bio",
-                controller: _bioController,
-                onSubmit: _submit,
-                isEdited: _bioEdited,
-              ),
-              const SizedBox(height: 16),
-              _buildEditableField(
-                onChange: () {
-                  setState(() {
-                    _tariffEdited = true;
-                  });
-                },
-                validate: (final String? tariff) =>
-                    double.tryParse(tariff!) == null
-                        ? "Not a valid number"
-                        : null,
-                label: "Tariff Per Minute",
-                controller: _tariffController,
-                onSubmit: _submit,
-                isEdited: _tariffEdited,
-              ),
-              const SizedBox(height: 32),
-              const Spacer(),
-              SubmitButton(
-                submit: () async {
-                  await setBio(_bioController.text);
-                  await setCreditTarif(double.parse(_tariffController.text));
-                  setState(() {
-                    _submit();
-                    _bioEdited = false;
-                    _tariffEdited = false;
-                  });
-                },
-                validate: () => formKey.currentState?.validate() ?? false,
-              ),
-            ],
+          child: FutureBuilder<TeacherSettingsModel>(
+            future: getTeacherSettings(),
+            builder: (
+              final BuildContext context,
+              final AsyncSnapshot<TeacherSettingsModel> snapshot,
+            ) =>
+                snapshot.mapSnapshot(
+              onSuccess: (final TeacherSettingsModel settings) {
+                _bioController.text = settings.bio;
+                _tariffController.text = settings.tariffPerMinute.toString();
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    _buildEditableField(
+                      onChange: () {
+                        setState(() {
+                          _bioEdited = true;
+                        });
+                      },
+                      minLines: 3,
+                      validate: (final _) => null,
+                      label: "Bio",
+                      controller: _bioController,
+                      onSubmit: _submit,
+                      isEdited: _bioEdited,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildEditableField(
+                      onChange: () {
+                        setState(() {
+                          _tariffEdited = true;
+                        });
+                      },
+                      validate: (final String? tariff) =>
+                          double.tryParse(tariff!) == null
+                              ? "Not a valid number"
+                              : null,
+                      label: "Tariff Per Minute",
+                      controller: _tariffController,
+                      onSubmit: _submit,
+                      isEdited: _tariffEdited,
+                    ),
+                    const SizedBox(height: 32),
+                    const Spacer(),
+                    SubmitButton(
+                      submit: () async {
+                        await setBio(_bioController.text);
+                        await setCreditTarif(
+                          double.parse(_tariffController.text),
+                        );
+                        setState(() {
+                          _submit();
+                          _bioEdited = false;
+                          _tariffEdited = false;
+                        });
+                      },
+                      validate: () => formKey.currentState?.validate() ?? false,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       );
