@@ -3,12 +3,19 @@ import "package:getteacher/net/net.dart";
 
 Future<ItemPricesResponseModel> getCreditsResponseModel() async =>
     ItemPricesResponseModel.fromJson(
-        (await getClient().getJson("/payment/credits")));
+      (await getClient().getJson("/payment/credits")),
+    );
 
-Future<ItemBuyResponseModel> buyCreditsProd(BuyItemRequestModel item) async =>
+Future<ItemBuyResponseModel> buyCreditsProd(
+  final BuyItemRequestModel item,
+) async =>
     ItemBuyResponseModel.fromJson(
-        await getClient().postJson("/payment/credits/buy", item.toJson()));
+      await getClient().postJson("/payment/credits/buy", item.toJson()),
+    );
 
-Future<ItemBuyResponseModel> buyCreditsDev(BuyItemRequestModel item) async =>
+Future<ItemBuyResponseModel> buyCreditsDev(
+  final BuyItemRequestModel item,
+) async =>
     ItemBuyResponseModel.fromJson(
-        await getClient().postJson("/payment/credits/dev-buy", item.toJson()));
+      await getClient().postJson("/payment/credits/dev-buy", item.toJson()),
+    );

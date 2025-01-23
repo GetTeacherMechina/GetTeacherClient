@@ -2,6 +2,7 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/credits_button.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
@@ -11,7 +12,6 @@ import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/theme/theme.dart";
 import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
-import "package:getteacher/views/credit_screen/credit_screen.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
 
@@ -157,41 +157,10 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             Positioned(
               bottom: 10,
               right: 10,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (final BuildContext context) => CreditScreen(),
-                    ),
-                  );
+              child: CreditButton(
+                onExit: () {
+                  setState(() {});
                 },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.credit_score, color: Colors.green),
-                      const SizedBox(width: 8),
-                      Text(
-                        "Credits: ${widget.profile.credits}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
           ],

@@ -50,11 +50,11 @@ class BuyItemRequestModel {
 @JsonSerializable()
 class ItemBuyResponseModel {
   ItemBuyResponseModel({
-    required this.statusCode,
+    required this.status,
   });
 
   factory ItemBuyResponseModel.fromJson(final Map<String, dynamic> json) =>
       _$ItemBuyResponseModelFromJson(json);
 
-  final String statusCode;
+  final String status;
 }
