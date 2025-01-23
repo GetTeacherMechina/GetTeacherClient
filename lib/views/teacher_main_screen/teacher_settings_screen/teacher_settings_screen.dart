@@ -53,7 +53,7 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
                         child: Card(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
-                            child: SubjectEditor(),
+                            child: TeacherSubjectEditor(),
                           ),
                         ),
                       ),

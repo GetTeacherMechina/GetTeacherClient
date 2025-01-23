@@ -11,15 +11,20 @@ Future<List<TeacherSubjectsModel>> getTeacherSubjectSelector() async {
 
 Future<void> addTeacherSubjects(
   final String subject,
-  final List<String> grade,
+  final List<String> grades,
 ) async {
-  await Future.wait(
-    grade.map(
-      (final String g) => getClient().postJson(
-        "/teacher-subjects/add",
-        <String, String>{"Subject": subject, "Grade": g},
-      ),
-    ),
+  await getClient().postJson(
+    "/teacher-subjects/add",
+    <String, dynamic>{
+      "TeacherSubjects": grades
+          .map(
+            (final String g) => <String, String>{
+              "Subject": subject,
+              "Grade": g,
+            },
+          )
+          .toList()
+    },
   );
 }
 

@@ -4,14 +4,14 @@ import "package:getteacher/net/teacher_subjects/teacher_subjects.dart";
 import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
 import "package:getteacher/theme/theme.dart";
 
-class SubjectEditor extends StatefulWidget {
-  const SubjectEditor({super.key});
+class TeacherSubjectEditor extends StatefulWidget {
+  const TeacherSubjectEditor({super.key});
 
   @override
-  State<SubjectEditor> createState() => _SubjectEditorState();
+  State<TeacherSubjectEditor> createState() => _TeacherSubjectEditorState();
 }
 
-class _SubjectEditorState extends State<SubjectEditor> {
+class _TeacherSubjectEditorState extends State<TeacherSubjectEditor> {
   final TextEditingController _subjectSearchEditingController =
       TextEditingController();
 
@@ -117,6 +117,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
   ];
 
   RangeValues gradeRange = const RangeValues(0, 11);
+  bool loading = false;
 
   @override
   Widget build(final BuildContext context) => AlertDialog(
@@ -166,24 +167,6 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
                   });
                 },
               ),
-              // DropdownButton<String>(
-              //   isExpanded: true,
-              //   value: selectedGrade,
-              //   hint: const Text("Choose a grade"),
-              //   items: grades
-              //       .map(
-              //         (final String grade) => DropdownMenuItem<String>(
-              //           value: grade,
-              //           child: Text(grade),
-              //         ),
-              //       )
-              //       .toList(),
-              //   onChanged: (final String? value) {
-              //     setState(() {
-              //       selectedGrade = value;
-              //     });
-              //   },
-              // ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -217,6 +200,7 @@ class _AddSubjectDialogState extends State<AddSubjectDialog> {
                           gradeRange.end.toInt() + 1,
                         ),
                       );
+                      Navigator.pop(context);
                     },
                     child: const Text("Add"),
                   ),
