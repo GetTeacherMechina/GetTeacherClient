@@ -3,41 +3,43 @@ import "package:json_annotation/json_annotation.dart";
 part "meeting_history_net_model.g.dart";
 
 @JsonSerializable()
-class MeetingsHistoryNetModelRequst {
-  MeetingsHistoryNetModelRequst({required this.history});
+class MeetingsHistoryResponse {
+  MeetingsHistoryResponse({required this.history});
 
-  factory MeetingsHistoryNetModelRequst.fromJson(
-          final Map<String, dynamic> json) =>
-      _$MeetingsHistoryNetModelRequstFromJson(json);
+  factory MeetingsHistoryResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) =>
+      _$MeetingsHistoryResponseFromJson(json);
 
-  final List<MeetingHistoryNetModelRequst> history;
+  final List<Meeting> history;
 }
 
 @JsonSerializable()
-class MeetingHistoryNetModelRequst {
-  MeetingHistoryNetModelRequst({
-    required this.subject,
-    required this.prtnerName,
+class Meeting {
+  Meeting({
+    required this.subjectName,
+    required this.partnerName,
     required this.startTime,
     required this.endTime,
   });
 
-  factory MeetingHistoryNetModelRequst.fromJson(
-          final Map<String, dynamic> json) =>
-      _$MeetingHistoryNetModelRequstFromJson(json);
+  factory Meeting.fromJson(final Map<String, dynamic> json) =>
+      _$MeetingFromJson(json);
 
-  final String subject;
-  final String prtnerName;
-  final String startTime;
-  final String endTime;
+  final String subjectName;
+  final String partnerName;
+  final DateTime startTime;
+  final DateTime endTime;
 }
 
 @JsonSerializable()
-class MeetingsHistoryNetModelRespons {
-  MeetingsHistoryNetModelRespons(
-      {required this.isStudent, required this.isTeacher});
+class MeetingsHistoryRequest {
+  MeetingsHistoryRequest({
+    required this.isStudent,
+    required this.isTeacher,
+  });
 
-  Map<String, dynamic> toJson() => _$MeetingsHistoryNetModelResponsToJson(this);
+  Map<String, dynamic> toJson() => _$MeetingsHistoryRequestToJson(this);
 
   final bool isTeacher;
   final bool isStudent;

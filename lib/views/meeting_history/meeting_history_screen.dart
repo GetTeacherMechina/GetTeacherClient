@@ -17,9 +17,11 @@ class _MeetingHistoryScreen extends State<MeetingHistoryScreen> {
   _MeetingHistoryScreen({required this.profile});
   final ProfileResponseModel profile;
 
-  late final Future<MeetingsHistoryNetModelRequst> respond = getMeetingsHistory(
-    MeetingsHistoryNetModelRespons(
-        isStudent: profile.isStudent, isTeacher: profile.isTeacher),
+  late final Future<MeetingsHistoryResponse> respond = getMeetingsHistory(
+    MeetingsHistoryRequest(
+      isStudent: profile.isStudent,
+      isTeacher: profile.isTeacher,
+    ),
   );
 
   @override
@@ -28,21 +30,21 @@ class _MeetingHistoryScreen extends State<MeetingHistoryScreen> {
           title: const Text("History"),
           centerTitle: true,
         ),
-        body: FutureBuilder<MeetingsHistoryNetModelRequst>(
+        body: FutureBuilder<MeetingsHistoryResponse>(
           future: respond,
           builder: (
             final BuildContext context,
-            final AsyncSnapshot<MeetingsHistoryNetModelRequst> snapshot,
+            final AsyncSnapshot<MeetingsHistoryResponse> snapshot,
           ) =>
               snapshot.mapSnapshot(
-            onSuccess: (final MeetingsHistoryNetModelRequst response) => Center(
+            onSuccess: (final MeetingsHistoryResponse response) => Center(
               child: Column(
                 children: response.history
                     .map(
-                      (final MeetingHistoryNetModelRequst h) => Row(
+                      (final Meeting h) => Row(
                         children: <Widget>[
                           Text(
-                            h.subject,
+                            h.subjectName,
                           ),
                           const Spacer(
                             flex: 4,
@@ -60,7 +62,7 @@ class _MeetingHistoryScreen extends State<MeetingHistoryScreen> {
                             flex: 4,
                           ),
                           Text(
-                            "prtner name ${h.prtnerName}",
+                            "prtner name ${h.partnerName}",
                           ),
                         ],
                       ),
