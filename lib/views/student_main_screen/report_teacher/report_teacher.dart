@@ -5,14 +5,19 @@ import "package:getteacher/net/report_techer/report_teacher_net_model.dart";
 import "package:getteacher/views/student_main_screen/report_teacher/report_teacher_model.dart";
 
 class ReportTeacher extends StatefulWidget {
-  ReportTeacher({super.key});
+  ReportTeacher({super.key, required this.meetingGuid});
 
   @override
-  State<StatefulWidget> createState() => _ReportTeacher();
+  State<StatefulWidget> createState() =>
+      _ReportTeacher(meetingGuid: meetingGuid);
+  final String meetingGuid;
 }
 
 class _ReportTeacher extends State<ReportTeacher> {
+  _ReportTeacher({required this.meetingGuid});
   ReportTeacherModel model = const ReportTeacherModel();
+
+  final String meetingGuid;
 
   late final TextEditingController reportTextEditingController =
       TextEditingController(text: model.report);
@@ -44,7 +49,8 @@ class _ReportTeacher extends State<ReportTeacher> {
             SubmitButton(
               validate: () => _formKey.currentState!.validate(),
               submit: () async {
-                await report(ReportTeacherNetModel(report: model.report));
+                await report(ReportTeacherNetModel(
+                    report: model.report, meetingGuid: meetingGuid));
                 Navigator.pop(context);
               },
             ),
