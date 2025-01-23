@@ -1,7 +1,13 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
+import "package:getteacher/net/net.dart";
+import "package:getteacher/net/teacher_settings/teacher_settings.dart";
+import "package:getteacher/net/teacher_settings/teacher_settings_model.dart";
 import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
 import "package:getteacher/net/teacher_subjects/teacher_subjects.dart";
+import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
+import "package:getteacher/views/teacher_main_screen/teacher_settings_screen/settings_editor.dart";
 
 class TeacherSettingsScreen extends StatefulWidget {
   const TeacherSettingsScreen({super.key});
@@ -20,39 +26,73 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text("teacher subject selector"),
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
-        body: Column(
-          children: <Widget>[
-            const Text("Change Bio:"),
-            const TextField(),
-            const Text("Subjects:"),
-            Expanded(
-              child: SearcherWidget<TeacherSubjectsModel>(
-                searchController: _subjectSearchEditingController,
-                fetchItems: () => _getTeacherFuture,
-                itemBuilder: (
-                  final BuildContext context,
-                  final TeacherSubjectsModel item,
-                ) =>
-                    ListTile(
-                  title: Text(item.toString()),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: Colors.red,
-                    onPressed: () async {
-                      await removeTeacherSubject(
-                        item.subject.name,
-                        item.grade.name,
-                      );
-                      final Future<List<TeacherSubjectsModel>> f =
-                          getTeacherSubjectSelector();
-                      setState(() {
-                        _getTeacherFuture = f;
-                      });
-                    },
+        body: Stack(
+          children: [
+            AppWidgets.homepageLogo(),
+            AppWidgets.coverBubblesImage(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      Expanded(
+                        flex: 4,
+                        child: Card(
+                          child: FutureBuilder<TeacherSettingsModel>(
+                            future: getTeacherSettings(),
+                            builder: (
+                              final BuildContext context,
+                              final AsyncSnapshot<TeacherSettingsModel>
+                                  snapshot,
+                            ) =>
+                                snapshot.mapSnapshot(
+                              onSuccess:
+                                  (final TeacherSettingsModel settings) =>
+                                      SettingsEditor(settings: settings),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
                   ),
                 ),
-              ),
+                Expanded(
+                  child: SearcherWidget<TeacherSubjectsModel>(
+                    searchController: _subjectSearchEditingController,
+                    fetchItems: () => _getTeacherFuture,
+                    itemBuilder: (
+                      final BuildContext context,
+                      final TeacherSubjectsModel item,
+                    ) =>
+                        ListTile(
+                      title: Text(item.toString()),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
+                        onPressed: () async {
+                          await removeTeacherSubject(
+                            item.subject.name,
+                            item.grade.name,
+                          );
+                          final Future<List<TeacherSubjectsModel>> f =
+                              getTeacherSubjectSelector();
+                          setState(() {
+                            _getTeacherFuture = f;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
             ),
           ],
         ),
