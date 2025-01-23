@@ -149,22 +149,22 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () async {
-                        final FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
-                                type: FileType.any, allowMultiple: false);
+                    onPressed: () async {
+                      final FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(type: FileType.any, allowMultiple: false);
 
-                        if (result != null) {
-                          final Uint8List? fileBytes = result.files.first.bytes;
-                          if (fileBytes != null) {
-                            final Map<String, dynamic> x = await getClient()
-                                .postImage("/images", fileBytes);
-                            await createMessage(
-                                widget.chatId, "####${x["url"]}####");
-                          }
+                      if (result != null) {
+                        final Uint8List? fileBytes = result.files.first.bytes;
+                        if (fileBytes != null) {
+                          final Map<String, dynamic> x =
+                              await getClient().postImage("/images", fileBytes);
+                          await createMessage(
+                              widget.chatId, "####${x["url"]}####");
                         }
-                      },
-                      icon: Icon(Icons.image)),
+                      }
+                    },
+                    icon: const Icon(Icons.image),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.send),
                     color: Colors.blueAccent,

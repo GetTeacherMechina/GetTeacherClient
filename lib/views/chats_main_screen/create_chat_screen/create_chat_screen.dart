@@ -83,6 +83,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          tooltip: "Create Chat",
           onPressed: onCreateChat,
           backgroundColor: AppTheme.accentColor,
           child: const Icon(
