@@ -3,10 +3,15 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter_webrtc/flutter_webrtc.dart";
 import "package:getteacher/net/ip_constants.dart";
+import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/views/meeting_summary_screen/meeting_summary_screen.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "dart:io" show Platform; // Allows Platform checks
 import "package:flutter/foundation.dart" show kIsWeb; // Detects web
+import "package:getteacher/net/call/end_meeting.dart";
+
+const String messageType = "MessageType";
+const String endMeeting = "EndMeeting";
 
 final String url = kIsWeb
     ? "http://$debugHost:4433"
@@ -17,10 +22,13 @@ final String url = kIsWeb
 class CallScreen extends StatefulWidget {
   const CallScreen({
     super.key,
+    required this.webSocketJson,
     required this.guid,
     required this.shouldStartCall,
     required this.isStudent,
   });
+
+  final WebSocketJson webSocketJson;
   final String guid;
   final bool shouldStartCall;
   final bool isStudent;
@@ -63,6 +71,15 @@ class _CallScreenState extends State<CallScreen> {
     super.initState();
     _initRenderers();
     _connectToSignalingServer();
+
+    print("Added new listener");
+    widget.webSocketJson.addNewListener((Map<String, dynamic> json) async {
+      print("Received message: $json");
+      if (json[messageType] == endMeeting) {
+        await _endMeeting(this);
+      }
+    });
+
     widget.shouldStartCall ? _startCall() : _joinCall();
   }
 
@@ -355,19 +372,8 @@ class _CallScreenState extends State<CallScreen> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    await _hangUp();
-                    if (widget.isStudent) {
-                      unawaited(
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute<void>(
-                            builder: (final BuildContext context) =>
-                                StarRatingScreen(meetingGuid: widget.guid),
-                          ),
-                        ),
-                      );
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    await endMeetingRequest(
+                        EndMeetingRequestModel(meetingGuid: widget.guid));
                   },
                   icon: const Icon(Icons.call),
                   color: Colors.red,
@@ -378,4 +384,21 @@ class _CallScreenState extends State<CallScreen> {
           ],
         ),
       );
+}
+
+Future<void> _endMeeting(_CallScreenState state) async {
+  await state._hangUp();
+
+  if (state.widget.isStudent) {
+    unawaited(
+      Navigator.of(state.context).pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (final BuildContext context) =>
+              StarRatingScreen(meetingGuid: state.widget.guid),
+        ),
+      ),
+    );
+  } else {
+    Navigator.of(state.context).pop();
+  }
 }

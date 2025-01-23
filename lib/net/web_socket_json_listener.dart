@@ -7,7 +7,7 @@ import "package:getteacher/net/net.dart";
 import "package:web_socket_channel/web_socket_channel.dart";
 
 class WebSocketJson {
-  WebSocketJson._(this.webSocket, this.onNewData)
+  WebSocketJson._(this.webSocket, this.onNewDatas)
       : isConnectedController = StreamController<bool>() {
     _startListening().onError((final _, final __) {
       isConnectedController.sink.add(false);
@@ -25,7 +25,10 @@ class WebSocketJson {
           try {
             final dynamic data = jsonDecode(message);
             if (data is Map<String, dynamic>) {
-              onNewData(data);
+              for (final void Function(Map<String, dynamic>) onNewData
+                  in onNewDatas) {
+                onNewData(data);
+              }
             } else {}
           } catch (e) {
             //
@@ -53,9 +56,17 @@ class WebSocketJson {
     webSocket.sink.close();
   }
 
-  void Function(Map<String, dynamic>) onNewData;
+  List<void Function(Map<String, dynamic>)> onNewDatas;
   WebSocketChannel webSocket;
   final StreamController<bool> isConnectedController;
+
+  void addNewListener(final void Function(Map<String, dynamic>) onNewData) {
+    onNewDatas.add(onNewData);
+  }
+
+  void removeListener(final void Function(Map<String, dynamic>) onNewData) {
+    onNewDatas.remove(onNewData);
+  }
 
   Future<void> reconnect() async {
     try {
@@ -75,9 +86,11 @@ class WebSocketJson {
     final WebSocketChannel websocket = WebSocketChannel.connect(
       wsUri("/websocket"),
     );
-
     websocket.sink.add(getClient().jwt());
 
-    return WebSocketJson._(websocket, onNewData);
+    return WebSocketJson._(
+      websocket,
+      <void Function(Map<String, dynamic>)>[onNewData],
+    );
   }
 }
