@@ -98,13 +98,12 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-       drawer: MainScreenDrawer(
+        drawer: MainScreenDrawer(
           profile: widget.profile,
           webSocketJson: webSocketJson,
         ),
-       backgroundColor: AppTheme.backgroundColor,
-       drawer: MainScreenDrawer(profile: widget.profile),
-       appBar: AppBar(
+        backgroundColor: AppTheme.backgroundColor,
+        appBar: AppBar(
           centerTitle: true,
           leading: Builder(
             builder: (final BuildContext context) => IconButton(

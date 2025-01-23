@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/chats/chats.dart";
-import "package:getteacher/net/teachers/teachers.dart";
+import "package:getteacher/net/users/users.dart";
 
 class CreateChatScreen extends StatefulWidget {
   const CreateChatScreen({super.key});
@@ -10,12 +10,12 @@ class CreateChatScreen extends StatefulWidget {
 }
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
-  List<(DbTeacher, bool)> teachers = <(DbTeacher, bool)>[];
+  List<(UserDetails, bool)> users = <(UserDetails, bool)>[];
 
   Future<void> onCreateChat() async {
-    final List<int> list = teachers
-        .where((final (DbTeacher, bool) a) => a.$2)
-        .map((final (DbTeacher, bool) a) => a.$1.id)
+    final List<int> list = users
+        .where((final (UserDetails, bool) a) => a.$2)
+        .map((final (UserDetails, bool) a) => a.$1.user.id)
         .toList();
     if (list.isEmpty) {
       return;
@@ -27,9 +27,9 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
   @override
   void initState() {
     super.initState();
-    getAllTeachers().then(
-      (final List<DbTeacher> v) => setState(() {
-        teachers = v.map((final DbTeacher a) => (a, false)).toList();
+    getAllUsersExcludingSelf().then(
+      (final List<UserDetails> v) => setState(() {
+        users = v.map((final UserDetails a) => (a, false)).toList();
       }),
     );
   }
@@ -40,15 +40,15 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
           title: const Text("Create Chat - Select Teachers"),
         ),
         body: ListView.builder(
-          itemCount: teachers.length,
+          itemCount: users.length,
           itemBuilder: (final BuildContext context, final int index) =>
               ListTile(
-            title: Text(teachers[index].$1.userName),
+            title: Text(users[index].$1.user.userName),
             leading: Checkbox(
-              value: teachers[index].$2,
+              value: users[index].$2,
               onChanged: (final bool? value) {
                 setState(() {
-                  teachers[index] = (teachers[index].$1, !teachers[index].$2);
+                  users[index] = (users[index].$1, !users[index].$2);
                 });
               },
             ),
