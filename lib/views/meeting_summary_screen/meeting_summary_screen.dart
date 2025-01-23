@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:getteacher/net/rate_meeting/rate_meeting.dart";
 import "package:getteacher/net/rate_meeting/rate_meeting_net_model.dart";
 import "package:getteacher/views/meeting_summary_screen/star_rating_input.dart";
+import "package:getteacher/views/student_main_screen/report_teacher/report_teacher.dart";
 
 class StarRatingScreen extends StatefulWidget {
   StarRatingScreen({required this.meetingGuid});
@@ -49,6 +50,16 @@ class StarRatingScreenState extends State<StarRatingScreen> {
                   ),
                   const Text("Mark as favorite teacher"),
                 ],
+              ),
+              TextButton(
+                child: const Text("report teacher"),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (final BuildContext context) =>
+                        ReportTeacher(meetingGuid: widget.meetingGuid),
+                  );
+                },
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(

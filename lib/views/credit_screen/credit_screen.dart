@@ -39,7 +39,7 @@ class _CreditScreenState extends State<CreditScreen> {
                   snapshot.data!.itemPrices;
 
               return Stack(
-                children: [
+                children: <Widget>[
                   AppWidgets.homepageLogo(),
                   AppWidgets.coverBubblesImage(),
                   ListView.builder(
