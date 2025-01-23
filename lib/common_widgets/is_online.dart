@@ -17,7 +17,7 @@ class IsOnline extends StatelessWidget {
           onSuccess: (final bool isConnected) => Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
-              spacing: 10,
+              // spacing: 10,
               children: <Widget>[
                 Container(
                   width: 10,
