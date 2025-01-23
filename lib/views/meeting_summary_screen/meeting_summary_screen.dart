@@ -52,14 +52,15 @@ class StarRatingScreenState extends State<StarRatingScreen> {
                 ],
               ),
               TextButton(
-                  child: const Text("report teacher"),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (final BuildContext context) =>
-                          ReportTeacher(meetingGuid: widget.meetingGuid),
-                    );
-                  }),
+                child: const Text("report teacher"),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (final BuildContext context) =>
+                        ReportTeacher(meetingGuid: widget.meetingGuid),
+                  );
+                },
+              ),
               const SizedBox(height: 20.0),
               ElevatedButton(
                 child: const Text("Submit"),

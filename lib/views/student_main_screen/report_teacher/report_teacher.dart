@@ -22,24 +22,23 @@ class _ReportTeacher extends State<ReportTeacher> {
   late final TextEditingController reportTextEditingController =
       TextEditingController(text: model.report);
 
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
   @override
   Widget build(final BuildContext context) => AlertDialog(
         title: const Text("report techer"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          key: _formKey,
           children: <Widget>[
             TextField(
               controller: reportTextEditingController,
               decoration: const InputDecoration(
-                hintText: "report",
+                hintText: "Report",
               ),
-              onChanged: (final String value) => {
-                model.copyWith(
-                  report: () => value,
-                ),
+              onChanged: (final String value) {
+                setState(() {
+                  model = model.copyWith(
+                    report: () => value,
+                  );
+                });
               },
             ),
             TextButton(
@@ -47,10 +46,14 @@ class _ReportTeacher extends State<ReportTeacher> {
               onPressed: () async => Navigator.pop(context),
             ),
             SubmitButton(
-              validate: () => _formKey.currentState!.validate(),
+              validate: () => true,
               submit: () async {
-                await report(ReportTeacherNetModel(
-                    report: model.report, meetingGuid: meetingGuid));
+                await report(
+                  ReportTeacherRequest(
+                    reportContent: model.report,
+                    meetingGuid: meetingGuid,
+                  ),
+                );
                 Navigator.pop(context);
               },
             ),

@@ -3,14 +3,14 @@ import "package:json_annotation/json_annotation.dart";
 part "report_teacher_net_model.g.dart";
 
 @JsonSerializable()
-class ReportTeacherNetModel {
-  ReportTeacherNetModel({
-    required this.report,
+class ReportTeacherRequest {
+  ReportTeacherRequest({
+    required this.reportContent,
     required this.meetingGuid,
   });
 
-  Map<String, dynamic> toJson() => _$ReportTeacherNetModelToJson(this);
+  Map<String, dynamic> toJson() => _$ReportTeacherRequestToJson(this);
 
-  final String report;
+  final String reportContent;
   final String meetingGuid;
 }
