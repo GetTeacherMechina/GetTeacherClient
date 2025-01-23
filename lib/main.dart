@@ -4,6 +4,7 @@ import "package:getteacher/net/net.dart";
 import "package:getteacher/net/validate/validate.dart";
 import "package:getteacher/utils/local_jwt.dart";
 import "package:getteacher/views/login_screen/login_screen.dart";
+import 'dart:html';
 
 Future<Widget> mainScreenFromLogin() async {
   final String? jwt = await LocalJwt.getLocalJwt();
@@ -22,6 +23,10 @@ Future<Widget> mainScreenFromLogin() async {
 }
 
 void main() async {
+  // Make sure the user aknowledges the use of camera and audio
+  await window.navigator.mediaDevices
+      ?.getUserMedia({"video": true, "audio": true});
+
   // ignore: unused_local_variable
   final Widget initialScreen = await mainScreenFromLogin();
 
