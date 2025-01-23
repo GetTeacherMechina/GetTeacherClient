@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/views/meeting_history/meeting_history_screen.dart";
-import "package:getteacher/views/profile_screen/profile_screen.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
-import "package:getteacher/views/student_main_screen/student_settings_screen/student_settings_screen.dart";
 import "package:getteacher/views/teacher_main_screen/teacher_settings_screen/teacher_settings_screen.dart";
 import "package:getteacher/utils/local_jwt.dart";
 
@@ -26,32 +24,6 @@ class MainScreenDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.account_circle),
-              title: const Text("Profile"),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (final BuildContext context) =>
-                        const ProfileScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text("Meeting history"),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (final BuildContext context) =>
-                        MeetingHistoryScreen(
-                      profile: profile,
-                    ),
-                  ),
-                );
-              },
-            ),
             if (profile.isTeacher)
               ListTile(
                 leading: const Icon(Icons.list),
@@ -61,19 +33,6 @@ class MainScreenDrawer extends StatelessWidget {
                     MaterialPageRoute<void>(
                       builder: (final BuildContext context) =>
                           const TeacherSettingsScreen(),
-                    ),
-                  );
-                },
-              ),
-            if (profile.isStudent)
-              ListTile(
-                leading: const Icon(Icons.list),
-                title: const Text("Student Settings"),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (final BuildContext context) =>
-                          const StudentSettingsScreen(),
                     ),
                   );
                 },

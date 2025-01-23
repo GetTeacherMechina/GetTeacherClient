@@ -63,6 +63,17 @@ class AppTheme {
     color: textColor,
   );
 
+    static const TextStyle secondaryTextStyle = TextStyle(
+    fontSize: 16,
+    color: hintTextColor,
+  );
+
+  static const TextStyle matchTextStyle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: textColor,
+  );
+
   static const TextStyle linkTextStyle = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,

@@ -4,6 +4,7 @@ import "package:getteacher/net/meeting_history/meetings_history.dart";
 import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 
+/*
 class MeetingHistoryScreen extends StatefulWidget {
   MeetingHistoryScreen({super.key, required this.profile});
 
@@ -73,4 +74,4 @@ class _MeetingHistoryScreen extends State<MeetingHistoryScreen> {
           ),
         ),
       );
-}
+}*/
