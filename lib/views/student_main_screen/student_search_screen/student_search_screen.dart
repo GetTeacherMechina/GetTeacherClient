@@ -1,17 +1,23 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/searcher_widget.dart";
+import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/subject_search/subject_search.dart";
 import "package:getteacher/theme/theme.dart";
+import "package:getteacher/views/ready_teachers/ready_teachers.dart";
 
 class StudentSearchWidget extends StatefulWidget {
   StudentSearchWidget({
     super.key,
     required this.onSubjectSelected,
     required this.selectedItem,
+    required this.profile,
+    required this.readyTeachers,
   });
 
   final void Function(String) onSubjectSelected;
   final String selectedItem;
+  final ReadyTeachers readyTeachers;
+  final StudentProfile profile;
 
   @override
   State<StudentSearchWidget> createState() => _StudentSearchWidgetState();
@@ -55,6 +61,9 @@ class _StudentSearchWidgetState extends State<StudentSearchWidget> {
                     ? AppTheme.primaryColor
                     : AppTheme.textColor,
               ),
+            ),
+            trailing: Text(
+              "Currently ${widget.readyTeachers.amountOfTeachersPerSubjectGrade(subject, widget.profile.grade.name)} teachers online",
             ),
           ),
         ),

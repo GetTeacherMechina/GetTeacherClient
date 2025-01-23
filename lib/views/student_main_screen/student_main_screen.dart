@@ -2,15 +2,19 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/credits_button.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
+import "package:getteacher/net/profile/profile.dart";
 import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
+import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
 import "package:getteacher/theme/theme.dart";
 import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/views/ready_teachers/ready_teachers.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
 
@@ -18,9 +22,13 @@ const String messageType = "MessageType";
 const String meetingStartNotification = "MeetingStartNotification";
 const String csgoContract = "CsGoContract";
 const String error = "Error";
+const String readyTeachersMessageType = "ReadyTeachersUpdate";
 
 class StudentMainScreen extends StatefulWidget {
-  const StudentMainScreen({super.key, required this.profile});
+  const StudentMainScreen({
+    super.key,
+    required this.profile,
+  });
   final ProfileResponseModel profile;
 
   @override
@@ -29,9 +37,12 @@ class StudentMainScreen extends StatefulWidget {
 
 class _StudentMainScreenState extends State<StudentMainScreen> {
   late WebSocketJson webSocketJson;
+  StudentProfile? profile;
 
   String subject = "";
   bool waitingForCall = false;
+  ReadyTeachers readyTeachers =
+      ReadyTeachers(readyTeachers: <SubjectGradeReadyTeachers>[]);
 
   void startMeeting(final Map<String, dynamic> json) {
     final MeetingResponse meeting = MeetingResponse.fromJson(json);
@@ -69,6 +80,12 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   void initState() {
     super.initState();
 
+    studentProfile().then((final StudentProfile p) {
+      setState(() {
+        profile = p;
+      });
+    });
+
     webSocketJson =
         WebSocketJson.connect((final Map<String, dynamic> json) async {
       if (json[messageType] == csgoContract) {
@@ -92,10 +109,15 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             ),
           );
         }
+      } else if (json[messageType] == readyTeachersMessageType) {
+        setState(() {
+          readyTeachers = ReadyTeachers.fromJson(json);
+        });
       } else if (json[messageType] == error) {}
     });
   }
 
+  @override
   @override
   Widget build(final BuildContext context) => Scaffold(
         drawer: MainScreenDrawer(
@@ -134,6 +156,9 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                           this.subject = subject;
                         });
                       },
+                      profile:
+                          profile ?? StudentProfile(grade: Grade(name: "")),
+                      readyTeachers: readyTeachers,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -178,6 +203,15 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 2,
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: CreditButton(
+                onExit: () {
+                  setState(() {});
+                },
               ),
             ),
           ],
