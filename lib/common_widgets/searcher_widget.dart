@@ -12,12 +12,14 @@ class SearcherWidget<T> extends StatefulWidget {
     this.hintText = "Search...",
     this.searchController,
     this.search = false,
+    this.getItemString,
   });
   final Future<List<T>> Function() fetchItems;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final String hintText;
   final TextEditingController? searchController;
   final bool search;
+  final String Function(T)? getItemString;
   @override
   SearcherWidgetState<T> createState() => SearcherWidgetState<T>();
 }
@@ -70,7 +72,7 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
               },
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: "Search for subjects...",
+                hintText: widget.hintText,
                 prefixIcon:
                     const Icon(Icons.search, color: AppTheme.hintTextColor),
                 filled: true,
@@ -90,7 +92,9 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
                     keys: <WeightedKey<T>>[
                       WeightedKey<T>(
                         name: "",
-                        getter: (final T item) => item.toString(),
+                        getter: (final T item) => widget.getItemString != null
+                            ? widget.getItemString!(item)
+                            : item.toString(),
                         weight: 0.5,
                       ),
                     ],

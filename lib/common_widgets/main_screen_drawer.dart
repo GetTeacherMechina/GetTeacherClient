@@ -10,8 +10,11 @@ import "package:getteacher/views/teacher_main_screen/teacher_settings_screen/tea
 import "package:getteacher/utils/local_jwt.dart";
 
 class MainScreenDrawer extends StatelessWidget {
-  const MainScreenDrawer(
-      {super.key, required this.profile, required this.webSocketJson});
+  const MainScreenDrawer({
+    super.key,
+    required this.profile,
+    required this.webSocketJson,
+  });
 
   final WebSocketJson webSocketJson;
 

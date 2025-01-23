@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
 import "package:getteacher/net/users/users.dart";
 
@@ -39,16 +40,21 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
         appBar: AppBar(
           title: const Text("Create Chat - Select Teachers"),
         ),
-        body: ListView.builder(
-          itemCount: users.length,
-          itemBuilder: (final BuildContext context, final int index) =>
+        body: SearcherWidget<(UserDetails, bool)>(
+          getItemString: (final (UserDetails, bool) p0) => p0.$1.user.userName,
+          fetchItems: () async => users,
+          itemBuilder: (
+            final BuildContext context,
+            final (UserDetails, bool) userDetails,
+          ) =>
               ListTile(
-            title: Text(users[index].$1.user.userName),
+            title: Text(userDetails.$1.user.userName),
             leading: Checkbox(
-              value: users[index].$2,
-              onChanged: (final bool? value) {
+              value: userDetails.$2,
+              onChanged: (final _) {
                 setState(() {
-                  users[index] = (users[index].$1, !users[index].$2);
+                  users[users.indexOf(userDetails)] =
+                      (userDetails.$1, !userDetails.$2);
                 });
               },
             ),
