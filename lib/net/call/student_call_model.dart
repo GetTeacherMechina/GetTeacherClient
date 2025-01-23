@@ -9,12 +9,16 @@ class StudentCallModel {
     this.teacherBio,
     this.teacherRank,
     this.meetingResponse,
+    this.isFavorite,
   );
 
   factory StudentCallModel.fromJson(final Map<String, dynamic> json) =>
       _$StudentCallModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$StudentCallModelToJson(this);
+
+  @JsonKey(name: "IsFavorite")
+  final bool isFavorite;
 
   @JsonKey(name: "TeacherBio")
   final String teacherBio;

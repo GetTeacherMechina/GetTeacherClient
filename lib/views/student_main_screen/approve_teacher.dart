@@ -9,8 +9,18 @@ class ApproveTeacher extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => AlertDialog(
-        title: Text(
-          "You can chat with ${call.meetingResponse.companionName}",
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "You can chat with ${call.meetingResponse.companionName}",
+            ),
+            if (call.isFavorite) // Check if the teacher is a favorite
+              const Icon(
+                Icons.star,
+                color: Colors.yellow,
+              ),
+          ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
