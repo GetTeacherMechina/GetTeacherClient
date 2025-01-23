@@ -58,6 +58,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
               guid: meeting.meetingGuid,
               shouldStartCall: false,
               isStudent: false,
+              webSocketJson: webSocketJson,
             ),
           ),
         ),
