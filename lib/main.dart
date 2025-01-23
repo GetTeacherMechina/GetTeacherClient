@@ -3,7 +3,7 @@ import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/net/net.dart";
 import "package:getteacher/net/validate/validate.dart";
 import "package:getteacher/utils/local_jwt.dart";
-import "package:getteacher/views/register_screen/register_screen.dart";
+import "package:getteacher/views/login_screen/login_screen.dart";
 
 Future<Widget> mainScreenFromLogin() async {
   final String? jwt = await LocalJwt.getLocalJwt();
@@ -18,7 +18,7 @@ Future<Widget> mainScreenFromLogin() async {
       getClient().unauthorize();
     }
   }
-  return RegisterScreen();
+  return LoginScreen();
 }
 
 void main() async {
