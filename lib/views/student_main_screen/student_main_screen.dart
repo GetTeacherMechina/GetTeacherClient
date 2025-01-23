@@ -93,46 +93,6 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
         ),
         body: Stack(
           children: <Widget>[
-            Positioned(
-              top: 10,
-              right: 10,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (final BuildContext context) => CreditScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.credit_score, color: Colors.green),
-                      const SizedBox(width: 8),
-                      Text(
-                        "Credits: ${widget.profile.credits}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
             AppWidgets.homepageLogo(),
             AppWidgets.coverBubblesImage(),
             Padding(
@@ -192,6 +152,46 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 2,
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (final BuildContext context) => CreditScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.credit_score, color: Colors.green),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Credits: ${widget.profile.credits}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
