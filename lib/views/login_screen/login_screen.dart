@@ -2,12 +2,14 @@ import "package:email_validator/email_validator.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/jump_to_main_screen.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
+import "package:getteacher/net/google_login/google_login.dart";
 import "package:getteacher/net/login/login.dart";
 import "package:getteacher/theme/theme.dart";
 import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/login_screen/login_model.dart";
 import "package:getteacher/views/register_screen/register_screen.dart";
 import "package:getteacher/views/reset_password_screen/forgot_my_password_screen.dart";
+import "package:sign_button/sign_button.dart";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -221,7 +223,20 @@ class _LoginScreen extends State<LoginScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            SignInButton(
+              buttonType: ButtonType.google,
+              btnColor: const Color.fromARGB(255, 236, 236, 240),
+              onPressed: () async {
+                await googleLogin();
+                 final Widget nextScreen = await getMainScreen();
+                  await Navigator.of(context).pushReplacement(
+                    MaterialPageRoute<void>(
+                      builder: (final BuildContext context) => nextScreen,
+                    ),
+                  );
+              } ,
+            ),
+            const SizedBox(height: 5),
             Container(
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor,
