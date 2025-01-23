@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:getteacher/net/chats/chats.dart";
-import "package:getteacher/net/teachers/teachers.dart";
+import "package:getteacher/net/users/users.dart";
 
 class CreateChatScreen extends StatefulWidget {
   const CreateChatScreen({super.key});
@@ -10,12 +10,12 @@ class CreateChatScreen extends StatefulWidget {
 }
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
-  List<(DbTeacher, bool)> teachers = [];
+  List<(UserData, bool)> teachers = [];
 
   Future<void> onCreateChat() async {
-    final list = teachers
-        .where((final (DbTeacher, bool) a) => a.$2)
-        .map((final (DbTeacher, bool) a) => a.$1.id)
+    final List<int> list = teachers
+        .where((final (UserData, bool) a) => a.$2)
+        .map((final (UserData, bool) a) => a.$1.id)
         .toList();
     if (list.isEmpty) {
       return;
@@ -27,9 +27,9 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
   @override
   void initState() {
     super.initState();
-    getAllTeachers().then(
-      (final List<DbTeacher> v) => setState(() {
-        teachers = v.map((final DbTeacher a) => (a, false)).toList();
+    getAllUsers().then(
+      (final List<UserData> v) => setState(() {
+        teachers = v.map((final UserData a) => (a, false)).toList();
       }),
     );
   }

@@ -1,7 +1,5 @@
-import "dart:io";
 import "dart:typed_data";
 
-import "package:file_picker/_internal/file_picker_web.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/latex_text_widget.dart";
@@ -152,22 +150,32 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () async {
-                        final FilePickerResult? result =
-                            await FilePicker.platform.pickFiles(
-                                type: FileType.any, allowMultiple: false);
+                    onPressed: () async {
+                      final FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(type: FileType.any, allowMultiple: false);
 
-                        if (result != null) {
-                          final Uint8List? fileBytes = result.files.first.bytes;
-                          if (fileBytes != null) {
-                            final Map<String, dynamic> x = await getClient()
-                                .postImage("/images", fileBytes);
-                            await createMessage(
-                                widget.chatId, "####${x["url"]}####");
-                          }
+                      if (result != null) {
+                        final Uint8List? fileBytes = result.files.first.bytes;
+                        if (fileBytes != null) {
+                          final Map<String, dynamic> x =
+                              await getClient().postImage("/images", fileBytes);
+                          await createMessage(
+                              widget.chatId, "####${x["url"]}####");
+                          final MessageModel msg = MessageModel(
+                            id: -1,
+                            senderId: -1,
+                            content: "####${x["url"]}####",
+                            dateTime: DateTime.now(),
+                            senderName: widget.profile.fullName,
+                          );
+                          setState(() {
+                            messages.add(msg);
+                          });
                         }
-                      },
-                      icon: Icon(Icons.image)),
+                      }
+                    },
+                    icon: const Icon(Icons.image),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.send),
                     color: Colors.blueAccent,
