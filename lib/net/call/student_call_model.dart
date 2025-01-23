@@ -8,6 +8,7 @@ class StudentCallModel {
   StudentCallModel(
     this.teacherBio,
     this.teacherRank,
+    this.teacherTariffPerMinute,
     this.meetingResponse,
     this.isFavorite,
   );
@@ -25,6 +26,9 @@ class StudentCallModel {
 
   @JsonKey(name: "TeacherRank")
   final double teacherRank;
+
+  @JsonKey(name: "TeacherTariffPerMinute")
+  final double teacherTariffPerMinute;
 
   @JsonKey(name: "MeetingResponseModel")
   final MeetingResponse meetingResponse;

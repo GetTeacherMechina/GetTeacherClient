@@ -67,6 +67,11 @@ class ApproveTeacher extends StatelessWidget {
                 "Rated: ${call.teacherRank.toStringAsFixed(2)}",
                 style: AppTheme.bodyTextStyle,
               ),
+              const SizedBox(height: 10),
+              Text(
+                "Tariff: ${call.teacherTariffPerMinute} credits/minute",
+                style: AppTheme.bodyTextStyle,
+              ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
