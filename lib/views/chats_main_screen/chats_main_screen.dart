@@ -36,6 +36,7 @@ class _ChatsMainScreenState extends State<ChatsMainScreen> {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SearcherWidget<ChatEntryModel>(
+            getItemString: (final ChatEntryModel p0) => p0.users.join(" "),
             fetchItems: () async {
               final ChatsModel data = await getChats();
               return data.chats;
