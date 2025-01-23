@@ -3,6 +3,7 @@ import "package:fuzzy/data/result.dart";
 import "dart:async";
 
 import "package:fuzzy/fuzzy.dart";
+import "package:getteacher/theme/theme.dart";
 
 class SearcherWidget<T> extends StatefulWidget {
   SearcherWidget({
@@ -10,11 +11,15 @@ class SearcherWidget<T> extends StatefulWidget {
     required this.itemBuilder,
     this.hintText = "Search...",
     this.searchController,
+    this.search = false,
+    this.getItemString,
   });
   final Future<List<T>> Function() fetchItems;
   final Widget Function(BuildContext context, T item) itemBuilder;
   final String hintText;
   final TextEditingController? searchController;
+  final bool search;
+  final String Function(T)? getItemString;
   @override
   SearcherWidgetState<T> createState() => SearcherWidgetState<T>();
 }
@@ -60,25 +65,41 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
       ? Column(
           children: <Widget>[
             TextField(
-              controller: _searchController,
-              onChanged: (final String value) {
+              onChanged: (final String query) {
                 setState(() {
-                  query = value;
+                  this.query = query;
                 });
               },
+              controller: _searchController,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
                 hintText: widget.hintText,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                prefixIcon:
+                    const Icon(Icons.search, color: AppTheme.hintTextColor),
                 filled: true,
+                fillColor: AppTheme.inputFieldBackground,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: ListView(
-                children: Fuzzy<T>(items)
+                children: Fuzzy<T>(
+                  items,
+                  options: FuzzyOptions<T>(
+                    keys: <WeightedKey<T>>[
+                      WeightedKey<T>(
+                        name: "",
+                        getter: (final T item) => widget.getItemString != null
+                            ? widget.getItemString!(item)
+                            : item.toString(),
+                        weight: 0.5,
+                      ),
+                    ],
+                  ),
+                )
                     .search(query)
                     .map(
                       (final Result<T> item) =>

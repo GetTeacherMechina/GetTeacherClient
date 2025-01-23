@@ -94,7 +94,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemCount: messages.length,
                 itemBuilder: (final BuildContext context, final int index) {
                   final MessageModel message = messages[index];
-                  print(messages[index].content);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(

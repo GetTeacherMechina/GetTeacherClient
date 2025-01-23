@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:progress_state_button/iconed_button.dart";
 import "package:progress_state_button/progress_button.dart";
 
@@ -20,19 +21,19 @@ class _SubmitButtonState extends State<SubmitButton> {
   @override
   Widget build(final BuildContext context) => ProgressButton.icon(
         iconedButtons: <ButtonState, IconedButton>{
-          ButtonState.idle: IconedButton(
+          ButtonState.idle: const IconedButton(
             text: "Submit",
-            icon: const Icon(Icons.send, color: Colors.white),
-            color: Colors.blue[400]!,
+            icon: Icon(Icons.send, color: Colors.white),
+            color: AppTheme.primaryColor,
           ),
           ButtonState.loading: IconedButton(
             text: "Loading",
-            color: Colors.blue[400]!,
+            color: Colors.deepPurple.shade200,
           ),
           ButtonState.fail: IconedButton(
             text: failedMessage,
             icon: const Icon(Icons.cancel, color: Colors.white),
-            color: Colors.red.shade300,
+            color: Colors.red.shade400,
           ),
           ButtonState.success: IconedButton(
             text: "Success",
@@ -90,5 +91,10 @@ class _SubmitButtonState extends State<SubmitButton> {
           });
         },
         state: _state,
+        radius: 30.0,
+        progressIndicator: const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       );
 }

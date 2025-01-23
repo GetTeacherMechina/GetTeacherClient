@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/searcher_widget.dart";
 import "package:getteacher/net/chats/chats.dart";
-import "package:getteacher/net/users/users.dart";
+import "package:getteacher/net/teachers/teachers.dart";
 
 class CreateChatScreen extends StatefulWidget {
   const CreateChatScreen({super.key});
@@ -10,12 +11,12 @@ class CreateChatScreen extends StatefulWidget {
 }
 
 class _CreateChatScreenState extends State<CreateChatScreen> {
-  List<(UserData, bool)> teachers = [];
+  List<(DbTeacher, bool)> teachers = [];
 
   Future<void> onCreateChat() async {
-    final List<int> list = teachers
-        .where((final (UserData, bool) a) => a.$2)
-        .map((final (UserData, bool) a) => a.$1.id)
+    final list = teachers
+        .where((final (DbTeacher, bool) a) => a.$2)
+        .map((final (DbTeacher, bool) a) => a.$1.id)
         .toList();
     if (list.isEmpty) {
       return;
@@ -27,9 +28,9 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
   @override
   void initState() {
     super.initState();
-    getAllUsers().then(
-      (final List<UserData> v) => setState(() {
-        teachers = v.map((final UserData a) => (a, false)).toList();
+    getAllTeachers().then(
+      (final List<DbTeacher> v) => setState(() {
+        teachers = v.map((final DbTeacher a) => (a, false)).toList();
       }),
     );
   }
@@ -38,27 +39,56 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text("Create Chat - Select Teachers"),
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
-        body: ListView.builder(
-          itemCount: teachers.length,
-          itemBuilder: (final BuildContext context, final int index) =>
-              ListTile(
-            title: Text(teachers[index].$1.userName),
-            leading: Checkbox(
-              value: teachers[index].$2,
-              onChanged: (final bool? value) {
-                setState(() {
-                  teachers[index] = (teachers[index].$1, !teachers[index].$2);
-                });
-              },
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SearcherWidget<(UserDetails, bool)>(
+            getItemString: (final (UserDetails, bool) p0) =>
+                p0.$1.user.userName,
+            fetchItems: () async => users,
+            itemBuilder: (
+              final BuildContext context,
+              final (UserDetails, bool) userDetails,
+            ) =>
+                ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              title: Text(
+                userDetails.$1.user.userName,
+                style: AppTheme.bodyTextStyle,
+              ),
+              subtitle: Text(
+                userDetails.$1.teacher != null
+                    ? (userDetails.$1.teacher!.bio)
+                    : "",
+                style: AppTheme.bodyTextStyle,
+              ),
+              trailing: Checkbox(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                value: userDetails.$2,
+                activeColor: AppTheme.accentColor,
+                onChanged: (final _) {
+                  setState(() {
+                    users[users.indexOf(userDetails)] =
+                        (userDetails.$1, !userDetails.$2);
+                  });
+                },
+              ),
             ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            onCreateChat();
-          },
-          child: const Icon(Icons.create),
+          tooltip: "Create Chat",
+          onPressed: onCreateChat,
+          backgroundColor: AppTheme.accentColor,
+          child: const Icon(
+            Icons.chat,
+            size: 28,
+          ),
         ),
       );
 }

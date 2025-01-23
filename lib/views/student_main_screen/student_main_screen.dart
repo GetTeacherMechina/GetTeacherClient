@@ -2,13 +2,19 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/credits_button.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
+import "package:getteacher/net/profile/profile.dart";
 import "package:getteacher/net/student_meeting_searching/student_meeting_searching.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
+import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
+import "package:getteacher/theme/widgets.dart";
 import "package:getteacher/views/call_screen.dart";
+import "package:getteacher/views/ready_teachers/ready_teachers.dart";
 import "package:getteacher/views/student_main_screen/approve_teacher.dart";
 import "package:getteacher/views/student_main_screen/student_search_screen/student_search_screen.dart";
 
@@ -16,9 +22,13 @@ const String messageType = "MessageType";
 const String meetingStartNotification = "MeetingStartNotification";
 const String csgoContract = "CsGoContract";
 const String error = "Error";
+const String readyTeachersMessageType = "ReadyTeachersUpdate";
 
 class StudentMainScreen extends StatefulWidget {
-  const StudentMainScreen({super.key, required this.profile});
+  const StudentMainScreen({
+    super.key,
+    required this.profile,
+  });
   final ProfileResponseModel profile;
 
   @override
@@ -27,10 +37,12 @@ class StudentMainScreen extends StatefulWidget {
 
 class _StudentMainScreenState extends State<StudentMainScreen> {
   late WebSocketJson webSocketJson;
-  bool doneInitWebSocket = false;
+  StudentProfile? profile;
 
   String subject = "";
   bool waitingForCall = false;
+  ReadyTeachers readyTeachers =
+      ReadyTeachers(readyTeachers: <SubjectGradeReadyTeachers>[]);
 
   void startMeeting(final Map<String, dynamic> json) {
     final MeetingResponse meeting = MeetingResponse.fromJson(json);
@@ -68,7 +80,14 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   void initState() {
     super.initState();
 
-    WebSocketJson.connect((final Map<String, dynamic> json) async {
+    studentProfile().then((final StudentProfile p) {
+      setState(() {
+        profile = p;
+      });
+    });
+
+    webSocketJson =
+        WebSocketJson.connect((final Map<String, dynamic> json) async {
       if (json[messageType] == csgoContract) {
         csgoApprove(json);
       } else if (json[messageType] == meetingStartNotification) {
@@ -90,23 +109,22 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             ),
           );
         }
+      } else if (json[messageType] == readyTeachersMessageType) {
+        setState(() {
+          readyTeachers = ReadyTeachers.fromJson(json);
+        });
       } else if (json[messageType] == error) {}
-    }).then((final WebSocketJson ws) {
-      webSocketJson = ws;
-      setState(() {
-        doneInitWebSocket = true;
-      });
     });
   }
 
   @override
+  @override
   Widget build(final BuildContext context) => Scaffold(
-        drawer: doneInitWebSocket
-            ? MainScreenDrawer(
-                profile: widget.profile,
-                webSocketJson: webSocketJson,
-              )
-            : null,
+        drawer: MainScreenDrawer(
+          profile: widget.profile,
+          webSocketJson: webSocketJson,
+        ),
+        backgroundColor: AppTheme.backgroundColor,
         appBar: AppBar(
           centerTitle: true,
           leading: Builder(
@@ -118,19 +136,19 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
             ),
           ),
           title: Text("Hello ${widget.profile.fullName}"),
-          surfaceTintColor: Theme.of(context).primaryColor,
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
         ),
-        body: Row(
+        body: Stack(
           children: <Widget>[
-            const Spacer(),
-            Expanded(
+            AppWidgets.homepageLogo(),
+            AppWidgets.coverBubblesImage(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Spacer(
-                    flex: 4,
-                  ),
                   Expanded(
-                    flex: 7,
                     child: StudentSearchWidget(
                       selectedItem: subject,
                       onSubjectSelected: (final String subject) {
@@ -138,52 +156,64 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                           this.subject = subject;
                         });
                       },
+                      profile:
+                          profile ?? StudentProfile(grade: Grade(name: "")),
+                      readyTeachers: readyTeachers,
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                  const SizedBox(height: 20),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 150),
                     child: ElevatedButton(
                       onPressed: () async {
                         if (subject.isEmpty) {
                           return;
                         }
                         if (!waitingForCall) {
-                          await startSearchingForTeacher(subject);
                           setState(() {
                             waitingForCall = true;
                           });
+                          await startSearchingForTeacher(subject);
                         } else {
-                          await stopSearchingForTeacher();
                           setState(() {
                             waitingForCall = false;
                           });
+                          await stopSearchingForTeacher();
                         }
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: waitingForCall
-                            ? <Widget>[
-                                const CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ]
-                            : <Widget>[
-                                const Icon(Icons.call),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text("Call a teacher"),
-                              ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
+                      child: waitingForCall
+                          ? const CircularProgressIndicator(
+                              color: AppTheme.whiteColor,
+                            )
+                          : const Text("Call a Teacher"),
                     ),
                   ),
                   const Spacer(
-                    flex: 4,
+                    flex: 2,
                   ),
                 ],
               ),
             ),
-            const Spacer(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: CreditButton(
+                onExit: () {
+                  setState(() {});
+                },
+              ),
+            ),
           ],
         ),
       );
