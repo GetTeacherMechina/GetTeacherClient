@@ -99,11 +99,15 @@ class _ChatScreenState extends State<ChatScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
-                      alignment: Alignment.centerRight,
+                      alignment: message.senderId == widget.profile.id
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.accentColor,
+                          color: message.senderId == widget.profile.id
+                              ? AppTheme.accentColor
+                              : Colors.blueAccent,
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: [AppTheme.defaultShadow],
                         ),
@@ -152,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         fillColor: AppTheme.inputFieldBackground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: AppTheme.borderColor,
                           ),
                         ),
@@ -173,7 +177,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               widget.chatId, "####${x["url"]}####");
                           final MessageModel msg = MessageModel(
                             id: -1,
-                            senderId: -1,
+                            senderId: widget.profile.id,
                             content: "####${x["url"]}####",
                             dateTime: DateTime.now(),
                             senderName: widget.profile.fullName,
@@ -194,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       await createMessage(widget.chatId, controller.text);
                       final MessageModel msg = MessageModel(
                         id: -1,
-                        senderId: -1,
+                        senderId: widget.profile.id,
                         content: controller.text,
                         dateTime: DateTime.now(),
                         senderName: widget.profile.fullName,
