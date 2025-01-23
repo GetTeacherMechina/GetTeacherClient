@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/credits_button.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
@@ -67,10 +68,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
               },
             ),
           ),
-          title: Text(
-            "Hello ${widget.profile.fullName}",
-            style: AppTheme.bodyTextStyle,
-          ),
+          title: Text("Hello ${widget.profile.fullName}"),
           backgroundColor: AppTheme.primaryColor,
           foregroundColor: AppTheme.whiteColor,
         ),
@@ -136,6 +134,15 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: CreditButton(
+                onExit: () {
+                  setState(() {});
+                },
               ),
             ),
           ],

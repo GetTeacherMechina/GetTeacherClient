@@ -2,6 +2,7 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
+import "package:getteacher/common_widgets/credits_button.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
@@ -71,6 +72,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
     });
   }
 
+  @override
   @override
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: AppTheme.backgroundColor,
@@ -150,6 +152,15 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                     flex: 2,
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: CreditButton(
+                onExit: () {
+                  setState(() {});
+                },
               ),
             ),
           ],
