@@ -44,6 +44,39 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   ReadyTeachers readyTeachers =
       ReadyTeachers(readyTeachers: <SubjectGradeReadyTeachers>[]);
 
+  void startMeeting(final Map<String, dynamic> json) {
+    final MeetingResponse meeting = MeetingResponse.fromJson(json);
+    setState(() {
+      waitingForCall = false;
+    });
+
+    if (mounted) {
+      unawaited(
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (final BuildContext context) => CallScreen(
+              guid: meeting.meetingGuid,
+              shouldStartCall: false,
+              isStudent: false,
+              webSocketJson: webSocketJson,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  void csgoApprove(final Map<String, dynamic> json) async {
+    final StudentCallModel studentCall = StudentCallModel.fromJson(json);
+    final bool approved = await showApproveTeacher(context, studentCall);
+    if (!approved) {
+      webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
+      return;
+    }
+
+    webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -57,14 +90,7 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
     webSocketJson =
         WebSocketJson.connect((final Map<String, dynamic> json) async {
       if (json[messageType] == csgoContract) {
-        final StudentCallModel studentCall = StudentCallModel.fromJson(json);
-        final bool approved = await showApproveTeacher(context, studentCall);
-        if (!approved) {
-          webSocketJson.webSocket.sink.add(utf8.encode("👎🏿"));
-          return;
-        }
-
-        webSocketJson.webSocket.sink.add(utf8.encode("👍🏻"));
+        csgoApprove(json);
       } else if (json[messageType] == meetingStartNotification) {
         final MeetingResponse meeting = MeetingResponse.fromJson(json);
         setState(() {
@@ -95,8 +121,11 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
   @override
   @override
   Widget build(final BuildContext context) => Scaffold(
+        drawer: MainScreenDrawer(
+          profile: widget.profile,
+          webSocketJson: webSocketJson,
+        ),
         backgroundColor: AppTheme.backgroundColor,
-        drawer: MainScreenDrawer(profile: widget.profile),
         appBar: AppBar(
           centerTitle: true,
           leading: Builder(

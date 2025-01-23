@@ -6,6 +6,7 @@ part "profile_net_model.g.dart";
 @JsonSerializable()
 class ProfileResponseModel {
   ProfileResponseModel({
+    required this.id,
     required this.email,
     required this.fullName,
     required this.isStudent,
@@ -16,6 +17,7 @@ class ProfileResponseModel {
   factory ProfileResponseModel.fromJson(final Map<String, dynamic> json) =>
       _$ProfileResponseModelFromJson(json);
 
+  final int id;
   final String email;
   final String fullName;
   final bool isStudent;

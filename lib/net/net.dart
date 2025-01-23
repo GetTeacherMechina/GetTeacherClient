@@ -1,5 +1,6 @@
 import "dart:convert";
 import "dart:io";
+import "dart:typed_data";
 
 import "package:flutter/material.dart";
 import "package:getteacher/net/ip_constants.dart";
@@ -32,7 +33,11 @@ class GetTeacherClient {
     if (response.statusCode != 200) {
       throw Exception("Request failed with code: ${response.statusCode}");
     }
-    return jsonDecode(response.body) as Map<String, dynamic>;
+    try {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      throw Error.safeToString("kill me, plus the data is not right!");
+    }
   }
 
   Future<Map<String, dynamic>> getJson(final String endpoint) async {
@@ -51,6 +56,23 @@ class GetTeacherClient {
       headers: headers(),
       body: jsonEncode(json),
     );
+    return handleResponse(response);
+  }
+
+  Future<Map<String, dynamic>> postImage(
+    final String endpoint,
+    final Uint8List bytes,
+  ) async {
+    final http.MultipartRequest request =
+        http.MultipartRequest("POST", httpUri(endpoint));
+
+    request.headers[HttpHeaders.authorizationHeader] = "Bearer ${_jwt!}";
+
+    request.files
+        .add(http.MultipartFile.fromBytes("file", bytes, filename: "file"));
+    final http.StreamedResponse responsee = await request.send();
+    final http.Response response = await http.Response.fromStream(responsee);
+
     return handleResponse(response);
   }
 }
