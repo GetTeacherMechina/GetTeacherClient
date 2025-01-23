@@ -1,9 +1,9 @@
 import "dart:async";
-
 import "package:flutter/material.dart";
 import "package:flutter_webrtc/flutter_webrtc.dart";
 import "package:getteacher/net/ip_constants.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:getteacher/views/meeting_summary_screen/meeting_summary_screen.dart";
 import "package:socket_io_client/socket_io_client.dart" as io;
 import "dart:io" show Platform; // Allows Platform checks
@@ -78,7 +78,7 @@ class _CallScreenState extends State<CallScreen> {
     _connectToSignalingServer();
 
     print("Added new listener");
-    widget.webSocketJson.addNewListener((Map<String, dynamic> json) async {
+    widget.webSocketJson.addNewListener((final Map<String, dynamic> json) async {
       print("Received message: $json");
       if (json[messageType] == endMeeting) {
         await _endMeeting(this);
@@ -447,51 +447,14 @@ class _CallScreenState extends State<CallScreen> {
                   ),
                 ],
               ),
-              child: Row(
-                children: <Widget>[
-                  if (_isCalling)
-                    Expanded(
-                      child: RTCVideoView(_localRenderer, mirror: true),
-                    ),
-                  Expanded(
-                    child: RTCVideoView(_remoteRenderer),
-                  ),
-                ],
-              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
-                  ),
-                  onPressed: _toggleVideo,
-                ),
-                IconButton(
-                  icon: Icon(
-                    _isAudioEnabled ? Icons.mic : Icons.mic_off,
-                  ),
-                  onPressed: _toggleAudio,
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await endMeetingRequest(
-                        EndMeetingRequestModel(meetingGuid: widget.guid));
-                  },
-                  icon: const Icon(Icons.call),
-                  color: Colors.red,
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
     );
 }
 
-Future<void> _endMeeting(_CallScreenState state) async {
+Future<void> _endMeeting(final _CallScreenState state) async {
   await state._hangUp();
 
   if (state.widget.isStudent) {
