@@ -19,7 +19,6 @@ final String url = kIsWeb
         ? "http://10.0.2.2:4433"
         : "http://localhost:4433";
 
-
 class CallScreen extends StatefulWidget {
   const CallScreen({
     super.key,
@@ -38,7 +37,6 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
-
   Timer? _timer;
   int _seconds = 0;
 
@@ -77,9 +75,8 @@ class _CallScreenState extends State<CallScreen> {
     _initRenderers();
     _connectToSignalingServer();
 
-    print("Added new listener");
-    widget.webSocketJson.addNewListener((final Map<String, dynamic> json) async {
-      print("Received message: $json");
+    widget.webSocketJson
+        .addNewListener((final Map<String, dynamic> json) async {
       if (json[messageType] == endMeeting) {
         await _endMeeting(this);
       }
@@ -108,7 +105,7 @@ class _CallScreenState extends State<CallScreen> {
     final int remainingSeconds = seconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
-  
+
   Future<void> _initRenderers() async {
     if (_peerConnection == null) {
       await _createPeerConnection();
@@ -343,115 +340,105 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          _formatTime(_seconds),
-          style: AppTheme.appBarTextStyle,
+        backgroundColor: AppTheme.backgroundColor,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            _formatTime(_seconds),
+            style: AppTheme.appBarTextStyle,
+          ),
+          backgroundColor: AppTheme.primaryColor,
+          foregroundColor: AppTheme.whiteColor,
+          elevation: 0,
         ),
-        backgroundColor: AppTheme.primaryColor,
-        foregroundColor: AppTheme.whiteColor,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
-                  color: AppTheme.whiteColor,
-                ),
-                child: Row(
-                  children: <Widget>[
-                    if (_isCalling)
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: <BoxShadow>[AppTheme.defaultShadow],
+                    color: AppTheme.whiteColor,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      if (_isCalling)
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            ),
+                            child: RTCVideoView(_localRenderer, mirror: true),
+                          ),
+                        ),
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15),
-                          ),
-                          child: RTCVideoView(_localRenderer, mirror: true),
+                          borderRadius: _isCalling
+                              ? const BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                )
+                              : BorderRadius.circular(15),
+                          child: RTCVideoView(_remoteRenderer),
                         ),
                       ),
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: _isCalling
-                            ? const BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                              )
-                            : BorderRadius.circular(15),
-                        child: RTCVideoView(_remoteRenderer),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.whiteColor,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      hoverColor: Colors.grey,
+                      icon: Icon(
+                        _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
+                        color: AppTheme.primaryColor,
+                        size: 30,
                       ),
+                      onPressed: _toggleVideo,
+                    ),
+                    IconButton(
+                      hoverColor: Colors.grey,
+                      icon: Icon(
+                        _isAudioEnabled ? Icons.mic : Icons.mic_off,
+                        color: AppTheme.primaryColor,
+                        size: 30,
+                      ),
+                      onPressed: _toggleAudio,
+                    ),
+                    IconButton(
+                      hoverColor: Colors.grey,
+                      onPressed: () async {
+                        _timer?.cancel();
+                        await endMeetingRequest(
+                            EndMeetingRequestModel(meetingGuid: widget.guid));
+                      },
+                      icon: const Icon(Icons.call_end),
+                      color: Colors.red,
+                      iconSize: 36,
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            Container(
-              decoration: BoxDecoration(
-                color: AppTheme.whiteColor,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: <BoxShadow>[AppTheme.defaultShadow],
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    hoverColor: Colors.grey,
-                    icon: Icon(
-                      _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
-                      color: AppTheme.primaryColor,
-                      size: 30,
-                    ),
-                    onPressed: _toggleVideo,
-                  ),
-                  IconButton(
-                    hoverColor: Colors.grey,
-                    icon: Icon(
-                      _isAudioEnabled ? Icons.mic : Icons.mic_off,
-                      color: AppTheme.primaryColor,
-                      size: 30,
-                    ),
-                    onPressed: _toggleAudio,
-                  ),
-                  IconButton(
-                    hoverColor: Colors.grey,
-                    onPressed: () async {
-                      _timer?.cancel();
-                      await _hangUp();
-                      if (widget.isStudent) {
-                        unawaited(
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute<void>(
-                              builder: (final BuildContext context) =>
-                                  StarRatingScreen(meetingGuid: widget.guid),
-                            ),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    icon: const Icon(Icons.call_end),
-                    color: Colors.red,
-                    iconSize: 36,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
 }
 
 Future<void> _endMeeting(final _CallScreenState state) async {
