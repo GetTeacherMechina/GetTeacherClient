@@ -63,7 +63,8 @@ class _StudentSearchWidgetState extends State<StudentSearchWidget> {
               ),
             ),
             trailing: Text(
-                "Currently ${widget.readyTeachers.amountOfTeachersPerSubjectGrade(subject, widget.profile.grade.name)} teachers online"),
+              "Currently ${widget.readyTeachers.amountOfTeachersPerSubjectGrade(subject, widget.profile.grade.name)} teachers online",
+            ),
           ),
         ),
       );

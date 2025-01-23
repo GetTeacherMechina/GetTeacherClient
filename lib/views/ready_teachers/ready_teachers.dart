@@ -1,8 +1,6 @@
-import "package:getteacher/net/teacher_subjects/teacher_subjects_models.dart";
+import "package:json_annotation/json_annotation.dart";
 
-import 'package:json_annotation/json_annotation.dart';
-
-part 'ready_teachers.g.dart';
+part "ready_teachers.g.dart";
 
 @JsonSerializable()
 class ReadyTeachers {
@@ -17,7 +15,9 @@ class ReadyTeachers {
   Map<String, dynamic> toJson() => _$ReadyTeachersToJson(this);
 
   int amountOfTeachersPerSubjectGrade(
-          final String subject, final String grade) =>
+    final String subject,
+    final String grade,
+  ) =>
       readyTeachers
           .where(
             (final SubjectGradeReadyTeachers t) =>

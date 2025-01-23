@@ -11,7 +11,7 @@ class ApproveTeacher extends StatelessWidget {
   Widget build(final BuildContext context) => AlertDialog(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             Text(
               "You can chat with ${call.meetingResponse.companionName}",
             ),
