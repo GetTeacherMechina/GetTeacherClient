@@ -32,9 +32,9 @@ class _StudentSearchWidgetState extends State<StudentSearchWidget> {
   // }
 
   @override
-  Widget build(final BuildContext context) => SearcherWidget(
+  Widget build(final BuildContext context) => SearcherWidget<String>(
         fetchItems: subjectSearch,
-        itemBuilder: (context, subject) => Card(
+        itemBuilder: (final BuildContext context, final String subject) => Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

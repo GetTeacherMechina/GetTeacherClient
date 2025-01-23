@@ -45,8 +45,11 @@ class UserRoleSelector extends StatelessWidget {
               Student() => index == studentIndex
                   ? StudentAndTeacher(role as Student, const Teacher.empty())
                   : role,
-              StudentAndTeacher(student: final Student student, teacher: final Teacher teacher) =>
-                  index == studentIndex ? student : teacher,
+              StudentAndTeacher(
+                student: final Student student,
+                teacher: final Teacher teacher
+              ) =>
+                index == studentIndex ? student : teacher,
             },
           );
         },

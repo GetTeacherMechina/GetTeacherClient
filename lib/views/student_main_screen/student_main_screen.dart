@@ -146,9 +146,9 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
                           : const Text("Call a Teacher"),
                     ),
                   ),
-                  Spacer(
+                  const Spacer(
                     flex: 2,
-                  )
+                  ),
                 ],
               ),
             ),

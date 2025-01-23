@@ -63,7 +63,7 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
       ? Column(
           children: <Widget>[
             TextField(
-              onChanged: (query) {
+              onChanged: (final String query) {
                 setState(() {
                   this.query = query;
                 });

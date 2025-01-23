@@ -21,7 +21,8 @@ class TeacherInput extends StatelessWidget {
             child: TextFormField(
               initialValue: teacher.bio,
               decoration: InputDecoration(
-                hintText: "Tell Us About Yourself\nWrite a short bio about your teaching experience...",
+                hintText:
+                    "Tell Us About Yourself\nWrite a short bio about your teaching experience...",
                 hintStyle: const TextStyle(color: AppTheme.hintTextColor),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
