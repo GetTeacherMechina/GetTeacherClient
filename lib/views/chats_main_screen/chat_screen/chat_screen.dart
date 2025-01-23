@@ -9,6 +9,7 @@ import "package:getteacher/net/chats/message_model.dart";
 import "package:getteacher/net/net.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
 import "package:getteacher/net/web_socket_json_listener.dart";
+import "package:getteacher/theme/theme.dart";
 import "package:getteacher/views/chats_main_screen/chat_screen/image_displayer.dart";
 
 const String messageType = "MessageType";
@@ -84,8 +85,9 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text("Chat"),
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: AppTheme.primaryColor,
         ),
+        backgroundColor: AppTheme.backgroundColor,
         body: Column(
           children: <Widget>[
             Expanded(
@@ -101,17 +103,18 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.blueAccent,
+                          color: AppTheme.accentColor,
                           borderRadius: BorderRadius.circular(8),
+                          boxShadow: [AppTheme.defaultShadow],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
                               message.senderName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                              style: AppTheme.secondaryHeadingStyle.copyWith(
+                                fontSize: 18,
+                                color: AppTheme.whiteColor,
                               ),
                             ),
                             (message.content.startsWith("####") &&
@@ -142,8 +145,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       controller: controller,
                       decoration: InputDecoration(
                         hintText: "Type a message...",
+                        hintStyle: AppTheme.bodyTextStyle.copyWith(
+                          color: AppTheme.hintTextColor,
+                        ),
+                        filled: true,
+                        fillColor: AppTheme.inputFieldBackground,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(
+                            color: AppTheme.borderColor,
+                          ),
                         ),
                       ),
                     ),
@@ -174,10 +185,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       }
                     },
                     icon: const Icon(Icons.image),
+                    color: AppTheme.primaryColor,
                   ),
                   IconButton(
                     icon: const Icon(Icons.send),
-                    color: Colors.blueAccent,
+                    color: AppTheme.primaryColor,
                     onPressed: () async {
                       await createMessage(widget.chatId, controller.text);
                       final MessageModel msg = MessageModel(
