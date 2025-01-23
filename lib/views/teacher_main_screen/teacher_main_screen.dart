@@ -40,14 +40,14 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
   void initState() {
     super.initState();
     connection = WebSocketJson.connect(
-      (final Map<String, dynamic> json) {
+      (final Map<String, dynamic> json) async {
         if (json[messageType] == meetingStartNotification) {
           final MeetingResponse callModel = MeetingResponse.fromJson(json);
           setState(() {
             readyForCalling = false;
           });
           if (mounted) {
-            Navigator.of(context).push(
+            await Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (final BuildContext context) => CallScreen(
                   guid: callModel.meetingGuid,
@@ -57,6 +57,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                 ),
               ),
             );
+            setState(() {});
           }
         }
       },
