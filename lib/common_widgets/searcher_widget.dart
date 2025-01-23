@@ -3,6 +3,7 @@ import "package:fuzzy/data/result.dart";
 import "dart:async";
 
 import "package:fuzzy/fuzzy.dart";
+import "package:getteacher/theme/theme.dart";
 
 class SearcherWidget<T> extends StatefulWidget {
   SearcherWidget({
@@ -62,19 +63,22 @@ class SearcherWidgetState<T> extends State<SearcherWidget<T>> {
       ? Column(
           children: <Widget>[
             TextField(
-              controller: _searchController,
-              onChanged: (final String value) {
+              onChanged: (query) {
                 setState(() {
-                  query = value;
+                  this.query = query;
                 });
               },
+              controller: _searchController,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: widget.hintText,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                hintText: "Search for subjects...",
+                prefixIcon:
+                    const Icon(Icons.search, color: AppTheme.hintTextColor),
                 filled: true,
+                fillColor: AppTheme.inputFieldBackground,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 20),

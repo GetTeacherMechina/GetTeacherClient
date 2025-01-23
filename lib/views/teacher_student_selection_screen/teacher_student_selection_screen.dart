@@ -19,76 +19,78 @@ class _TeacherStudentSelectionState extends State<TeacherStudentSelection> {
   @override
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: AppTheme.backgroundColor,
-        body: 
-        Stack(
+        body: Stack(
           children: <Widget>[
-
-          AppWidgets.fadedBigLogo(),
-          AppWidgets.bubblesImage(),
-        Center(
-          child: Container(
-            padding: const EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              color: AppTheme.whiteColor,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [AppTheme.defaultShadow],
-            ),
-            width: 400,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text(
-                  "Select Your Role",
-                  style: AppTheme.headingStyle,
-                  textAlign: TextAlign.center,
+            AppWidgets.fadedBigLogo(),
+            AppWidgets.bubblesImage(),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(40),
+                decoration: BoxDecoration(
+                  color: AppTheme.whiteColor,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
                 ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(
-                        builder: (final BuildContext context) =>
-                            TeacherMainScreen(profile: widget.profile),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: AppTheme.whiteColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                width: 400,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text(
+                      "Select Your Role",
+                      style: AppTheme.headingStyle,
+                      textAlign: TextAlign.center,
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                  ),
-                  child: const Text("Continue as Teacher"),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(
-                        builder: (final BuildContext context) =>
-                            StudentMainScreen(profile: widget.profile),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                TeacherMainScreen(profile: widget.profile),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentColor,
-                    foregroundColor: AppTheme.whiteColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      child: const Text("Continue as Teacher"),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                  ),
-                  child: const Text("Continue as Student"),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute<void>(
+                            builder: (final BuildContext context) =>
+                                StudentMainScreen(profile: widget.profile),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.accentColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                      ),
+                      child: const Text("Continue as Student"),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 }

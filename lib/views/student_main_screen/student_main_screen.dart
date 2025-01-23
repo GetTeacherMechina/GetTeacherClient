@@ -2,7 +2,6 @@ import "dart:async";
 import "dart:convert";
 
 import "package:flutter/material.dart";
-import "package:getteacher/common_widgets/is_online.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/call/student_call_model.dart";
@@ -99,53 +98,57 @@ class _StudentMainScreenState extends State<StudentMainScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  StudentSearchWidget(
-                    selectedItem: subject,
-                    onSubjectSelected: (final String subject) {
-                      setState(() {
-                        this.subject = subject;
-                      });
-                      print("Selected subject: $subject");
-                    },
+                  Expanded(
+                    child: StudentSearchWidget(
+                      selectedItem: subject,
+                      onSubjectSelected: (final String subject) {
+                        setState(() {
+                          this.subject = subject;
+                        });
+                      },
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      print("Button pressed, subject: $subject");
-                      if (subject.isEmpty) {
-                        print("Subject is empty, returning");
-                        return;
-                      }
-                      if (!waitingForCall) {
-                        print("Starting search for subject: $subject");
-                        await startSearchingForTeacher(subject);
-                        setState(() {
-                          waitingForCall = true;
-                        });
-                      } else {
-                        print("Stopping search");
-                        await stopSearchingForTeacher();
-                        setState(() {
-                          waitingForCall = false;
-                        });
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryColor,
-                      foregroundColor: AppTheme.whiteColor,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 150),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (subject.isEmpty) {
+                          return;
+                        }
+                        if (!waitingForCall) {
+                          setState(() {
+                            waitingForCall = true;
+                          });
+                          await startSearchingForTeacher(subject);
+                        } else {
+                          setState(() {
+                            waitingForCall = false;
+                          });
+                          await stopSearchingForTeacher();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        foregroundColor: AppTheme.whiteColor,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+                      child: waitingForCall
+                          ? const CircularProgressIndicator(
+                              color: AppTheme.whiteColor,
+                            )
+                          : const Text("Call a Teacher"),
                     ),
-                    child: waitingForCall
-                        ? const CircularProgressIndicator(
-                            color: AppTheme.whiteColor)
-                        : const Text("Call a Teacher"),
                   ),
+                  Spacer(
+                    flex: 2,
+                  )
                 ],
               ),
             ),

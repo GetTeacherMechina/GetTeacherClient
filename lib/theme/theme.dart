@@ -24,14 +24,14 @@ class AppTheme {
 
   // Shadow settings
   static final BoxShadow defaultShadow = BoxShadow(
-    color: Colors.grey.withOpacity(0.2),
+    color: Colors.grey.withAlpha((0.2 * 255).toInt()),
     spreadRadius: 10,
     blurRadius: 12,
     offset: const Offset(0, 3),
   );
 
   static final BoxShadow purpleShadow = BoxShadow(
-    color: Colors.deepPurple.withOpacity(0.4),
+    color: Colors.deepPurple.withAlpha((0.4 * 255).toInt()),
     spreadRadius: 5,
     blurRadius: 15,
   );

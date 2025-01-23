@@ -38,7 +38,7 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                 decoration: BoxDecoration(
                   color: AppTheme.whiteColor,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [AppTheme.defaultShadow],
+                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
                 ),
                 child: Form(
                   key: _formKey,
@@ -53,7 +53,9 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                       const Text(
                         "Enter the email address associated with your account and we'll send you a code to reset your password.",
                         style: TextStyle(
-                            color: AppTheme.secondaryTextColor, fontSize: 16),
+                          color: AppTheme.secondaryTextColor,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
@@ -74,7 +76,8 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                         validate: () => _formKey.currentState!.validate(),
                         submit: () async {
                           await forgotPassword(
-                              ForgotPasswordRequestModel(email: model.email));
+                            ForgotPasswordRequestModel(email: model.email),
+                          );
                           await Navigator.of(context).pushReplacement(
                             MaterialPageRoute<void>(
                               builder: (final BuildContext context) =>
@@ -85,8 +88,10 @@ class _ForgotMyPasswordScreen extends State<ForgotMyPasswordScreen> {
                       ),
                       const SizedBox(height: 20),
                       TextButton(
-                        child: const Text("Back to Login",
-                            style: AppTheme.linkTextStyle),
+                        child: const Text(
+                          "Back to Login",
+                          style: AppTheme.linkTextStyle,
+                        ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute<void>(

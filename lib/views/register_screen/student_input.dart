@@ -43,10 +43,13 @@ class StudentInput extends StatelessWidget {
                 value: student.grade,
                 isExpanded: true,
                 items: grades.entries
-                    .map((final MapEntry<int, String> entry) => DropdownMenuItem<int>(
-                          value: entry.key,
-                          child: Text("כיתה ${entry.value}"),
-                        ))
+                    .map(
+                      (final MapEntry<int, String> entry) =>
+                          DropdownMenuItem<int>(
+                        value: entry.key,
+                        child: Text("כיתה ${entry.value}"),
+                      ),
+                    )
                     .toList(),
                 onChanged: (final int? value) {
                   if (value != null) {

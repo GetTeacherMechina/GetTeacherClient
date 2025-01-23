@@ -32,7 +32,7 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(final BuildContext context) => Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         body: Stack(
-          children: [
+          children: <Widget>[
             AppWidgets.bottomBubblesImage(),
             ListView(
               padding: EdgeInsets.symmetric(
@@ -75,7 +75,8 @@ class _LoginScreen extends State<LoginScreen> {
         onTap: () {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<void>(
-                builder: (final BuildContext context) => RegisterScreen()),
+              builder: (final BuildContext context) => RegisterScreen(),
+            ),
           );
         },
         child: Container(
@@ -103,27 +104,35 @@ class _LoginScreen extends State<LoginScreen> {
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 50.0, right: 50.0, bottom: 50.0, top: 20),
+              padding: const EdgeInsets.only(
+                left: 50.0,
+                right: 50.0,
+                bottom: 50.0,
+                top: 20,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
                     "Sign In to GetTeacher",
-                    style: AppTheme.headingStyle
+                    style: AppTheme.headingStyle,
                   ),
                   const SizedBox(height: 30),
                   const Text(
                     "Don't have an account yet?",
                     style: TextStyle(
-                        color: AppTheme.secondaryTextColor, fontSize: 16,),
+                      color: AppTheme.secondaryTextColor,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute<void>(
-                            builder: (final BuildContext context) =>
-                                RegisterScreen()),
+                          builder: (final BuildContext context) =>
+                              RegisterScreen(),
+                        ),
                       );
                     },
                     child: const MouseRegion(
@@ -144,7 +153,8 @@ class _LoginScreen extends State<LoginScreen> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height / 6),
+                vertical: MediaQuery.of(context).size.height / 6,
+              ),
               child: _loginForm(),
             ),
           ),
@@ -161,22 +171,29 @@ class _LoginScreen extends State<LoginScreen> {
               controller: emailController,
               decoration: AppWidgets.inputDecoration(hint: "Email"),
               validator: (final String? value) =>
-                  value != null && EmailValidator.validate(value) ? null : "Invalid email",
+                  value != null && EmailValidator.validate(value)
+                      ? null
+                      : "Invalid email",
               onChanged: (final String value) =>
                   model = model.copyWith(email: () => value),
             ),
             const SizedBox(height: 20),
             TextFormField(
-            controller: passwordController,
-            obscureText: _obscurePassword,
-            decoration: AppWidgets.inputDecoration(
-              hint: "Password",
+              controller: passwordController,
               obscureText: _obscurePassword,
-              passField: true,
-              onTap: () {setState(() {_obscurePassword = !_obscurePassword;});},
+              decoration: AppWidgets.inputDecoration(
+                hint: "Password",
+                obscureText: _obscurePassword,
+                passField: true,
+                onTap: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+              ),
+              onChanged: (final String value) =>
+                  model = model.copyWith(password: () => value),
             ),
-            onChanged: (final String value) => model = model.copyWith(password: () => value),
-          ),
             Align(
               alignment: Alignment.centerLeft,
               child: GestureDetector(
@@ -218,7 +235,8 @@ class _LoginScreen extends State<LoginScreen> {
                   final Widget nextScreen = await getMainScreen();
                   await Navigator.of(context).pushReplacement(
                     MaterialPageRoute<void>(
-                        builder: (final BuildContext context) => nextScreen),
+                      builder: (final BuildContext context) => nextScreen,
+                    ),
                   );
                 },
               ),

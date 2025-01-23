@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:getteacher/common_widgets/submit_button.dart";
-import "package:getteacher/net/reset_password/forgot_password.dart";
 import "package:getteacher/net/reset_password/reset_password.dart";
 import "package:getteacher/net/reset_password/reset_password_net_model.dart";
 import "package:getteacher/theme/theme.dart";
@@ -64,9 +63,9 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1 * 255).toInt()),
               blurRadius: 15,
               spreadRadius: 5,
             ),
@@ -87,7 +86,9 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
               Text(
                 "Code sent to $email",
                 style: const TextStyle(
-                    color: AppTheme.secondaryTextColor, fontSize: 16),
+                  color: AppTheme.secondaryTextColor,
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(height: 20),
               TextFormField(
@@ -154,8 +155,10 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
               ),
               const SizedBox(height: 20),
               TextButton(
-                child: Text("$email - not your email?",
-                    style: AppTheme.linkTextStyle),
+                child: Text(
+                  "$email - not your email?",
+                  style: AppTheme.linkTextStyle,
+                ),
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute<void>(
@@ -176,9 +179,9 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1 * 255).toInt()),
               blurRadius: 15,
               spreadRadius: 5,
             ),
@@ -209,7 +212,9 @@ class _ResetPasswordScreen extends State<ResetPasswordScreen> {
                 shadowColor: Colors.deepPurpleAccent, // Change shadow color
                 elevation: 5, // Adjust shadow elevation
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 30, vertical: 15), // Adjust padding
+                  horizontal: 30,
+                  vertical: 15,
+                ), // Adjust padding
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(20), // Add rounded corners

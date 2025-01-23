@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:getteacher/common_widgets/is_online.dart";
 import "package:getteacher/common_widgets/main_screen_drawer.dart";
 import "package:getteacher/net/call/meeting_response.dart";
 import "package:getteacher/net/profile/profile_net_model.dart";
@@ -89,7 +88,7 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                 decoration: BoxDecoration(
                   color: AppTheme.whiteColor,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [AppTheme.defaultShadow],
+                  boxShadow: <BoxShadow>[AppTheme.defaultShadow],
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
