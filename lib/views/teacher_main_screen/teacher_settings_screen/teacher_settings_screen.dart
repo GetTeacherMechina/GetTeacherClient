@@ -15,7 +15,8 @@ class _TeacherSettingsScreenState extends State<TeacherSettingsScreen> {
   @override
   Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text("teacher subject selector"),
+          title: const Text("Teacher Settings"),
+          centerTitle: true,
           backgroundColor: AppTheme.primaryColor,
           foregroundColor: AppTheme.whiteColor,
         ),

@@ -46,10 +46,9 @@ class MainScreenDrawer extends StatelessWidget {
                   );
                 },
               ),
-
             ListTile(
               leading: const Icon(Icons.chat),
-              title: const Text("chats"),
+              title: const Text("Chats"),
               onTap: () {
                 Navigator.push(
                     context,
