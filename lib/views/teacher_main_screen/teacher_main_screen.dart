@@ -108,14 +108,15 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () async {
-                        if (readyForCalling) {
+                        final bool shouldStop = readyForCalling;
+                        setState(() {
+                          readyForCalling = !readyForCalling;
+                        });
+                        if (shouldStop) {
                           await stopMeetingSearching();
                         } else {
                           await startMeetingSearching();
                         }
-                        setState(() {
-                          readyForCalling = !readyForCalling;
-                        });
                       },
                       child: CircleAvatar(
                         radius: 50,
@@ -135,7 +136,9 @@ class _TeacherMainScreenState extends State<TeacherMainScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      readyForCalling ? "Searching for students..." : "Tap to start searching",
+                      readyForCalling
+                          ? "Searching for students..."
+                          : "Tap to start searching",
                       style: AppTheme.bodyTextStyle,
                       textAlign: TextAlign.center,
                     ),

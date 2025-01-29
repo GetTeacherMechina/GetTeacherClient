@@ -52,16 +52,14 @@ class AppWidgets {
         ),
       );
 
-  static Center homepageLogo() => Center(
-        child: Positioned(
-          bottom: 2,
-          child: Opacity(
-            opacity: 0.3,
-            child: Image.asset(
-              "assets/images/logo1.png",
-              width: 384,
-              height: 384,
-            ),
+  static Widget homepageLogo() => Align(
+        alignment: Alignment.bottomCenter,
+        child: Opacity(
+          opacity: 0.3,
+          child: Image.asset(
+            "assets/images/logo1.png",
+            width: 384,
+            height: 384,
           ),
         ),
       );

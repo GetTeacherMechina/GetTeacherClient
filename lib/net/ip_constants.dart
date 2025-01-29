@@ -6,22 +6,14 @@ const String baseUrl = "/api/v1";
 const String debugHost = "127.0.0.1";
 
 Uri httpUri(final String path) {
-  if (kDebugMode) {
-    return Uri.http("$debugHost:$debugPort", baseUrl + path);
-  } else {
-    throw Exception("No release url");
-  }
+  return Uri.http("$debugHost:$debugPort", baseUrl + path);
 }
 
 Uri wsUri(final String path) {
-  if (kDebugMode) {
-    return Uri(
-      scheme: "ws",
-      host: debugHost,
-      port: debugPort,
-      path: baseUrl + path,
-    );
-  } else {
-    throw Exception("No release url");
-  }
+  return Uri(
+    scheme: "ws",
+    host: debugHost,
+    port: debugPort,
+    path: baseUrl + path,
+  );
 }

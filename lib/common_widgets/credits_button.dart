@@ -65,7 +65,7 @@ class _CreditButtonState extends State<CreditButton> {
                   const Icon(Icons.credit_score, color: Colors.green),
                   const SizedBox(width: 8),
                   Text(
-                    "Credits: $credits",
+                    "Credits: ${credits.toInt()}",
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
